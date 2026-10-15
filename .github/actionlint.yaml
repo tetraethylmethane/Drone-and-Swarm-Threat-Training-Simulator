@@ -1,0 +1,4 @@
+# Custom labels of self-hosted runners (see .github/workflows/unity.yml).
+self-hosted-runner:
+  labels:
+    - unity

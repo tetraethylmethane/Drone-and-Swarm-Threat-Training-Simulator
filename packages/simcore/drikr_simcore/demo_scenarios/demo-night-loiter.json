@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "key": "demo-night-loiter",
+  "version": 1,
+  "name": "Night Loiter Assessment",
+  "description": "DEMONSTRATION SCENARIO. Night-time urban exercise in haze with a loitering non-cooperative multirotor, a cooperative fixed-wing transit and radar clutter. The optical sensor degrades mid-exercise.",
+  "briefing": "Night conditions reduce simulated optical range and classification quality. Expect radar clutter tracks that fade quickly. Report persistent non-cooperative activity near the virtual site and use sensor confirmation when observations are uncertain.",
+  "learning_objectives": [
+    {"id": "report-loiter", "description": "Report the loitering multirotor to exercise control within 120 seconds of first observation.", "criterion": {"kind": "respond_within", "entity_class": "small_multirotor", "response": "report_to_exercise_control", "within_s": 120}},
+    {"id": "classify-fixed-wing", "description": "Correctly classify the cooperative fixed-wing aircraft.", "criterion": {"kind": "classify_correctly", "entity_class": "fixed_wing_uas", "min_fraction": 1.0}},
+    {"id": "no-false-clear", "description": "Do not log a non-cooperative virtual drone as cleared.", "criterion": {"kind": "no_false_clearance"}}
+  ],
+  "environment": {"terrain": "urban", "time_of_day": "night", "weather": "haze", "visibility_km": 5, "wind_mps": 2},
+  "sensors": {
+    "radar": {"enabled": true, "range_m": 4000, "update_interval_s": 2, "detection_probability": 0.88, "position_noise_m": 30, "latency_s": 0.5, "clutter_tracks_per_min": 1.0},
+    "electro_optical": {"enabled": true, "range_m": 2500, "update_interval_s": 3, "detection_probability": 0.75, "classification_accuracy": 0.8, "latency_s": 1},
+    "rf": {"enabled": true, "range_m": 3000, "update_interval_s": 4, "detection_probability": 0.75, "latency_s": 1.5}
+  },
+  "entities": [
+    {"id": "loiterer", "label": "Non-cooperative loitering multirotor", "entity_class": "small_multirotor", "behavior": "loiter", "cooperative": false, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 10, "max": 40}, "speed_mps": {"min": 8, "max": 12}, "altitude_m": {"min": 50, "max": 100}, "closest_approach_m": {"min": 400, "max": 800}, "dwell_s": {"min": 120, "max": 160}},
+    {"id": "courier", "label": "Cooperative fixed-wing transit", "entity_class": "fixed_wing_uas", "behavior": "transit", "cooperative": true, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 40, "max": 90}, "speed_mps": {"min": 18, "max": 24}, "altitude_m": {"min": 120, "max": 200}, "closest_approach_m": {"min": 600, "max": 1200}}
+  ],
+  "event_schedule": [
+    {"type": "exercise_message", "id": "brief", "at_s": 0, "message": "Exercise control: urban sector, night. Optical maintenance window expected."},
+    {"type": "sensor_degraded", "id": "eo-degrade", "at_s": 110, "sensor": "electro_optical", "detection_factor": 0.5, "noise_factor": 1.6, "extra_delay_s": 1.5},
+    {"type": "sensor_restored", "id": "eo-restore", "at_s": 200, "sensor": "electro_optical"}
+  ],
+  "randomization": {"seed": 2002, "allow_seed_override": true},
+  "difficulty": {"level": 3, "adaptive_allowed": true, "min_level": 2, "max_level": 5},
+  "scoring": {"rubric_key": "standard-assessment", "rubric_version": 1},
+  "time_limits": {"duration_s": 300, "allow_pause": true},
+  "self_guided": true
+}

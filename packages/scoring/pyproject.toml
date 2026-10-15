@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drikr-scoring"
+version = "1.0.0"
+description = "Drikr Systems training simulator: transparent scoring and rules-based adaptive difficulty"
+requires-python = ">=3.12"
+dependencies = ["drikr-contracts==1.0.0", "drikr-simcore==1.0.0"]
+
+[tool.setuptools.packages.find]
+include = ["drikr_scoring*"]
+
+[tool.setuptools.package-data]
+drikr_scoring = ["default_rubrics/*.json"]

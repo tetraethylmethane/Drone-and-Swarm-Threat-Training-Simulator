@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drikr-contracts"
+version = "1.0.0"
+description = "Drikr Systems training simulator: shared scenario, event and action contracts"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.10,<3"]
+
+[tool.setuptools.packages.find]
+include = ["drikr_contracts*"]

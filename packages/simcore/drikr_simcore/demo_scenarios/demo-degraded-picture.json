@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "key": "demo-degraded-picture",
+  "version": 1,
+  "name": "Degraded Sensor Picture",
+  "description": "DEMONSTRATION SCENARIO. Foggy industrial exercise with noisy radar, frequent clutter tracks and short optical range. Visibility improves late in the exercise. Emphasises handling of uncertain observations.",
+  "briefing": "Fog limits the simulated optical sensor to short range and radar clutter is frequent. Many observations will be uncertain. Prefer low-confidence classifications or sensor confirmation requests over confident guesses, and never clear a track you cannot support.",
+  "learning_objectives": [
+    {"id": "no-false-clear", "description": "Do not log a non-cooperative virtual drone as cleared.", "criterion": {"kind": "no_false_clearance"}},
+    {"id": "classify-most", "description": "Classify at least 70% of all observed tracks.", "criterion": {"kind": "classify_all", "min_fraction": 0.7}},
+    {"id": "classify-multirotor", "description": "Correctly classify at least half of the observed small multirotors.", "criterion": {"kind": "classify_correctly", "entity_class": "small_multirotor", "min_fraction": 0.5}}
+  ],
+  "environment": {"terrain": "industrial", "time_of_day": "day", "weather": "fog", "visibility_km": 1.2, "wind_mps": 1},
+  "sensors": {
+    "radar": {"enabled": true, "range_m": 3500, "update_interval_s": 2.5, "detection_probability": 0.8, "position_noise_m": 60, "latency_s": 1, "clutter_tracks_per_min": 2.0},
+    "electro_optical": {"enabled": true, "range_m": 2000, "update_interval_s": 3, "detection_probability": 0.65, "classification_accuracy": 0.7, "latency_s": 1.5},
+    "rf": {"enabled": true, "range_m": 2500, "update_interval_s": 4, "detection_probability": 0.7, "latency_s": 2}
+  },
+  "entities": [
+    {"id": "hoverer", "label": "Non-cooperative hovering multirotor", "entity_class": "small_multirotor", "behavior": "hover", "cooperative": false, "count": {"min": 1, "max": 2}, "spawn_time_s": {"min": 10, "max": 90}, "speed_mps": {"min": 8, "max": 11}, "altitude_m": {"min": 40, "max": 70}, "closest_approach_m": {"min": 400, "max": 900}, "dwell_s": {"min": 60, "max": 100}},
+    {"id": "inspection", "label": "Cooperative inspection multirotor", "entity_class": "small_multirotor", "behavior": "orbit", "cooperative": true, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 30, "max": 70}, "speed_mps": {"min": 6, "max": 9}, "altitude_m": {"min": 30, "max": 50}, "closest_approach_m": {"min": 500, "max": 700}, "dwell_s": {"min": 60, "max": 80}},
+    {"id": "birds", "label": "Bird activity", "entity_class": "bird_or_clutter", "behavior": "erratic", "cooperative": false, "count": {"min": 1, "max": 2}, "spawn_time_s": {"min": 0, "max": 120}, "speed_mps": {"min": 5, "max": 10}, "altitude_m": {"min": 15, "max": 50}, "closest_approach_m": {"min": 400, "max": 1200}}
+  ],
+  "event_schedule": [
+    {"type": "exercise_message", "id": "brief", "at_s": 0, "message": "Exercise control: dense fog over the industrial sector. Radar clutter is expected."},
+    {"type": "visibility_change", "id": "fog-lifts", "at_s": 200, "visibility_km": 3.0},
+    {"type": "exercise_message", "id": "fog-msg", "at_s": 200, "message": "Exercise control: fog is lifting; optical range is improving."}
+  ],
+  "randomization": {"seed": 4004, "allow_seed_override": true},
+  "difficulty": {"level": 3, "adaptive_allowed": true, "min_level": 1, "max_level": 5},
+  "scoring": {"rubric_key": "standard-assessment", "rubric_version": 1},
+  "time_limits": {"duration_s": 300, "allow_pause": true},
+  "self_guided": true
+}

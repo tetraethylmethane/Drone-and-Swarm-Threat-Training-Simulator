@@ -1,0 +1,127 @@
+@import "@fontsource/inter/400.css" layer(base);
+@import "@fontsource/inter/500.css" layer(base);
+@import "@fontsource/inter/600.css" layer(base);
+
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: rgb(var(--canvas));
+  --color-surface: rgb(var(--surface));
+  --color-surface-muted: rgb(var(--surface-muted));
+  --color-border: rgb(var(--border));
+  --color-border-strong: rgb(var(--border-strong));
+  --color-ink: rgb(var(--ink));
+  --color-ink-muted: rgb(var(--ink-muted));
+  --color-ink-subtle: rgb(var(--ink-subtle));
+
+  --color-brand: rgb(var(--brand));
+  --color-brand-hover: rgb(var(--brand-hover));
+  --color-brand-soft: rgb(var(--brand-soft));
+  --color-brand-ink: rgb(var(--brand-ink));
+
+  --color-success: rgb(var(--success));
+  --color-success-soft: rgb(var(--success-soft));
+
+  --color-warning: rgb(var(--warning));
+  --color-warning-soft: rgb(var(--warning-soft));
+
+  --color-danger: rgb(var(--danger));
+  --color-danger-soft: rgb(var(--danger-soft));
+
+  --color-info: rgb(var(--info));
+  --color-info-soft: rgb(var(--info-soft));
+
+  --font-sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-panel: 0 1px 2px rgb(27 31 29 / 0.04);
+  --shadow-overlay: 0 8px 24px rgb(27 31 29 / 0.12);
+}
+
+/*
+  Tailwind v4 defaults borders to `currentcolor`; keep the design-system border token instead.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentcolor);
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Drikr training simulator interface design tokens (RGB channels for Tailwind alpha support).
+ * Replace with official brand values when supplied; see docs/design/brand-and-design-system.md.
+ */
+:root {
+  --canvas: 246 245 241;
+  --surface: 255 255 255;
+  --surface-muted: 239 238 233;
+  --border: 220 217 209;
+  --border-strong: 198 194 184;
+  --ink: 27 31 29;
+  --ink-muted: 84 90 86;
+  --ink-subtle: 99 104 100;
+  --brand: 31 77 58;
+  --brand-hover: 24 61 46;
+  --brand-soft: 227 236 230;
+  --brand-ink: 255 255 255;
+  --success: 40 98 63;
+  --success-soft: 226 239 230;
+  --warning: 133 86 14;
+  --warning-soft: 248 239 222;
+  --danger: 155 44 44;
+  --danger-soft: 248 230 228;
+  --info: 45 79 115;
+  --info-soft: 228 235 243;
+}
+
+@layer base {
+  html {
+    @apply bg-canvas text-ink antialiased;
+    font-family: Inter, system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+  }
+  body {
+    @apply min-h-screen text-sm;
+  }
+  h1 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  h2 {
+    @apply text-base font-semibold;
+  }
+  h3 {
+    @apply text-sm font-semibold;
+  }
+  :focus-visible {
+    @apply outline-hidden ring-2 ring-brand ring-offset-2 ring-offset-canvas;
+  }
+  ::selection {
+    @apply bg-brand-soft;
+  }
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

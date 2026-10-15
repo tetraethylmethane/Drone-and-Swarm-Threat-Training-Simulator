@@ -1,0 +1,50 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+deploy/tls/
+
+# Local data
+backups/
+*.dump
+.localdev/
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Unity (apps/simulator/DrikrUnityClient)
+apps/simulator/DrikrUnityClient/[Ll]ibrary/
+apps/simulator/DrikrUnityClient/[Tt]emp/
+apps/simulator/DrikrUnityClient/[Oo]bj/
+apps/simulator/DrikrUnityClient/[Ll]ogs/
+apps/simulator/DrikrUnityClient/[Bb]uilds/
+apps/simulator/DrikrUnityClient/[Uu]ser[Ss]ettings/
+apps/simulator/DrikrUnityClient/*.csproj
+apps/simulator/DrikrUnityClient/*.sln
+apps/simulator/*.log
+apps/simulator/*.xml

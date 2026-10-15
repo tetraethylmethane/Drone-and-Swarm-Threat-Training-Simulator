@@ -1,0 +1,117 @@
+{
+  "$defs": {
+    "ActionKind": {
+      "enum": [
+        "classify",
+        "respond"
+      ],
+      "title": "ActionKind",
+      "type": "string"
+    },
+    "Confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "TrackClassification": {
+      "description": "Labels a trainee may assign to a track. ``unknown`` is always permitted.",
+      "enum": [
+        "small_multirotor",
+        "fixed_wing_uas",
+        "coordinated_swarm",
+        "bird_or_clutter",
+        "unknown"
+      ],
+      "title": "TrackClassification",
+      "type": "string"
+    },
+    "TrainingResponse": {
+      "enum": [
+        "continue_monitoring",
+        "request_sensor_confirmation",
+        "report_to_exercise_control",
+        "log_as_cleared"
+      ],
+      "title": "TrainingResponse",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A single trainee decision. ``client_action_id`` makes submission idempotent.",
+  "properties": {
+    "classification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TrackClassification"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "client_action_id": {
+      "format": "uuid",
+      "title": "Client Action Id",
+      "type": "string"
+    },
+    "confidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Confidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "kind": {
+      "$ref": "#/$defs/ActionKind"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "maxLength": 280,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    },
+    "response": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TrainingResponse"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "track_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 24,
+      "minItems": 1,
+      "title": "Track Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "client_action_id",
+    "kind",
+    "track_ids"
+  ],
+  "title": "TraineeAction",
+  "type": "object"
+}

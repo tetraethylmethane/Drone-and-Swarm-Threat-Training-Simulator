@@ -1,0 +1,12 @@
+{
+  "name": "Drikr.Editor",
+  "rootNamespace": "Drikr.EditorTools",
+  "references": ["Drikr.Runtime"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "noEngineReferences": false
+}

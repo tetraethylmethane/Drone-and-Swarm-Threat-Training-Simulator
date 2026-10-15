@@ -1,0 +1,24 @@
+# HTTPS for network access. Use together with docker-compose.yml:
+#
+#   bash scripts/generate-tls-cert.sh --host drikr-training.local --ip 192.168.10.20
+#   docker compose -f docker-compose.yml -f docker-compose.tls.yml up -d
+#
+# HTTP on DRIKR_WEB_PORT only redirects to HTTPS on DRIKR_HTTPS_PORT. Certificates are read from
+# DRIKR_TLS_DIR (default ./deploy/tls, git-ignored). See docs/operations/offline-deployment.md.
+services:
+  web:
+    environment:
+      DRIKR_HTTPS_PORT: ${DRIKR_HTTPS_PORT:-8443}
+      # The image renders /etc/nginx/templates/*.template into this (tmpfs) directory at start-up,
+      # which also hides the plain-HTTP configuration baked into the image.
+      NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/conf.d
+      NGINX_ENVSUBST_FILTER: "^DRIKR_"
+    ports: !override
+      - "${DRIKR_WEB_BIND:-127.0.0.1}:${DRIKR_WEB_PORT:-8080}:8080"
+      - "${DRIKR_WEB_BIND:-127.0.0.1}:${DRIKR_HTTPS_PORT:-8443}:8443"
+    # conf.d is owned by the image's unprivileged nginx user (uid 101) so the template can be rendered.
+    tmpfs: !override ["/tmp", "/var/cache/nginx", "/etc/nginx/conf.d:uid=101,gid=101,mode=0755"]
+    volumes:
+      - ./apps/web/nginx-tls.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${DRIKR_TLS_DIR:-./deploy/tls}/server.crt:/etc/nginx/tls/server.crt:ro
+      - ${DRIKR_TLS_DIR:-./deploy/tls}/server.key:/etc/nginx/tls/server.key:ro

@@ -1,0 +1,93 @@
+{
+  "$defs": {
+    "EventOrigin": {
+      "enum": [
+        "generated",
+        "trainee",
+        "system"
+      ],
+      "title": "EventOrigin",
+      "type": "string"
+    },
+    "EventType": {
+      "enum": [
+        "entity_spawned",
+        "entity_state",
+        "entity_exited",
+        "track_assigned",
+        "observation_missed",
+        "track_observation",
+        "track_lost",
+        "sensor_status",
+        "environment_update",
+        "exercise_message",
+        "sensor_confirmation",
+        "session_started",
+        "session_paused",
+        "session_resumed",
+        "session_completed",
+        "classification_submitted",
+        "response_submitted"
+      ],
+      "title": "EventType",
+      "type": "string"
+    },
+    "EventVisibility": {
+      "enum": [
+        "trainee",
+        "ground_truth",
+        "system"
+      ],
+      "title": "EventVisibility",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "available_at_ms": {
+      "minimum": 0,
+      "title": "Available At Ms",
+      "type": "integer"
+    },
+    "event_id": {
+      "pattern": "^[GST]-\\d{6}$",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "origin": {
+      "$ref": "#/$defs/EventOrigin"
+    },
+    "payload": {
+      "title": "Payload",
+      "type": "object"
+    },
+    "seq": {
+      "minimum": 0,
+      "title": "Seq",
+      "type": "integer"
+    },
+    "t_ms": {
+      "minimum": 0,
+      "title": "T Ms",
+      "type": "integer"
+    },
+    "type": {
+      "$ref": "#/$defs/EventType"
+    },
+    "visibility": {
+      "$ref": "#/$defs/EventVisibility"
+    }
+  },
+  "required": [
+    "event_id",
+    "seq",
+    "t_ms",
+    "available_at_ms",
+    "type",
+    "visibility",
+    "origin",
+    "payload"
+  ],
+  "title": "SimEvent",
+  "type": "object"
+}

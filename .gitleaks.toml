@@ -1,0 +1,18 @@
+# Gitleaks configuration. Development-only and CI-only credentials are deliberately
+# public (they protect throwaway local/CI databases) and are allow-listed by value.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented development/CI-only credentials"
+regexes = [
+  '''drikr_dev_only''',
+  '''drikr_ci_only''',
+  '''dev_only-local-secret-key-please-change-0123456789''',
+  '''ci-only-secret-key-that-is-long-enough-0123456789''',
+  '''test-secret-key-that-is-long-enough-0123456789''',
+  '''Training-Pass-2026!''',
+  # C# property name matched by the generic API-key rule (not a secret)
+  '''^_a11y.Published$''',
+]
+paths = ['''\.env\.example''']

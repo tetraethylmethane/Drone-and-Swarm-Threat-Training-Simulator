@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "key": "demo-swarm-recognition",
+  "version": 1,
+  "name": "Coordinated Swarm Recognition",
+  "description": "DEMONSTRATION SCENARIO. Coastal dusk exercise in which a coordinated multi-agent swarm approaches and orbits the virtual site while a single multirotor and bird activity compete for attention. The RF sensor degrades partway through.",
+  "briefing": "A coordinated swarm appears as several closely spaced tracks moving together. Recognise the group, classify its members and report it promptly. Do not let bird activity distract from the coordinated group.",
+  "learning_objectives": [
+    {"id": "classify-swarm", "description": "Correctly classify at least 80% of observed swarm member tracks.", "criterion": {"kind": "classify_correctly", "entity_class": "coordinated_swarm", "min_fraction": 0.8}},
+    {"id": "report-swarm", "description": "Report every swarm member to exercise control within 90 seconds of first observation.", "criterion": {"kind": "respond_within", "entity_class": "coordinated_swarm", "response": "report_to_exercise_control", "within_s": 90}},
+    {"id": "classify-most", "description": "Classify at least 80% of all observed tracks.", "criterion": {"kind": "classify_all", "min_fraction": 0.8}}
+  ],
+  "environment": {"terrain": "coastal", "time_of_day": "dusk", "weather": "clear", "visibility_km": 12, "wind_mps": 7},
+  "sensors": {
+    "radar": {"enabled": true, "range_m": 4000, "update_interval_s": 2, "detection_probability": 0.9, "position_noise_m": 25, "latency_s": 0.5, "clutter_tracks_per_min": 0.5},
+    "electro_optical": {"enabled": true, "range_m": 2500, "update_interval_s": 3, "detection_probability": 0.8, "classification_accuracy": 0.8, "latency_s": 1},
+    "rf": {"enabled": true, "range_m": 3500, "update_interval_s": 4, "detection_probability": 0.8, "latency_s": 1.5}
+  },
+  "entities": [
+    {"id": "swarm", "label": "Coordinated swarm", "entity_class": "coordinated_swarm", "behavior": "orbit", "cooperative": false, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 20, "max": 50}, "speed_mps": {"min": 11, "max": 14}, "altitude_m": {"min": 70, "max": 110}, "closest_approach_m": {"min": 700, "max": 1000}, "dwell_s": {"min": 90, "max": 120}, "swarm": {"size": {"min": 6, "max": 8}, "formation": "cluster", "spacing_m": 35}},
+    {"id": "single", "label": "Non-cooperative multirotor", "entity_class": "small_multirotor", "behavior": "transit", "cooperative": false, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 0, "max": 30}, "speed_mps": {"min": 10, "max": 13}, "altitude_m": {"min": 40, "max": 80}, "closest_approach_m": {"min": 800, "max": 1400}},
+    {"id": "gulls", "label": "Coastal bird activity", "entity_class": "bird_or_clutter", "behavior": "erratic", "cooperative": false, "count": {"min": 2, "max": 4}, "spawn_time_s": {"min": 0, "max": 120}, "speed_mps": {"min": 7, "max": 13}, "altitude_m": {"min": 15, "max": 50}, "closest_approach_m": {"min": 500, "max": 1600}}
+  ],
+  "event_schedule": [
+    {"type": "exercise_message", "id": "brief", "at_s": 0, "message": "Exercise control: coastal sector at dusk. Expect seabird activity."},
+    {"type": "sensor_degraded", "id": "rf-degrade", "at_s": 150, "sensor": "rf", "detection_factor": 0.4, "noise_factor": 2.0},
+    {"type": "sensor_restored", "id": "rf-restore", "at_s": 260, "sensor": "rf"}
+  ],
+  "randomization": {"seed": 3003, "allow_seed_override": true},
+  "difficulty": {"level": 3, "adaptive_allowed": true, "min_level": 2, "max_level": 5},
+  "scoring": {"rubric_key": "standard-assessment", "rubric_version": 1},
+  "time_limits": {"duration_s": 330, "allow_pause": true},
+  "self_guided": false
+}

@@ -1,0 +1,64 @@
+{
+  "$defs": {
+    "TimeOfDay": {
+      "enum": [
+        "day",
+        "dusk",
+        "night"
+      ],
+      "title": "TimeOfDay",
+      "type": "string"
+    },
+    "Weather": {
+      "enum": [
+        "clear",
+        "haze",
+        "rain",
+        "fog"
+      ],
+      "title": "Weather",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "seed": {
+      "anyOf": [
+        {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Seed"
+    },
+    "time_of_day": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeOfDay"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "weather": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Weather"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "title": "TraineeSelection",
+  "type": "object"
+}

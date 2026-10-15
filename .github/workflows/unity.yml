@@ -1,0 +1,150 @@
+# Unity client: EditMode tests and Windows / Linux / macOS player builds.
+#
+# Unity's licence terms require an activated licence on every machine that runs the editor, so this
+# workflow needs one of the following (see apps/simulator/README.md, "Continuous integration"):
+#
+#   A. GitHub-hosted runners with GameCI containers. Repository secrets:
+#        Personal licence:      UNITY_LICENSE (contents of Unity_lic.ulf), UNITY_EMAIL, UNITY_PASSWORD
+#        Plus/Pro licence:      UNITY_SERIAL, UNITY_EMAIL, UNITY_PASSWORD
+#   B. A self-hosted Windows runner with Unity 6000.3.26f1 (+ Linux and Mac build support) and its own
+#      activated licence, labelled `unity`. Set the repository variable UNITY_SELF_HOSTED=true.
+#
+# Without either, the jobs are skipped with a notice instead of failing.
+name: unity
+
+on:
+  push:
+    paths: ["apps/simulator/**", "packages/contracts/schemas/**", ".github/workflows/unity.yml"]
+  pull_request:
+    paths: ["apps/simulator/**", "packages/contracts/schemas/**", ".github/workflows/unity.yml"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_PATH: apps/simulator/DrikrUnityClient
+
+jobs:
+  licence:
+    name: Licence check
+    runs-on: ubuntu-24.04
+    outputs:
+      hosted: ${{ steps.check.outputs.hosted }}
+    steps:
+      - id: check
+        env:
+          HAS_LICENSE: ${{ secrets.UNITY_LICENSE != '' || secrets.UNITY_SERIAL != '' }}
+          HAS_ACCOUNT: ${{ secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' }}
+        run: |
+          if [ "$HAS_LICENSE" = "true" ] && [ "$HAS_ACCOUNT" = "true" ]; then
+            echo "hosted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "hosted=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Unity CI skipped::No Unity licence secrets configured. Add UNITY_LICENSE (or UNITY_SERIAL), UNITY_EMAIL and UNITY_PASSWORD, or use a self-hosted runner (UNITY_SELF_HOSTED=true)."
+          fi
+
+  test:
+    name: EditMode tests (GameCI)
+    needs: licence
+    if: needs.licence.outputs.hosted == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: unity-library-test-${{ hashFiles('apps/simulator/DrikrUnityClient/Packages/packages-lock.json', 'apps/simulator/DrikrUnityClient/Assets/**/*.cs') }}
+          restore-keys: unity-library-test-
+      - uses: game-ci/unity-test-runner@v4.4.0
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Unity EditMode results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  build:
+    name: Player (${{ matrix.name }}, GameCI)
+    needs: [licence, test]
+    if: needs.licence.outputs.hosted == 'true'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            targetPlatform: StandaloneWindows64
+            buildMethod: Drikr.EditorTools.BuildScript.BuildWindows
+            output: Builds/Windows
+          - name: Linux x64
+            targetPlatform: StandaloneLinux64
+            buildMethod: Drikr.EditorTools.BuildScript.BuildLinux
+            output: Builds/Linux
+          - name: macOS universal
+            targetPlatform: StandaloneOSX
+            buildMethod: Drikr.EditorTools.BuildScript.BuildMacOS
+            output: Builds/macOS
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: unity-library-${{ matrix.targetPlatform }}-${{ hashFiles('apps/simulator/DrikrUnityClient/Packages/packages-lock.json', 'apps/simulator/DrikrUnityClient/Assets/**/*.cs') }}
+          restore-keys: unity-library-${{ matrix.targetPlatform }}-
+      - uses: game-ci/unity-builder@v4.8.2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildMethod: ${{ matrix.buildMethod }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drikr-unity-${{ matrix.targetPlatform }}
+          path: ${{ env.PROJECT_PATH }}/${{ matrix.output }}
+          if-no-files-found: error
+
+  self-hosted:
+    name: Tests and players (self-hosted, own licence)
+    if: vars.UNITY_SELF_HOSTED == 'true'
+    runs-on: [self-hosted, windows, unity]
+    env:
+      UNITY_EXE: ${{ vars.UNITY_EXE || 'C:/Program Files/Unity 6000.3.26f1/Editor/Unity.exe' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: EditMode tests
+        shell: pwsh
+        run: |
+          $p = Join-Path $env:GITHUB_WORKSPACE $env:PROJECT_PATH
+          & $env:UNITY_EXE -batchmode -nographics -projectPath $p -runTests -testPlatform EditMode `
+            -testResults "$p/Logs/editmode-results.xml" -logFile "$p/Logs/editmode.log" | Out-Null
+          if ($LASTEXITCODE -ne 0) { Get-Content "$p/Logs/editmode.log" -Tail 80; exit $LASTEXITCODE }
+      - name: Build all installed desktop targets
+        shell: pwsh
+        run: |
+          $p = Join-Path $env:GITHUB_WORKSPACE $env:PROJECT_PATH
+          & $env:UNITY_EXE -batchmode -nographics -quit -projectPath $p `
+            -executeMethod Drikr.EditorTools.BuildScript.BuildAll -logFile "$p/Logs/build.log" | Out-Null
+          Select-String -Path "$p/Logs/build.log" -Pattern 'DRIKR_BUILD'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: drikr-unity-self-hosted
+          path: |
+            ${{ env.PROJECT_PATH }}/Builds
+            ${{ env.PROJECT_PATH }}/Logs/editmode-results.xml

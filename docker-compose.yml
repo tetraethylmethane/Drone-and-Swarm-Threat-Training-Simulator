@@ -1,0 +1,69 @@
+# Drikr Systems training simulator: reproducible local / offline deployment.
+#
+#   cp .env.example .env      # then replace every CHANGE value
+#   docker compose up -d --build
+#   docker compose exec api drikr-api create-admin --username admin
+#
+# See docs/operations/offline-deployment.md and docs/operations/backup-and-recovery.md.
+name: drikr
+
+services:
+  db:
+    image: postgres:17.2-alpine3.20
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    security_opt: ["no-new-privileges:true"]
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: drikr-api:1.0.0
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [backend]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    image: drikr-web:1.0.0
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${DRIKR_WEB_BIND:-127.0.0.1}:${DRIKR_WEB_PORT:-8080}:8080"
+    networks: [backend, frontend]
+    read_only: true
+    tmpfs: ["/tmp", "/var/cache/nginx"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+networks:
+  # The database and API are not reachable from the host; only the web proxy publishes a port.
+  backend:
+    internal: true
+  frontend: {}
+
+volumes:
+  pgdata: {}

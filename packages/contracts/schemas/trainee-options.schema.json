@@ -1,0 +1,48 @@
+{
+  "$defs": {
+    "TimeOfDay": {
+      "enum": [
+        "day",
+        "dusk",
+        "night"
+      ],
+      "title": "TimeOfDay",
+      "type": "string"
+    },
+    "Weather": {
+      "enum": [
+        "clear",
+        "haze",
+        "rain",
+        "fog"
+      ],
+      "title": "Weather",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Options an instructor permits a trainee to choose at launch.\n\nEmpty lists mean the option is fixed to the scenario's authored value.",
+  "properties": {
+    "allow_custom_seed": {
+      "default": false,
+      "title": "Allow Custom Seed",
+      "type": "boolean"
+    },
+    "time_of_day": {
+      "items": {
+        "$ref": "#/$defs/TimeOfDay"
+      },
+      "title": "Time Of Day",
+      "type": "array"
+    },
+    "weather": {
+      "items": {
+        "$ref": "#/$defs/Weather"
+      },
+      "title": "Weather",
+      "type": "array"
+    }
+  },
+  "title": "TraineeOptions",
+  "type": "object"
+}

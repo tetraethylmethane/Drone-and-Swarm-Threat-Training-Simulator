@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "key": "standard-assessment",
+  "version": 1,
+  "name": "Standard Training Assessment",
+  "description": "DEMONSTRATION RUBRIC. Balanced assessment of recognition, timing, rubric consistency, uncertainty handling, objectives and procedure for the bundled demonstration scenarios. Training-only decision rules; not an operational procedure.",
+  "pass_mark": 70,
+  "weights": {
+    "recognition": 0.3,
+    "timing": 0.15,
+    "consistency": 0.2,
+    "uncertainty": 0.1,
+    "objectives": 0.15,
+    "procedure": 0.1
+  },
+  "timing": {"target_s": 20, "max_s": 90},
+  "timing_overrides": {
+    "coordinated_swarm": {"target_s": 15, "max_s": 60}
+  },
+  "partial_credit": [
+    {"true_class": "coordinated_swarm", "given": "small_multirotor", "credit": 0.25},
+    {"true_class": "small_multirotor", "given": "coordinated_swarm", "credit": 0.25},
+    {"true_class": "fixed_wing_uas", "given": "small_multirotor", "credit": 0.1},
+    {"true_class": "small_multirotor", "given": "fixed_wing_uas", "credit": 0.1}
+  ],
+  "uncertainty": {
+    "evidence_threshold": 0.5,
+    "credit_low_confidence": 1.0,
+    "credit_medium_confidence": 0.6,
+    "credit_high_confidence_correct": 0.3,
+    "credit_high_confidence_wrong": 0.0,
+    "credit_confirmation_requested": 1.0
+  },
+  "decision_tree": {
+    "kind": "branch",
+    "id": "is-clutter",
+    "condition": {"fact": "true_class", "op": "eq", "value": "bird_or_clutter"},
+    "if_true": {
+      "kind": "leaf",
+      "id": "clutter",
+      "expected": ["log_as_cleared"],
+      "acceptable": ["continue_monitoring"],
+      "rationale": "Non-drone clutter should be logged as cleared once identified; continued monitoring is acceptable."
+    },
+    "if_false": {
+      "kind": "branch",
+      "id": "is-swarm",
+      "condition": {"fact": "true_class", "op": "eq", "value": "coordinated_swarm"},
+      "if_true": {
+        "kind": "leaf",
+        "id": "swarm",
+        "expected": ["report_to_exercise_control"],
+        "acceptable": [],
+        "rationale": "Coordinated swarm activity must be reported to exercise control."
+      },
+      "if_false": {
+        "kind": "branch",
+        "id": "is-cooperative",
+        "condition": {"fact": "cooperative", "op": "eq", "value": true},
+        "if_true": {
+          "kind": "branch",
+          "id": "beacon-seen",
+          "condition": {"fact": "beacon_observed", "op": "eq", "value": true},
+          "if_true": {
+            "kind": "leaf",
+            "id": "cooperative-confirmed",
+            "expected": ["log_as_cleared", "continue_monitoring"],
+            "acceptable": ["report_to_exercise_control"],
+            "rationale": "A cooperative aircraft with an observed simulated beacon may be cleared or monitored."
+          },
+          "if_false": {
+            "kind": "leaf",
+            "id": "cooperative-unconfirmed",
+            "expected": ["continue_monitoring", "request_sensor_confirmation"],
+            "acceptable": ["report_to_exercise_control"],
+            "rationale": "Cooperative status was never observable; monitor or seek confirmation rather than clearing."
+          }
+        },
+        "if_false": {
+          "kind": "branch",
+          "id": "near-site",
+          "condition": {"fact": "closest_range_m", "op": "lte", "value": 1500},
+          "if_true": {
+            "kind": "leaf",
+            "id": "noncooperative-near",
+            "expected": ["report_to_exercise_control"],
+            "acceptable": ["request_sensor_confirmation"],
+            "rationale": "Non-cooperative drone activity near the virtual site must be reported to exercise control."
+          },
+          "if_false": {
+            "kind": "leaf",
+            "id": "noncooperative-distant",
+            "expected": ["continue_monitoring", "report_to_exercise_control"],
+            "acceptable": ["request_sensor_confirmation"],
+            "rationale": "Distant non-cooperative activity should be monitored or reported."
+          }
+        }
+      }
+    }
+  },
+  "procedure_rules": [
+    {"kind": "confirm_before_clear", "description": "Request sensor confirmation before clearing a track with weak classification evidence.", "evidence_threshold": 0.5},
+    {"kind": "min_observations_before_clear", "description": "Wait for at least five observations before clearing a track.", "min_observations": 5},
+    {"kind": "classify_before_report", "description": "Classify a track before reporting or clearing it."}
+  ]
+}

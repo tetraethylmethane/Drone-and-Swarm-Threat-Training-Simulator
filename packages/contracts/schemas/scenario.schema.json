@@ -1,0 +1,931 @@
+{
+  "$defs": {
+    "Behavior": {
+      "enum": [
+        "transit",
+        "loiter",
+        "orbit",
+        "hover",
+        "erratic"
+      ],
+      "title": "Behavior",
+      "type": "string"
+    },
+    "ClassifyAllCriterion": {
+      "additionalProperties": false,
+      "description": "At least ``min_fraction`` of all observable tracks receive any classification.",
+      "properties": {
+        "kind": {
+          "const": "classify_all",
+          "default": "classify_all",
+          "title": "Kind",
+          "type": "string"
+        },
+        "min_fraction": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Fraction",
+          "type": "number"
+        }
+      },
+      "required": [
+        "min_fraction"
+      ],
+      "title": "ClassifyAllCriterion",
+      "type": "object"
+    },
+    "ClassifyCorrectlyCriterion": {
+      "additionalProperties": false,
+      "description": "At least ``min_fraction`` of observable tracks of ``entity_class`` are classified correctly.",
+      "properties": {
+        "entity_class": {
+          "$ref": "#/$defs/EntityClass"
+        },
+        "kind": {
+          "const": "classify_correctly",
+          "default": "classify_correctly",
+          "title": "Kind",
+          "type": "string"
+        },
+        "min_fraction": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Fraction",
+          "type": "number"
+        }
+      },
+      "required": [
+        "entity_class",
+        "min_fraction"
+      ],
+      "title": "ClassifyCorrectlyCriterion",
+      "type": "object"
+    },
+    "DifficultyProfile": {
+      "additionalProperties": false,
+      "description": "Difficulty level 3 runs the scenario exactly as authored; see drikr_simcore.difficulty.",
+      "properties": {
+        "adaptive_allowed": {
+          "default": true,
+          "title": "Adaptive Allowed",
+          "type": "boolean"
+        },
+        "level": {
+          "default": 3,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Level",
+          "type": "integer"
+        },
+        "max_level": {
+          "default": 5,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Max Level",
+          "type": "integer"
+        },
+        "min_level": {
+          "default": 1,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Min Level",
+          "type": "integer"
+        }
+      },
+      "title": "DifficultyProfile",
+      "type": "object"
+    },
+    "ElectroOpticalConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "classification_accuracy": {
+          "default": 0.75,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Classification Accuracy",
+          "type": "number"
+        },
+        "detection_probability": {
+          "default": 0.8,
+          "maximum": 1.0,
+          "minimum": 0.05,
+          "title": "Detection Probability",
+          "type": "number"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "latency_s": {
+          "default": 1.0,
+          "maximum": 10.0,
+          "minimum": 0.0,
+          "title": "Latency S",
+          "type": "number"
+        },
+        "range_m": {
+          "default": 2000,
+          "maximum": 6000.0,
+          "minimum": 200.0,
+          "title": "Range M",
+          "type": "number"
+        },
+        "update_interval_s": {
+          "default": 3.0,
+          "maximum": 10.0,
+          "minimum": 0.5,
+          "title": "Update Interval S",
+          "type": "number"
+        }
+      },
+      "title": "ElectroOpticalConfig",
+      "type": "object"
+    },
+    "EntityClass": {
+      "description": "Ground-truth category of a virtual entity (generic training categories).",
+      "enum": [
+        "small_multirotor",
+        "fixed_wing_uas",
+        "coordinated_swarm",
+        "bird_or_clutter"
+      ],
+      "title": "EntityClass",
+      "type": "string"
+    },
+    "EntityGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "altitude_m": {
+          "$ref": "#/$defs/FloatRange"
+        },
+        "behavior": {
+          "$ref": "#/$defs/Behavior"
+        },
+        "closest_approach_m": {
+          "$ref": "#/$defs/FloatRange"
+        },
+        "cooperative": {
+          "default": false,
+          "title": "Cooperative",
+          "type": "boolean"
+        },
+        "count": {
+          "$ref": "#/$defs/IntRange"
+        },
+        "dwell_s": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FloatRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "entity_class": {
+          "$ref": "#/$defs/EntityClass"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 120,
+          "minLength": 2,
+          "title": "Label",
+          "type": "string"
+        },
+        "spawn_time_s": {
+          "$ref": "#/$defs/FloatRange"
+        },
+        "speed_mps": {
+          "$ref": "#/$defs/FloatRange"
+        },
+        "swarm": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SwarmConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "entity_class",
+        "behavior",
+        "count",
+        "spawn_time_s",
+        "speed_mps",
+        "altitude_m",
+        "closest_approach_m"
+      ],
+      "title": "EntityGroup",
+      "type": "object"
+    },
+    "EnvironmentConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "terrain": {
+          "$ref": "#/$defs/Terrain"
+        },
+        "time_of_day": {
+          "$ref": "#/$defs/TimeOfDay"
+        },
+        "visibility_km": {
+          "maximum": 30.0,
+          "minimum": 0.2,
+          "title": "Visibility Km",
+          "type": "number"
+        },
+        "weather": {
+          "$ref": "#/$defs/Weather"
+        },
+        "wind_mps": {
+          "default": 3.0,
+          "maximum": 25.0,
+          "minimum": 0.0,
+          "title": "Wind Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "terrain",
+        "time_of_day",
+        "weather",
+        "visibility_km"
+      ],
+      "title": "EnvironmentConfig",
+      "type": "object"
+    },
+    "ExerciseMessageEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "at_s": {
+          "minimum": 0.0,
+          "title": "At S",
+          "type": "number"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "message": {
+          "maxLength": 280,
+          "minLength": 3,
+          "title": "Message",
+          "type": "string"
+        },
+        "type": {
+          "const": "exercise_message",
+          "default": "exercise_message",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "at_s",
+        "message"
+      ],
+      "title": "ExerciseMessageEvent",
+      "type": "object"
+    },
+    "FloatRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "title": "Max",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "number"
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "title": "FloatRange",
+      "type": "object"
+    },
+    "Formation": {
+      "enum": [
+        "line",
+        "wedge",
+        "cluster"
+      ],
+      "title": "Formation",
+      "type": "string"
+    },
+    "IntRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "title": "Max",
+          "type": "integer"
+        },
+        "min": {
+          "title": "Min",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "title": "IntRange",
+      "type": "object"
+    },
+    "LearningObjective": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "discriminator": {
+            "mapping": {
+              "classify_all": "#/$defs/ClassifyAllCriterion",
+              "classify_correctly": "#/$defs/ClassifyCorrectlyCriterion",
+              "no_false_clearance": "#/$defs/NoFalseClearanceCriterion",
+              "respond_within": "#/$defs/RespondWithinCriterion"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ClassifyCorrectlyCriterion"
+            },
+            {
+              "$ref": "#/$defs/RespondWithinCriterion"
+            },
+            {
+              "$ref": "#/$defs/NoFalseClearanceCriterion"
+            },
+            {
+              "$ref": "#/$defs/ClassifyAllCriterion"
+            }
+          ],
+          "title": "Criterion"
+        },
+        "description": {
+          "maxLength": 300,
+          "minLength": 5,
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "criterion"
+      ],
+      "title": "LearningObjective",
+      "type": "object"
+    },
+    "NoFalseClearanceCriterion": {
+      "additionalProperties": false,
+      "description": "No non-cooperative drone track is logged as cleared.",
+      "properties": {
+        "kind": {
+          "const": "no_false_clearance",
+          "default": "no_false_clearance",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "title": "NoFalseClearanceCriterion",
+      "type": "object"
+    },
+    "RadarConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "clutter_tracks_per_min": {
+          "default": 0.0,
+          "maximum": 6.0,
+          "minimum": 0.0,
+          "title": "Clutter Tracks Per Min",
+          "type": "number"
+        },
+        "detection_probability": {
+          "default": 0.9,
+          "maximum": 1.0,
+          "minimum": 0.05,
+          "title": "Detection Probability",
+          "type": "number"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "latency_s": {
+          "default": 0.5,
+          "maximum": 10.0,
+          "minimum": 0.0,
+          "title": "Latency S",
+          "type": "number"
+        },
+        "position_noise_m": {
+          "default": 25.0,
+          "maximum": 250.0,
+          "minimum": 0.0,
+          "title": "Position Noise M",
+          "type": "number"
+        },
+        "range_m": {
+          "default": 4000,
+          "maximum": 10000.0,
+          "minimum": 500.0,
+          "title": "Range M",
+          "type": "number"
+        },
+        "update_interval_s": {
+          "default": 2.0,
+          "maximum": 10.0,
+          "minimum": 0.5,
+          "title": "Update Interval S",
+          "type": "number"
+        }
+      },
+      "title": "RadarConfig",
+      "type": "object"
+    },
+    "RandomizationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_seed_override": {
+          "default": true,
+          "title": "Allow Seed Override",
+          "type": "boolean"
+        },
+        "seed": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "seed"
+      ],
+      "title": "RandomizationConfig",
+      "type": "object"
+    },
+    "RespondWithinCriterion": {
+      "additionalProperties": false,
+      "description": "Every observable track of ``entity_class`` receives ``response`` within ``within_s`` of first observation.",
+      "properties": {
+        "entity_class": {
+          "$ref": "#/$defs/EntityClass"
+        },
+        "kind": {
+          "const": "respond_within",
+          "default": "respond_within",
+          "title": "Kind",
+          "type": "string"
+        },
+        "response": {
+          "$ref": "#/$defs/TrainingResponse"
+        },
+        "within_s": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1800.0,
+          "title": "Within S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "entity_class",
+        "response",
+        "within_s"
+      ],
+      "title": "RespondWithinCriterion",
+      "type": "object"
+    },
+    "RfConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "detection_probability": {
+          "default": 0.7,
+          "maximum": 1.0,
+          "minimum": 0.05,
+          "title": "Detection Probability",
+          "type": "number"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "latency_s": {
+          "default": 1.5,
+          "maximum": 10.0,
+          "minimum": 0.0,
+          "title": "Latency S",
+          "type": "number"
+        },
+        "range_m": {
+          "default": 3000,
+          "maximum": 8000.0,
+          "minimum": 200.0,
+          "title": "Range M",
+          "type": "number"
+        },
+        "update_interval_s": {
+          "default": 4.0,
+          "maximum": 10.0,
+          "minimum": 0.5,
+          "title": "Update Interval S",
+          "type": "number"
+        }
+      },
+      "title": "RfConfig",
+      "type": "object"
+    },
+    "ScoringRef": {
+      "additionalProperties": false,
+      "properties": {
+        "rubric_key": {
+          "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+          "title": "Rubric Key",
+          "type": "string"
+        },
+        "rubric_version": {
+          "minimum": 1,
+          "title": "Rubric Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rubric_key",
+        "rubric_version"
+      ],
+      "title": "ScoringRef",
+      "type": "object"
+    },
+    "SensorDegradedEvent": {
+      "additionalProperties": false,
+      "description": "Simulated sensor-quality degradation (reduced detection, more noise, extra delay).",
+      "properties": {
+        "at_s": {
+          "minimum": 0.0,
+          "title": "At S",
+          "type": "number"
+        },
+        "detection_factor": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Detection Factor",
+          "type": "number"
+        },
+        "extra_delay_s": {
+          "default": 0.0,
+          "maximum": 10.0,
+          "minimum": 0.0,
+          "title": "Extra Delay S",
+          "type": "number"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "noise_factor": {
+          "default": 1.0,
+          "maximum": 5.0,
+          "minimum": 1.0,
+          "title": "Noise Factor",
+          "type": "number"
+        },
+        "sensor": {
+          "$ref": "#/$defs/SensorKind"
+        },
+        "type": {
+          "const": "sensor_degraded",
+          "default": "sensor_degraded",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "at_s",
+        "sensor",
+        "detection_factor"
+      ],
+      "title": "SensorDegradedEvent",
+      "type": "object"
+    },
+    "SensorKind": {
+      "enum": [
+        "radar",
+        "electro_optical",
+        "rf"
+      ],
+      "title": "SensorKind",
+      "type": "string"
+    },
+    "SensorRestoredEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "at_s": {
+          "minimum": 0.0,
+          "title": "At S",
+          "type": "number"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "sensor": {
+          "$ref": "#/$defs/SensorKind"
+        },
+        "type": {
+          "const": "sensor_restored",
+          "default": "sensor_restored",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "at_s",
+        "sensor"
+      ],
+      "title": "SensorRestoredEvent",
+      "type": "object"
+    },
+    "SensorSuite": {
+      "additionalProperties": false,
+      "properties": {
+        "electro_optical": {
+          "$ref": "#/$defs/ElectroOpticalConfig"
+        },
+        "radar": {
+          "$ref": "#/$defs/RadarConfig"
+        },
+        "rf": {
+          "$ref": "#/$defs/RfConfig"
+        }
+      },
+      "title": "SensorSuite",
+      "type": "object"
+    },
+    "SwarmConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "formation": {
+          "$ref": "#/$defs/Formation",
+          "default": "cluster"
+        },
+        "size": {
+          "$ref": "#/$defs/IntRange"
+        },
+        "spacing_m": {
+          "default": 30.0,
+          "maximum": 200.0,
+          "minimum": 5.0,
+          "title": "Spacing M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "size"
+      ],
+      "title": "SwarmConfig",
+      "type": "object"
+    },
+    "Terrain": {
+      "enum": [
+        "urban",
+        "rural",
+        "coastal",
+        "industrial"
+      ],
+      "title": "Terrain",
+      "type": "string"
+    },
+    "TimeLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_pause": {
+          "default": true,
+          "title": "Allow Pause",
+          "type": "boolean"
+        },
+        "duration_s": {
+          "maximum": 1800,
+          "minimum": 60,
+          "title": "Duration S",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "duration_s"
+      ],
+      "title": "TimeLimits",
+      "type": "object"
+    },
+    "TimeOfDay": {
+      "enum": [
+        "day",
+        "dusk",
+        "night"
+      ],
+      "title": "TimeOfDay",
+      "type": "string"
+    },
+    "TrainingResponse": {
+      "enum": [
+        "continue_monitoring",
+        "request_sensor_confirmation",
+        "report_to_exercise_control",
+        "log_as_cleared"
+      ],
+      "title": "TrainingResponse",
+      "type": "string"
+    },
+    "VisibilityChangeEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "at_s": {
+          "minimum": 0.0,
+          "title": "At S",
+          "type": "number"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "const": "visibility_change",
+          "default": "visibility_change",
+          "title": "Type",
+          "type": "string"
+        },
+        "visibility_km": {
+          "maximum": 30.0,
+          "minimum": 0.2,
+          "title": "Visibility Km",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "at_s",
+        "visibility_km"
+      ],
+      "title": "VisibilityChangeEvent",
+      "type": "object"
+    },
+    "Weather": {
+      "enum": [
+        "clear",
+        "haze",
+        "rain",
+        "fog"
+      ],
+      "title": "Weather",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "briefing": {
+      "maxLength": 4000,
+      "minLength": 10,
+      "title": "Briefing",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "difficulty": {
+      "$ref": "#/$defs/DifficultyProfile"
+    },
+    "entities": {
+      "items": {
+        "$ref": "#/$defs/EntityGroup"
+      },
+      "maxItems": 20,
+      "minItems": 1,
+      "title": "Entities",
+      "type": "array"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentConfig"
+    },
+    "event_schedule": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "exercise_message": "#/$defs/ExerciseMessageEvent",
+            "sensor_degraded": "#/$defs/SensorDegradedEvent",
+            "sensor_restored": "#/$defs/SensorRestoredEvent",
+            "visibility_change": "#/$defs/VisibilityChangeEvent"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/SensorDegradedEvent"
+          },
+          {
+            "$ref": "#/$defs/SensorRestoredEvent"
+          },
+          {
+            "$ref": "#/$defs/VisibilityChangeEvent"
+          },
+          {
+            "$ref": "#/$defs/ExerciseMessageEvent"
+          }
+        ]
+      },
+      "maxItems": 50,
+      "title": "Event Schedule",
+      "type": "array"
+    },
+    "key": {
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+      "title": "Key",
+      "type": "string"
+    },
+    "learning_objectives": {
+      "items": {
+        "$ref": "#/$defs/LearningObjective"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Learning Objectives",
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Name",
+      "type": "string"
+    },
+    "randomization": {
+      "$ref": "#/$defs/RandomizationConfig"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scoring": {
+      "$ref": "#/$defs/ScoringRef"
+    },
+    "self_guided": {
+      "default": false,
+      "title": "Self Guided",
+      "type": "boolean"
+    },
+    "sensors": {
+      "$ref": "#/$defs/SensorSuite"
+    },
+    "time_limits": {
+      "$ref": "#/$defs/TimeLimits"
+    },
+    "version": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "description",
+    "briefing",
+    "learning_objectives",
+    "environment",
+    "sensors",
+    "entities",
+    "randomization",
+    "scoring",
+    "time_limits"
+  ],
+  "title": "Scenario",
+  "type": "object"
+}

@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drikr-api"
+version = "1.0.0"
+description = "Drikr Systems training simulator: FastAPI backend"
+requires-python = ">=3.12"
+dependencies = [
+  "drikr-contracts==1.0.0",
+  "drikr-simcore==1.0.0",
+  "drikr-scoring==1.0.0",
+  "fastapi==0.143.1",
+  "starlette==1.8.0",
+  "uvicorn[standard]==0.34.0",
+  "pydantic==2.10.4",
+  "pydantic-settings==2.7.0",
+  "sqlalchemy==2.0.37",
+  "alembic==1.14.0",
+  "psycopg[binary]==3.2.3",
+  "argon2-cffi==23.1.0",
+  "reportlab==4.2.5",
+  "cryptography==50.0.2",
+  "segno==1.6.6",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.1.1",
+  "pytest-cov==6.0.0",
+  "httpx==0.28.1",
+  "ruff==0.8.4",
+  "mypy==1.14.0",
+  "pip-audit==2.7.3",
+]
+
+[project.scripts]
+drikr-api = "drikr_api.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["drikr_api*"]
+
+[tool.setuptools.package-data]
+drikr_api = ["assets/*.png"]
