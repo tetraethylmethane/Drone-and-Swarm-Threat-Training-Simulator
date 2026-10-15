@@ -13,7 +13,11 @@ COPY packages/contracts/schemas/ /src/packages/contracts/schemas/
 COPY packages/simcore/drikr_simcore/demo_scenarios/ /src/packages/simcore/drikr_simcore/demo_scenarios/
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.27.2-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.30.4-alpine3.24 AS runtime
+# Apply Alpine security updates released after the base image was built (keeps Trivy clean).
+USER root
+RUN apk upgrade --no-cache
+USER 101
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /src/apps/web/dist /usr/share/nginx/html
 EXPOSE 8080

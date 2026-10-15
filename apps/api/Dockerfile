@@ -2,19 +2,21 @@
 # Drikr Systems training simulator API. Build context: repository root.
 #   docker build -f apps/api/Dockerfile -t drikr-api:1.0.0 .
 
-FROM python:3.12.7-slim-bookworm AS build
+FROM python:3.12.14-slim-bookworm AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_DEFAULT_TIMEOUT=120 PIP_RETRIES=10
 WORKDIR /src
 COPY packages/ packages/
 COPY apps/api/ apps/api/
 RUN pip wheel --wheel-dir /wheels ./packages/contracts ./packages/simcore ./packages/scoring ./apps/api
 
-FROM python:3.12.7-slim-bookworm AS runtime
+FROM python:3.12.14-slim-bookworm AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     DRIKR_MIGRATIONS_DIR=/app/database/migrations
+# Apply Debian security updates released after the base image was built (keeps Trivy clean).
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN groupadd --gid 10001 drikr && useradd --uid 10001 --gid drikr --no-create-home --shell /usr/sbin/nologin drikr
 COPY --from=build /wheels /wheels
 RUN pip install --no-index --find-links=/wheels drikr-api && rm -rf /wheels

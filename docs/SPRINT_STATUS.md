@@ -32,7 +32,8 @@ located on 2026-10-15 (initially not found on `PATH`) and used for the Unity cli
 | `pip-audit` | No known vulnerabilities (local packages not on PyPI are skipped) |
 | `npm audit` (web, **including dev tooling**) | **0 vulnerabilities** after Vite 8, Vitest 5, Tailwind 4, jsdom 30 and `@types/node` 22.20.4 |
 | `npm audit` (E2E tooling) | **0 vulnerabilities** after Playwright 1.48.2 → 1.63.0 (advisory GHSA-7mvr-c777-76hp) and axe-core/playwright 4.13.0 |
-| Trivy image scan, gitleaks | Configured in CI; **not executed locally**. Unverified until CI runs |
+| Trivy image scan (HIGH/CRITICAL, fixed only) | First CI run found 52 (API, Debian 12.8) and 38 (web, Alpine 3.20) OS-package findings from 2024 base images. Fixed by moving to python 3.12.14-slim-bookworm, nginx-unprivileged 1.30.4 (Alpine 3.24) and postgres 17.11, plus OS security updates at build time: **0 findings** in both images (Trivy 0.66.0 locally). The upstream postgres image still reports Go standard-library CVEs in its bundled `gosu` binary (not scanned in CI; tracked as O12) |
+| gitleaks | Clean on the committed tree (one false positive, a C# property name, allow-listed) |
 
 ## Sprint 1 — Architecture and foundation: complete
 
@@ -185,4 +186,5 @@ Findings from the synthetic validation that need decisions (not changed in this 
 | O8 | Cross-browser E2E (Firefox, WebKit) and manual screen-reader audit |
 | O9 | Move the repository out of OneDrive for development: sync locking slows npm and caused one E2E artifact failure |
 | O10 | Replace `httpx` with the client Starlette now recommends for its TestClient (deprecation warning in tests) |
+| O12 | Postgres image: Go stdlib CVEs reported in the upstream image's `gosu` helper; track upstream or build a derived image |
 | O11 | Review the adaptive-policy thresholds and the Perimeter basics scenario using the synthetic-validation findings |

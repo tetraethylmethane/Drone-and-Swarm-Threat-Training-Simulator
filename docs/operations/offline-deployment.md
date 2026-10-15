@@ -18,8 +18,8 @@ container images.
 ```bash
 git clone <repository> drikr && cd drikr
 docker compose build
-docker pull postgres:17.2-alpine3.20
-docker save -o drikr-images-1.0.0.tar drikr-api:1.0.0 drikr-web:1.0.0 postgres:17.2-alpine3.20
+docker pull postgres:17.11-alpine3.24
+docker save -o drikr-images-1.0.0.tar drikr-api:1.0.0 drikr-web:1.0.0 postgres:17.11-alpine3.24
 sha256sum drikr-images-1.0.0.tar > drikr-images-1.0.0.tar.sha256
 ```
 

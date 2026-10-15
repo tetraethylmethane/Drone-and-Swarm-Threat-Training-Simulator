@@ -9,7 +9,7 @@ name: drikr
 
 services:
   db:
-    image: postgres:17.2-alpine3.20
+    image: postgres:17.11-alpine3.24
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
