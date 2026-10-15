@@ -5,6 +5,7 @@ import { PageHeader, Panel, PanelHeader } from "@/components/ui/panel";
 import { Tag, toneForStatus } from "@/components/ui/status";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/states";
 import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
+import { FirstVisitGuide, GUIDE_PATH } from "@/features/guide/HowToPlay";
 import { api, qs } from "@/lib/api";
 import { formatClock, formatDate, formatDateTime, formatPercent } from "@/lib/format";
 import { ENV_LABELS, label, STATUS_LABELS } from "@/lib/labels";
@@ -18,9 +19,15 @@ export function TraineeHome() {
   const sessions = useAsync((sig) => api.get<Page<SessionState>>("/sessions?limit=10", sig), []);
   return (
     <>
+      <FirstVisitGuide />
       <PageHeader
         title="My exercises"
         description="Exercises assigned to you by an instructor. Open one to read the briefing and launch it."
+        actions={
+          <Button asChild variant="secondary">
+            <Link to={GUIDE_PATH}>How to play</Link>
+          </Button>
+        }
       />
       <Panel className="mb-4">
         <PanelHeader title="Assigned exercises" />

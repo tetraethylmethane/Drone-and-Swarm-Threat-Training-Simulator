@@ -14,6 +14,12 @@ test("capture key screens @screens", async ({ browser, page }) => {
   await page.screenshot({ path: `${OUT}/01-login.png` });
 
   const trainee = await newUserPage(browser, "trainee2");
+  await trainee.goto("/trainee/how-to-play");
+  await trainee.screenshot({
+    path: `${OUT}/16-how-to-play.png`,
+    fullPage: true,
+  });
+  await trainee.goto("/trainee");
   await trainee.screenshot({
     path: `${OUT}/02-trainee-home.png`,
     fullPage: true,

@@ -15,6 +15,7 @@ import { AnalyticsPage, InstructorHome, SessionsPage } from "@/features/instruct
 import { RubricDetailPage, RubricListPage } from "@/features/instructor/RubricPages";
 import { ScenarioEditorPage } from "@/features/instructor/ScenarioEditor";
 import { ScenarioDetailPage, ScenarioListPage } from "@/features/instructor/ScenarioPages";
+import { HowToPlayPage } from "@/features/guide/HowToPlay";
 import { HistoryPage } from "@/features/trainee/HistoryPage";
 import {
   AssignmentBriefingPage,
@@ -69,6 +70,7 @@ export function App() {
         <Route path="/trainee/practice" element={guard(<PracticeLibraryPage />, TRAINEE)} />
         <Route path="/trainee/practice/:scenarioId" element={guard(<PracticeBriefingPage />, TRAINEE)} />
         <Route path="/trainee/history" element={guard(<HistoryPage />, TRAINEE)} />
+        <Route path="/trainee/how-to-play" element={guard(<HowToPlayPage />, TRAINEE)} />
         <Route path="/exercise/:sessionId" element={guard(<ExercisePage />, TRAINEE)} />
 
         <Route path="/sessions/:sessionId/result" element={<AarPage />} />

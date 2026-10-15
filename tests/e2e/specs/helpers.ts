@@ -73,11 +73,9 @@ export async function enrolMfa(
   username: string,
   password = PASSWORD,
 ): Promise<string> {
-  const panel = page
-    .locator("section")
-    .filter({
-      has: page.getByRole("heading", { name: "Multi-factor authentication" }),
-    });
+  const panel = page.locator("section").filter({
+    has: page.getByRole("heading", { name: "Multi-factor authentication" }),
+  });
   await panel.getByRole("button", { name: "Set up authenticator" }).click();
   await panel.getByLabel("Current password").fill(password);
   await panel.getByRole("button", { name: "Continue" }).click();
@@ -103,7 +101,17 @@ export async function login(
   page: Page,
   username: string,
   password = PASSWORD,
+  { showGuide = false }: { showGuide?: boolean } = {},
 ): Promise<void> {
+  // The first-visit "How to play" welcome would cover other tests; guide.spec.ts tests it.
+  if (!showGuide)
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.setItem("drikr.guide.seen.v1", "1");
+      } catch {
+        /* storage unavailable */
+      }
+    });
   await page.goto("/login");
   await page.getByLabel("Username").fill(username);
   await page.getByLabel("Password").fill(password);

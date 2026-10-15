@@ -14,6 +14,12 @@ your recovery codes instead; each works once. To set up an authenticator, or to 
 codes, open **Account and security**. If your organisation requires MFA for your role, that page
 opens automatically until you have set it up.
 
+**New here?** On your first visit a short welcome explains the idea. **How to play** in the menu
+has the full guide: the steps, what each classification and response means, how to read the
+Tracks table, and tips for a good score. During an exercise, the **Next step** bar above the
+picture always says what to do next, and **How to play** opens the guide without leaving the
+exercise.
+
 ## 2. Find your exercises
 
 **My exercises** lists assignments from your instructor with status, attempts used and best score.

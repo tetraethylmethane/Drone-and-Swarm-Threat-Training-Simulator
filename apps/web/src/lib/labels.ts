@@ -8,6 +8,17 @@ export const CLASSIFICATION_LABELS: Record<string, string> = {
   unknown: "Unknown",
 };
 
+/** Plain-language meaning of each classification, for the guide and the decision panel. */
+export const CLASSIFICATION_HELP: Record<string, string> = {
+  small_multirotor: "A small drone with rotors, like a quadcopter. Slow, can hover, often low and close.",
+  fixed_wing_uas:
+    "A drone shaped like a small aircraft. Faster, flies in straight lines or wide loops, cannot hover.",
+  coordinated_swarm: "Several drones moving together in a pattern. Their tracks appear and move as a group.",
+  bird_or_clutter:
+    "Not a drone: a bird, weather or a false radar return. Erratic, short-lived or no RF signal.",
+  unknown: "You cannot tell yet. Better than guessing; you can change it later.",
+};
+
 export const RESPONSE_LABELS: Record<string, string> = {
   continue_monitoring: "Continue monitoring",
   request_sensor_confirmation: "Request sensor confirmation",

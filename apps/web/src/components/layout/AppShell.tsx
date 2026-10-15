@@ -23,6 +23,7 @@ const NAV: Record<Role, { heading: string; items: NavItem[] }[]> = {
         { to: "/trainee", label: "My exercises", end: true },
         { to: "/trainee/practice", label: "Practice library" },
         { to: "/trainee/history", label: "My progress" },
+        { to: "/trainee/how-to-play", label: "How to play" },
       ],
     },
   ],

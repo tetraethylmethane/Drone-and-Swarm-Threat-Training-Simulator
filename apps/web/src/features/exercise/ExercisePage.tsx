@@ -10,6 +10,9 @@ import { formatClock } from "@/lib/format";
 import { CLASSIFICATION_LABELS, ENV_LABELS, label, STATUS_LABELS } from "@/lib/labels";
 import { errorMessage } from "@/lib/useAsync";
 
+import { HowToPlayContent } from "@/features/guide/HowToPlay";
+import { nextStep } from "@/features/guide/nextStep";
+
 import { DecisionPanel, EventLog, SensorPanel, TrackTable } from "./panels";
 import { PlanView } from "./PlanView";
 import { sortedTracks } from "./trackPicture";
@@ -35,6 +38,7 @@ export function ExercisePage() {
   const [view, setView] = useState<"3d" | "plan">(() => (hasWebGL() ? "3d" : "plan"));
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [opError, setOpError] = useState<string | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
   const tracks = useMemo(() => sortedTracks(ex.picture), [ex.picture]);
 
   const toggle = useCallback((id: string, additive: boolean) => {
@@ -83,6 +87,9 @@ export function ExercisePage() {
             </p>
           </div>
           <Tag tone={toneForStatus(s.status)}>{label(STATUS_LABELS, s.status)}</Tag>
+          <Button variant="ghost" aria-expanded={showGuide} onClick={() => setShowGuide((v) => !v)}>
+            {showGuide ? "Hide guide" : "How to play"}
+          </Button>
           {s.status === "created" ? <Button onClick={() => run("start")}>Start exercise</Button> : null}
           {running && s.allow_pause ? (
             <Button variant="secondary" onClick={() => run("pause")}>
@@ -119,6 +126,8 @@ export function ExercisePage() {
         </Alert>
       ) : null}
       {opError ? <Alert tone="danger">{opError}</Alert> : null}
+      <NextStepBar step={nextStep(s.status, tracks, selected)} />
+      {showGuide ? <HowToPlayContent /> : null}
 
       {s.status === "created" && b ? (
         <Panel>
@@ -260,6 +269,30 @@ export function ExercisePage() {
           </>
         }
       />
+    </div>
+  );
+}
+
+function NextStepBar({ step }: { step: ReturnType<typeof nextStep> }) {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex items-start gap-3 rounded-md border border-brand/40 bg-brand-soft px-4 py-3"
+    >
+      <span
+        aria-hidden="true"
+        className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full bg-brand px-1.5 text-xs font-semibold text-brand-ink"
+      >
+        {step.step ?? "✓"}
+      </span>
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-ink">
+          <span className="sr-only">Next step: </span>
+          {step.title}
+        </p>
+        <p className="text-xs text-ink-muted">{step.detail}</p>
+      </div>
     </div>
   );
 }

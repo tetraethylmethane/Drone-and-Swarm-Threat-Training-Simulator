@@ -7,6 +7,7 @@ import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
 import { TRACK_CLASSIFICATIONS, TRAINING_RESPONSES } from "@/contracts/scenario";
 import { formatClock } from "@/lib/format";
 import {
+  CLASSIFICATION_HELP,
   CLASSIFICATION_LABELS,
   CONFIDENCE_LABELS,
   label,
@@ -181,7 +182,10 @@ export function DecisionPanel({
       </p>
       <fieldset className="space-y-3" disabled={disabled || busy || none}>
         <legend className="text-xs font-semibold uppercase tracking-wide text-ink-subtle">1. Classify</legend>
-        <Field label="Classification">
+        <Field
+          label="Classification"
+          hint={classification ? CLASSIFICATION_HELP[classification] : "What do you think this track is?"}
+        >
           <Select value={classification} onChange={(e) => setClassification(e.target.value)}>
             <option value="">Choose a classification</option>
             {TRACK_CLASSIFICATIONS.map((c) => (

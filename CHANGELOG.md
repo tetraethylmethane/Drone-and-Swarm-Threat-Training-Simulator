@@ -6,6 +6,10 @@ Engine versions are tracked separately because they affect reproducibility.
 ## [1.0.0-rc3] - 2026-10-15
 
 ### Added
+- In-app help for trainees: a first-visit welcome, a **How to play** guide page (steps, plain-language
+  meaning of every classification and response, reading the Tracks table, scoring tips), a live
+  **Next step** bar during exercises, and an explanation of the chosen classification in the
+  Decision panel.
 - Unity client for Linux (x86_64) and macOS (universal) in addition to Windows; `BuildLinux`,
   `BuildMacOS` and `BuildAll`; a Linux smoke test in Docker (`scripts/unity-linux-smoke.sh`).
 - Unity CI workflow (`.github/workflows/unity.yml`): EditMode tests and players for all three
