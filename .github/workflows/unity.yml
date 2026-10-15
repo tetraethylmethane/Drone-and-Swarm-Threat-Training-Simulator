@@ -50,8 +50,8 @@ jobs:
     if: needs.licence.outputs.hosted == 'true'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: ${{ env.PROJECT_PATH }}/Library
           key: unity-library-test-${{ hashFiles('apps/simulator/DrikrUnityClient/Packages/packages-lock.json', 'apps/simulator/DrikrUnityClient/Assets/**/*.cs') }}
@@ -68,7 +68,7 @@ jobs:
           testMode: editmode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Unity EditMode results
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.1
         if: always()
         with:
           name: unity-test-results
@@ -96,8 +96,8 @@ jobs:
             buildMethod: Drikr.EditorTools.BuildScript.BuildMacOS
             output: Builds/macOS
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: ${{ env.PROJECT_PATH }}/Library
           key: unity-library-${{ matrix.targetPlatform }}-${{ hashFiles('apps/simulator/DrikrUnityClient/Packages/packages-lock.json', 'apps/simulator/DrikrUnityClient/Assets/**/*.cs') }}
@@ -112,7 +112,7 @@ jobs:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildMethod: ${{ matrix.buildMethod }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: drikr-unity-${{ matrix.targetPlatform }}
           path: ${{ env.PROJECT_PATH }}/${{ matrix.output }}
@@ -125,7 +125,7 @@ jobs:
     env:
       UNITY_EXE: ${{ vars.UNITY_EXE || 'C:/Program Files/Unity 6000.3.26f1/Editor/Unity.exe' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
       - name: EditMode tests
         shell: pwsh
         run: |
@@ -141,7 +141,7 @@ jobs:
             -executeMethod Drikr.EditorTools.BuildScript.BuildAll -logFile "$p/Logs/build.log" | Out-Null
           Select-String -Path "$p/Logs/build.log" -Pattern 'DRIKR_BUILD'
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.1
         if: always()
         with:
           name: drikr-unity-self-hosted
