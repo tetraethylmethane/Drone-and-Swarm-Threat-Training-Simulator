@@ -6,7 +6,7 @@ and the evidence for it. The sprints were not separate two-week calendar iterati
 
 **Environment used for verification:** Windows 11 (10.0.26200), Intel 12 logical CPUs, Python
 3.12.4, Node 22.23.3 (portable, checksum-verified), PostgreSQL 17.5 (project-local cluster), Docker 27.3.1 (Linux containers:
-Python 3.12.7, PostgreSQL 17.2, nginx 1.27). Unity 6000.3.26f1 with Windows standalone support was
+Python 3.12.14, PostgreSQL 17.11, nginx 1.30.4 since 2026-10-15; earlier runs: Python 3.12.7, PostgreSQL 17.2, nginx 1.27). Unity 6000.3.26f1 with Windows standalone support was
 located on 2026-10-15 (initially not found on `PATH`) and used for the Unity client.
 
 ## Test results (latest runs, 2026-10-15, release candidate 3)
@@ -62,7 +62,7 @@ Decisions: ADR-001 to ADR-011. The repository was greenfield: no prior code, tes
 ## Sprint 3 — Scenario configuration and event engine: complete
 
 - [x] Valid scenarios pass; invalid configurations rejected with paths
-- [x] Identical version, configuration and seed reproduce the same logical sequence (unit, API `verify`, **cross-platform: all four demo digests identical on Windows/CPython 3.12.4 and Linux/CPython 3.12.7**)
+- [x] Identical version, configuration and seed reproduce the same logical sequence (unit, API `verify`, **cross-platform: all four demo digests identical on Windows/CPython 3.12.4 and Linux/CPython 3.12.7, re-checked on Linux/CPython 3.12.14 on 2026-10-15**)
 - [x] Different seeds give valid variations
 - [x] Event timestamps follow the tick rules
 - [x] Version changes do not overwrite historical sessions (`test_versioning_never_overwrites_history`)
