@@ -1,0 +1,3 @@
+# Reviewed false positives (gitleaks fingerprints). Each entry was checked by hand and is not a secret.
+# scripts/measure-performance.py: 'verify=args.ca' is the path to a CA certificate file (rewritten in a later commit).
+115c1b837f4d206f59f9f4c713f9d19f63e7ee62:scripts/measure-performance.py:generic-api-key:38

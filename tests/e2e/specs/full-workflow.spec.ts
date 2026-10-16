@@ -89,6 +89,13 @@ test("instructor assigns, trainee completes, instructor reviews and exports", as
   await expect(
     trainee.getByRole("row", { name: new RegExp(trackLabel) }),
   ).toContainText("Report to exercise control");
+  // The assessment cites the recorded events it is based on (scoring-1.2.0 evidence).
+  await expect(
+    trainee.getByRole("columnheader", { name: "Evidence" }),
+  ).toBeVisible();
+  await expect(
+    trainee.getByRole("row", { name: new RegExp(trackLabel) }),
+  ).toContainText(/classified Small multirotor/);
 
   // --- Instructor reviews, verifies and exports ----------------------------------
   await instructor.goto(new URL(sessionUrl).pathname);

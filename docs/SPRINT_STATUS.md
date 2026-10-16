@@ -23,6 +23,8 @@ located on 2026-10-15 (initially not found on `PATH`) and used for the Unity cli
 | Reproducibility on stored data | Docker deployment: **22 of 22** sessions (all scored by `scoring-1.1.0`) reproduce under `scoring-1.2.0`. Dev database: **36 of 36** across `scoring-1.0.0`, `1.1.0` and `1.2.0` |
 | Measured exercise (`scripts/measure-performance.py`, HTTPS, one laptop) | Feed median 46 ms (p95 64); decision 37 ms; finish and score 218 ms; PDF 230 ms; sign-in 99 ms (first request 2.2 s including connection setup). Full table in `docs/product/positioning.md` |
 | Unity | No Unity changes in rc4; rc3 results below still apply |
+| gitleaks on GitHub (gitleaks-action v3, full history) | First rc4 run flagged `verify=args.ca` in `scripts/measure-performance.py` as a "generic API key": a **false positive** (a CA certificate path). Code reworded; the fingerprint is listed in `.gitleaksignore`. Local scans now use gitleaks 8.30.1 (history and tree): no leaks |
+| E2E on GitHub | First rc4 run failed: a new test assumed existing scored sessions, which a fresh CI database does not have. Tests restructured to work on an empty database; the evidence check moved into the self-contained full-workflow test |
 
 ### Previous results (2026-10-15, release candidate 3)
 

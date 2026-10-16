@@ -35,7 +35,8 @@ def main() -> None:
     ap.add_argument("--scenario", default="demo-perimeter-basics")
     args = ap.parse_args()
     password = os.environ["DRIKR_BENCH_PASSWORD"]
-    client = httpx.Client(base_url=args.api, verify=args.ca or True, timeout=60)
+    trusted_roots = args.ca if args.ca else True  # CA certificate file, or the system trust store
+    client = httpx.Client(base_url=args.api, verify=trusted_roots, timeout=60)
     t: dict[str, Any] = {}
 
     def timed(name: str, method: str, path: str, **kw: Any) -> httpx.Response:
