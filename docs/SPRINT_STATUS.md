@@ -9,7 +9,22 @@ and the evidence for it. The sprints were not separate two-week calendar iterati
 Python 3.12.14, PostgreSQL 17.11, nginx 1.30.4 since 2026-10-15; earlier runs: Python 3.12.7, PostgreSQL 17.2, nginx 1.27). Unity 6000.3.26f1 with Windows standalone support was
 located on 2026-10-15 (initially not found on `PATH`) and used for the Unity client.
 
-## Test results (latest runs, 2026-10-15, release candidate 3)
+## Test results (latest runs, 2026-10-16, release candidate 4)
+
+| Suite | Result |
+|---|---|
+| Python unit, reproducibility and integration (`pytest`) | **272 passed**, 0 failed (227 s). New in rc4: reproducibility suite (40), traceability (3), competency and comparison (3), units (2), reproducibility report and measured performance (2) |
+| Ruff lint and format, mypy strict (65 files) | Clean |
+| Web unit and component (Vitest 5) | **38 passed** (6 files; new: competency panel, compare page, unit summary) |
+| ESLint, Prettier, `tsc` strict, production build | Clean |
+| E2E (Playwright 1.63, Chromium), dev stack | **23 passed**, 1 skipped (opt-in screenshot capture; run separately: pass). New: competency on My progress; units, competency, evidence column and compare on Analytics and the AAR |
+| Migration `0003` upgrade, downgrade, upgrade and `alembic check` | Clean |
+| Docker stack upgraded in place to `0003` | Ready; backup restored into a scratch database at `0003` (134 audit events, chain valid); restart of all containers ready in 10 s with records unchanged |
+| Reproducibility on stored data | Docker deployment: **22 of 22** sessions (all scored by `scoring-1.1.0`) reproduce under `scoring-1.2.0`. Dev database: **36 of 36** across `scoring-1.0.0`, `1.1.0` and `1.2.0` |
+| Measured exercise (`scripts/measure-performance.py`, HTTPS, one laptop) | Feed median 46 ms (p95 64); decision 37 ms; finish and score 218 ms; PDF 230 ms; sign-in 99 ms (first request 2.2 s including connection setup). Full table in `docs/product/positioning.md` |
+| Unity | No Unity changes in rc4; rc3 results below still apply |
+
+### Previous results (2026-10-15, release candidate 3)
 
 | Suite | Result |
 |---|---|
@@ -172,6 +187,28 @@ Findings from the synthetic validation that need decisions (not changed in this 
 - the adaptive policy lags improving trainees and lets steady mid-skill trainees drift down;
 - the objectives and procedure dimensions rest on few items.
 
+## Sprint 9: Evidence and differentiation (follow-up brief): complete
+
+The full plan, files and acceptance criteria are in `docs/product/differentiation-roadmap.md`. Every
+claim is mapped to a test in `docs/product/requirements-to-tests.md`.
+
+| Item | Status | Evidence |
+|---|---|---|
+| Competitor research (10 companies) and evidence register | Done (public sources, 2026-10-16) | `docs/research/competitor-landscape.md`, `competitive-evidence.md` |
+| Repositories and papers re-verified | Done | `docs/research/research-and-reuse.md` |
+| Positioning, roadmap, requirements-to-tests | Done | `docs/product/` |
+| Traceable assessments (`scoring-1.2.0` evidence events) | Done | `test_traceability.py`; AAR Evidence column |
+| Verification across engine versions | Done | Older results verify by assessment; changed scores flagged |
+| Reproducibility suite and bulk report | Done | 40 tests; `/admin/reproducibility`; CLI |
+| Competency tracking, recurring errors, attempt comparison | Done | `test_competency.py`; component and E2E tests |
+| Unit-level reporting | Done | Migration `0003`; `test_units.py` |
+| Measured performance and recovery validation | Done (one machine) | System health panel; measurements above |
+| Instructor usability test, adaptive retune, Perimeter basics, load test, human pilot | **Proposed** (Sprint 10) | Roadmap |
+
+Architecture note: the follow-up brief lists Unity as the authoritative engine. The project keeps
+ADR-001 (authoritative deterministic Python engine, Unity as a presentation client), because the
+reproducibility guarantees depend on it. See the roadmap for the reasoning.
+
 ## Open items
 
 | ID | Item |
@@ -187,4 +224,5 @@ Findings from the synthetic validation that need decisions (not changed in this 
 | O9 | Move the repository out of OneDrive for development: sync locking slows npm and caused one E2E artifact failure |
 | O10 | Replace `httpx` with the client Starlette now recommends for its TestClient (deprecation warning in tests) |
 | O12 | Postgres image: Go stdlib CVEs reported in the upstream image's `gosu` helper; track upstream or build a derived image |
+| O13 | Sprint 10 (proposed): usability test, adaptive retune, Perimeter basics v2, competitor verification, load test, human pilot |
 | O11 | Review the adaptive-policy thresholds and the Perimeter basics scenario using the synthetic-validation findings |

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ const NewUserSchema = z.object({
   display_name: z.string().trim().min(2, "Enter a name").max(120),
   role: z.enum(["administrator", "instructor", "trainee"]),
   password: z.string().min(12, "At least 12 characters"),
+  unit: z.string().trim().max(80, "At most 80 characters"),
 });
 
 function detailText(err: unknown): string {
@@ -45,6 +47,7 @@ export function UsersPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [resetFor, setResetFor] = useState<UserOut | null>(null);
   const [anonymiseFor, setAnonymiseFor] = useState<UserOut | null>(null);
+  const [unitFor, setUnitFor] = useState<UserOut | null>(null);
   const [msg, setMsg] = useState<{ tone: "success" | "danger"; text: string } | null>(null);
 
   async function patch(u: UserOut, body: Record<string, unknown>, done: string) {
@@ -91,6 +94,7 @@ export function UsersPage() {
                 <TH>Name</TH>
                 <TH>Username</TH>
                 <TH>Role</TH>
+                <TH>Unit</TH>
                 <TH>Status</TH>
                 <TH>Created</TH>
                 <TH>
@@ -123,6 +127,20 @@ export function UsersPage() {
                         </option>
                       ))}
                     </Select>
+                  </TD>
+                  <TD className="text-sm">
+                    {u.anonymised_at ? (
+                      (u.unit ?? "—")
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        aria-label={`Unit for ${u.username}: ${u.unit ?? "none"}. Change`}
+                        onClick={() => setUnitFor(u)}
+                      >
+                        {u.unit ?? "Set unit"}
+                      </Button>
+                    )}
                   </TD>
                   <TD className="space-x-1">
                     <Tag tone={u.is_active ? "success" : "neutral"}>
@@ -217,6 +235,17 @@ export function UsersPage() {
         onClose={() => setResetFor(null)}
         onDone={(n) => setMsg({ tone: "success", text: `Temporary password set for ${n}.` })}
       />
+      <UnitDialog
+        user={unitFor}
+        onClose={() => setUnitFor(null)}
+        onDone={(n, unit) => {
+          st.reload();
+          setMsg({
+            tone: "success",
+            text: unit ? `${n} is now in unit ${unit}.` : `${n} is no longer in a unit.`,
+          });
+        }}
+      />
       <AnonymiseDialog
         user={anonymiseFor}
         onClose={() => setAnonymiseFor(null)}
@@ -241,12 +270,18 @@ function CreateUserDialog({
   onOpenChange: (v: boolean) => void;
   onCreated: () => void;
 }) {
-  const [form, setForm] = useState({ username: "", display_name: "", role: "trainee", password: "" });
+  const [form, setForm] = useState({
+    username: "",
+    display_name: "",
+    role: "trainee",
+    password: "",
+    unit: "",
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (open) {
-      setForm({ username: "", display_name: "", role: "trainee", password: "" });
+      setForm({ username: "", display_name: "", role: "trainee", password: "", unit: "" });
       setErrors({});
       setError(null);
     }
@@ -261,7 +296,7 @@ function CreateUserDialog({
     }
     setErrors({});
     try {
-      await api.post("/users", p.data);
+      await api.post("/users", { ...p.data, unit: p.data.unit || null });
       onOpenChange(false);
       onCreated();
     } catch (err) {
@@ -305,6 +340,13 @@ function CreateUserDialog({
               </option>
             ))}
           </Select>
+        </Field>
+        <Field
+          label="Unit (optional)"
+          hint="Team, section or course, for unit-level reports."
+          error={errors.unit}
+        >
+          <Input value={form.unit} onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))} />
         </Field>
         <Field
           label="Temporary password"
@@ -374,6 +416,61 @@ function ResetPasswordDialog({
           value={pw}
           onChange={(e) => setPw(e.target.value)}
         />
+      </Field>
+      {error ? (
+        <Alert tone="danger" className="mt-3">
+          {error}
+        </Alert>
+      ) : null}
+    </Dialog>
+  );
+}
+
+function UnitDialog({
+  user,
+  onClose,
+  onDone,
+}: {
+  user: UserOut | null;
+  onClose: () => void;
+  onDone: (username: string, unit: string | null) => void;
+}) {
+  const [unit, setUnit] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    setUnit(user?.unit ?? "");
+    setError(null);
+  }, [user]);
+  return (
+    <Dialog
+      open={user !== null}
+      onOpenChange={(v) => !v && onClose()}
+      title={`Unit for ${user?.username ?? ""}`}
+      description="Units group trainees for unit-level reports. Leave empty to remove the user from their unit."
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              if (!user) return;
+              try {
+                const out = await api.patch<UserOut>(`/users/${user.id}`, { unit: unit.trim() || null });
+                onDone(user.username, out.unit ?? null);
+                onClose();
+              } catch (err) {
+                setError(detailText(err));
+              }
+            }}
+          >
+            Save unit
+          </Button>
+        </>
+      }
+    >
+      <Field label="Unit">
+        <Input value={unit} maxLength={80} onChange={(e) => setUnit(e.target.value)} />
       </Field>
       {error ? (
         <Alert tone="danger" className="mt-3">
@@ -715,6 +812,163 @@ interface SystemInfo {
   audit_chain: { valid: boolean; checked: number; reason: string | null };
   simulation: { engine: string; visual_clients: string };
   network: { external_runtime_dependencies: string[]; telemetry: string };
+  performance?: {
+    since: string;
+    uptime_s: number;
+    requests_total: number;
+    window: number;
+    overall: { p50_ms: number; p95_ms: number; server_errors: number };
+    routes: {
+      route: string;
+      requests: number;
+      p50_ms: number;
+      p95_ms: number;
+      max_ms: number;
+      server_errors: number;
+    }[];
+    note: string;
+  };
+}
+
+interface ReproReport {
+  counts: {
+    checked: number;
+    reproducible: number;
+    not_reproducible: number;
+    exact_score_match: number;
+    same_assessment_older_engine: number;
+    event_log_purged: number;
+  };
+  scoring_engine_versions: Record<string, number>;
+  failures: { session_id: string; completed_at: string | null; reason: string; note: string | null }[];
+  duration_s: number;
+  method: string;
+}
+
+const REPRO_REASONS: Record<string, string> = {
+  timeline_differs: "Timeline no longer regenerates identically",
+  stored_log_changed: "Stored event log was changed",
+  score_differs: "Re-scoring gives a different assessment",
+  other: "Other",
+};
+
+function ReproducibilityPanel() {
+  const [report, setReport] = useState<ReproReport | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  return (
+    <Panel className="lg:col-span-2">
+      <PanelHeader
+        title="Reproducibility"
+        description="Re-checks recent completed sessions: regenerate each timeline from its stored configuration and seed, compare it with the stored log, and re-score it."
+        actions={
+          <Button
+            variant="secondary"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              setError(null);
+              try {
+                setReport(await api.get<ReproReport>("/admin/reproducibility?limit=50"));
+              } catch (err) {
+                setError(errorMessage(err));
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {busy ? "Checking" : "Check last 50 sessions"}
+          </Button>
+        }
+      />
+      <PanelBody className="space-y-3">
+        {error ? <Alert tone="danger">{error}</Alert> : null}
+        {!report ? (
+          <p className="text-sm text-ink-muted">
+            Not run in this view yet. Each run is recorded in the audit log.
+          </p>
+        ) : (
+          <>
+            <Alert
+              tone={report.counts.not_reproducible ? "danger" : "success"}
+              title={`${report.counts.reproducible} of ${report.counts.checked} sessions reproduced (${report.duration_s} s)`}
+            >
+              {report.counts.exact_score_match} identical score output;{" "}
+              {report.counts.same_assessment_older_engine} scored by an earlier engine with the same
+              assessment; {report.counts.event_log_purged} with the event log removed by retention. Engines:{" "}
+              {Object.entries(report.scoring_engine_versions)
+                .map(([k, v]) => `${k} (${v})`)
+                .join(", ") || "none"}
+              .
+            </Alert>
+            {report.failures.length ? (
+              <Table>
+                <THead>
+                  <TR>
+                    <TH>Session</TH>
+                    <TH>Completed</TH>
+                    <TH>Reason</TH>
+                  </TR>
+                </THead>
+                <TBody>
+                  {report.failures.map((f) => (
+                    <TR key={f.session_id}>
+                      <TD>
+                        <Link className="text-brand hover:underline" to={`/sessions/${f.session_id}/result`}>
+                          {f.session_id.slice(0, 8)}
+                        </Link>
+                      </TD>
+                      <TD className="text-xs">{formatDateTime(f.completed_at)}</TD>
+                      <TD className="text-sm">{REPRO_REASONS[f.reason] ?? f.reason}</TD>
+                    </TR>
+                  ))}
+                </TBody>
+              </Table>
+            ) : null}
+          </>
+        )}
+      </PanelBody>
+    </Panel>
+  );
+}
+
+function PerformancePanel({ perf }: { perf: NonNullable<SystemInfo["performance"]> }) {
+  return (
+    <Panel className="lg:col-span-2">
+      <PanelHeader
+        title="Measured performance"
+        description={`${perf.note} ${perf.requests_total.toLocaleString()} requests since ${formatDateTime(perf.since)}; overall median ${perf.overall.p50_ms} ms, 95th percentile ${perf.overall.p95_ms} ms, ${perf.overall.server_errors} server error(s).`}
+      />
+      {!perf.routes.length ? (
+        <EmptyState title="No requests measured yet" />
+      ) : (
+        <Table>
+          <THead>
+            <TR>
+              <TH>Endpoint</TH>
+              <TH>Requests</TH>
+              <TH>Median</TH>
+              <TH>95th percentile</TH>
+              <TH>Slowest</TH>
+              <TH>Server errors</TH>
+            </TR>
+          </THead>
+          <TBody>
+            {perf.routes.map((r) => (
+              <TR key={r.route}>
+                <TD className="text-xs">{r.route}</TD>
+                <TD className="tabular">{r.requests.toLocaleString()}</TD>
+                <TD className="tabular">{r.p50_ms} ms</TD>
+                <TD className="tabular">{r.p95_ms} ms</TD>
+                <TD className="tabular">{r.max_ms} ms</TD>
+                <TD className="tabular">{r.server_errors}</TD>
+              </TR>
+            ))}
+          </TBody>
+        </Table>
+      )}
+    </Panel>
+  );
 }
 
 export function SystemPage() {
@@ -794,6 +1048,8 @@ export function SystemPage() {
             />
           </PanelBody>
         </Panel>
+        {s.performance ? <PerformancePanel perf={s.performance} /> : null}
+        <ReproducibilityPanel />
       </div>
     </>
   );

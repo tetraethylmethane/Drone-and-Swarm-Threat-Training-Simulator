@@ -18,7 +18,7 @@ def test_health_and_readiness(world: World) -> None:
     r = api.get("/health")
     assert r.status_code == 200 and r.json()["status"] == "ok"
     ready = api.get("/health/ready").json()
-    assert ready == {"status": "ready", "database": "ok", "schema_revision": "0002"}
+    assert ready == {"status": "ready", "database": "ok", "schema_revision": "0003"}
     assert r.headers["X-Content-Type-Options"] == "nosniff"
     assert r.headers["Cache-Control"] == "no-store"
 

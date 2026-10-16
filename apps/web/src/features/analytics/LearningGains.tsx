@@ -49,16 +49,19 @@ function signed(v: number): string {
 
 export function LearningGainsPanel({
   traineeId,
+  unit = "",
   scenarioKey,
   canExport,
 }: {
   traineeId: string;
+  unit?: string;
   scenarioKey: string;
   canExport: boolean;
 }) {
   const [sameDifficulty, setSameDifficulty] = useState(false);
   const query = qs({
     trainee_id: traineeId,
+    unit,
     scenario_key: scenarioKey,
     same_difficulty_only: sameDifficulty,
   });

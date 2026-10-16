@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from drikr_api.models import DifficultyMode, FeedbackLevel, ReviewStatus, Role
 from drikr_api.services.settings_service import MfaRole, RetentionPolicy
@@ -45,12 +45,33 @@ class UserCreate(Strict):
     display_name: str = Field(min_length=2, max_length=120)
     role: Role
     password: str = Field(min_length=1, max_length=256)
+    unit: str | None = Field(default=None, max_length=80)
+
+    @field_validator("unit")
+    @classmethod
+    def _unit(cls, v: str | None) -> str | None:
+        return clean_unit(v)
 
 
 class UserUpdate(Strict):
     display_name: str | None = Field(default=None, min_length=2, max_length=120)
     role: Role | None = None
     is_active: bool | None = None
+    #: Send "" or null to clear; omit to leave unchanged.
+    unit: str | None = Field(default=None, max_length=80)
+
+    @field_validator("unit")
+    @classmethod
+    def _unit(cls, v: str | None) -> str | None:
+        return clean_unit(v)
+
+
+def clean_unit(v: str | None) -> str | None:
+    """Units are free text; surrounding spaces are removed and an empty value means none."""
+    if v is None:
+        return None
+    v = " ".join(v.split())
+    return v or None
 
 
 class PasswordReset(Strict):

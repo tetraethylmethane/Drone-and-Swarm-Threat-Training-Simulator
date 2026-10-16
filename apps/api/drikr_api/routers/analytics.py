@@ -11,6 +11,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from drikr_api.deps import Principal, get_db, require
+from drikr_api.errors import ApiError, not_found
 from drikr_api.models import (
     Assignment,
     DifficultyAdjustment,
@@ -24,7 +25,9 @@ from drikr_api.models import (
     User,
 )
 from drikr_api.security.rbac import Permission
-from drikr_scoring import stats
+from drikr_api.serializers import feedback_level_for, result_for_viewer
+from drikr_api.services import competency_service
+from drikr_scoring import DIMENSIONS, stats
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
@@ -42,6 +45,7 @@ def progress(
     trainee_id: uuid.UUID | None = None,
     scenario_key: str | None = Query(default=None, max_length=64),
     objective_id: str | None = Query(default=None, max_length=40),
+    unit: str | None = Query(default=None, max_length=80),
     date_from: datetime | None = None,
     date_to: datetime | None = None,
     limit: int = Query(default=500, ge=1, le=2000),
@@ -59,6 +63,8 @@ def progress(
     )
     if tid:
         stmt = stmt.where(TrainingSession.trainee_id == tid)
+    if unit:
+        stmt = stmt.where(User.unit == unit)
     if scenario_key:
         stmt = stmt.where(Scenario.key == scenario_key)
     if date_from:
@@ -74,7 +80,7 @@ def progress(
         points.append(
             {
                 "session_id": str(s.id),
-                "trainee": {"id": str(u.id), "display_name": u.display_name},
+                "trainee": {"id": str(u.id), "display_name": u.display_name, "unit": u.unit},
                 "scenario_key": scn.key,
                 "scenario_version": scn.version,
                 "scenario_name": scn.name,
@@ -115,16 +121,17 @@ def filters(principal: Principal = ANY_READ, db: Session = Depends(get_db)) -> d
         scenarios[key] = name
         for o in definition["learning_objectives"]:
             objectives.setdefault(o["id"], o["description"])
-    trainees: list[dict[str, str]] = []
+    trainees: list[dict[str, str | None]] = []
     if principal.can(Permission.ANALYTICS_READ_ALL):
         trainees = [
-            {"id": str(u.id), "display_name": u.display_name}
+            {"id": str(u.id), "display_name": u.display_name, "unit": u.unit}
             for u in db.scalars(select(User).where(User.role == Role.TRAINEE).order_by(User.display_name)).all()
         ]
     return {
         "scenarios": [{"key": k, "name": v} for k, v in sorted(scenarios.items())],
         "objectives": [{"id": k, "description": v} for k, v in sorted(objectives.items())],
         "trainees": trainees,
+        "units": sorted({t["unit"] for t in trainees if t["unit"]}),
     }
 
 
@@ -197,6 +204,7 @@ def learning_gains(
     trainee_id: uuid.UUID | None = None,
     scenario_key: str | None = Query(default=None, max_length=64),
     same_difficulty_only: bool = False,
+    unit: str | None = Query(default=None, max_length=80),
     principal: Principal = ANY_READ,
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
@@ -217,6 +225,8 @@ def learning_gains(
     )
     if tid:
         stmt = stmt.where(TrainingSession.trainee_id == tid)
+    if unit:
+        stmt = stmt.where(User.unit == unit)
     if scenario_key:
         stmt = stmt.where(Scenario.key == scenario_key)
     groups: dict[tuple[uuid.UUID, str], list[tuple[TrainingSession, ScoreResult, User]]] = {}
@@ -269,4 +279,143 @@ def learning_gains(
         "summary": summary,
         "interpretation": "Observational within-trainee comparison of first and latest attempts. Not a controlled "
         "study: practice effects, scenario familiarity and difficulty changes are not separated from learning.",
+    }
+
+
+# --- competency tracking and attempt comparison -------------------------------------------------
+
+
+def _attempt(s: TrainingSession, r: ScoreResult, scn: Scenario, principal: Principal) -> competency_service.Attempt:
+    trainee_view = principal.role is Role.TRAINEE
+    return competency_service.Attempt(
+        session_id=str(s.id),
+        completed_at=s.completed_at,
+        scenario_key=scn.key,
+        scenario_version=scn.version,
+        difficulty_level=s.difficulty_level,
+        seed=s.seed,
+        timeline_digest=s.timeline_digest,
+        rubric_version=f"{r.result.get('rubric', {}).get('key')} v{r.rubric_version}",
+        scoring_engine_version=r.scoring_engine_version,
+        overall=r.overall,
+        result=result_for_viewer(r, trainee_view=trainee_view, level=feedback_level_for(s)),
+    )
+
+
+@router.get("/competency")
+def competency(
+    trainee_id: uuid.UUID | None = None,
+    scenario_key: str | None = Query(default=None, max_length=64),
+    principal: Principal = ANY_READ,
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Competency trends, recurring errors and identical-exercise attempts for one trainee."""
+    tid = _scope_trainee(principal, trainee_id)
+    if tid is None:
+        raise ApiError(422, "trainee_required", "Choose a trainee to see competency tracking")
+    trainee = db.get(User, tid)
+    if trainee is None:
+        raise not_found("Trainee")
+    stmt = (
+        select(TrainingSession, ScoreResult, Scenario)
+        .join(ScoreResult, ScoreResult.session_id == TrainingSession.id)
+        .join(Scenario, Scenario.id == TrainingSession.scenario_id)
+        .where(
+            TrainingSession.trainee_id == tid,
+            TrainingSession.status == SessionStatus.COMPLETED,
+            ScoreResult.status == "scored",
+        )
+    )
+    if scenario_key:
+        stmt = stmt.where(Scenario.key == scenario_key)
+    rows = db.execute(stmt.order_by(TrainingSession.completed_at).limit(500)).all()
+    attempts = [_attempt(s, r, scn, principal) for s, r, scn in rows]
+    return {
+        "trainee": {"id": str(trainee.id), "display_name": trainee.display_name},
+        "scenario_key": scenario_key,
+        **competency_service.competency(attempts),
+    }
+
+
+@router.get("/compare")
+def compare(
+    a: uuid.UUID,
+    b: uuid.UUID,
+    principal: Principal = ANY_READ,
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Side-by-side comparison of two scored attempts, stating how comparable they are."""
+    loaded = []
+    for sid in (a, b):
+        row = db.execute(
+            select(TrainingSession, ScoreResult, Scenario)
+            .join(ScoreResult, ScoreResult.session_id == TrainingSession.id)
+            .join(Scenario, Scenario.id == TrainingSession.scenario_id)
+            .where(TrainingSession.id == sid)
+        ).first()
+        if row is None or (not principal.can(Permission.ANALYTICS_READ_ALL) and row[0].trainee_id != principal.user.id):
+            raise not_found("Scored session")  # do not reveal other trainees' sessions
+        loaded.append(_attempt(row[0], row[1], row[2], principal))
+    include_tracks = all("items" in x.result for x in loaded)
+    return competency_service.compare(loaded[0], loaded[1], include_tracks=include_tracks)
+
+
+@router.get("/units")
+def units(
+    scenario_key: str | None = Query(default=None, max_length=64),
+    date_from: datetime | None = None,
+    date_to: datetime | None = None,
+    _: Principal = Depends(require(Permission.ANALYTICS_READ_ALL)),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Unit-level summary of completed, scored sessions (staff only)."""
+    trainees = db.scalars(select(User).where(User.role == Role.TRAINEE, User.anonymised_at.is_(None))).all()
+    members: dict[str | None, set[uuid.UUID]] = {}
+    for u in trainees:
+        members.setdefault(u.unit, set()).add(u.id)
+    stmt = (
+        select(TrainingSession, ScoreResult, User)
+        .join(ScoreResult, ScoreResult.session_id == TrainingSession.id)
+        .join(Scenario, Scenario.id == TrainingSession.scenario_id)
+        .join(User, User.id == TrainingSession.trainee_id)
+        .where(TrainingSession.status == SessionStatus.COMPLETED, ScoreResult.status == "scored")
+    )
+    if scenario_key:
+        stmt = stmt.where(Scenario.key == scenario_key)
+    if date_from:
+        stmt = stmt.where(TrainingSession.completed_at >= date_from)
+    if date_to:
+        stmt = stmt.where(TrainingSession.completed_at <= date_to)
+    by_unit: dict[str | None, list[tuple[TrainingSession, ScoreResult, User]]] = {}
+    for s, r, u in db.execute(stmt).all():
+        by_unit.setdefault(u.unit, []).append((s, r, u))
+    rows = []
+    for unit_name in sorted(set(members) | set(by_unit), key=lambda x: (x is None, x or "")):
+        sessions = by_unit.get(unit_name, [])
+        overall = [float(r.overall) for _, r, _ in sessions if r.overall is not None]
+        dims: dict[str, float | None] = {}
+        for d in DIMENSIONS:
+            vals = [
+                float(v)
+                for _, r, _ in sessions
+                if (v := (r.result.get("dimensions", {}).get(d) or {}).get("score")) is not None
+            ]
+            dims[d] = round(stats.mean(vals), 1) if vals else None
+        rows.append(
+            {
+                "unit": unit_name,
+                "trainees": len(members.get(unit_name, set())),
+                "trainees_with_sessions": len({u.id for _, _, u in sessions}),
+                "sessions": len(sessions),
+                "mean_overall": round(stats.mean(overall), 1) if overall else None,
+                "pass_rate": round(100 * sum(1 for _, r, _ in sessions if r.passed) / len(sessions), 1)
+                if sessions
+                else None,
+                "dimensions": dims,
+            }
+        )
+    return {
+        "units": rows,
+        "note": "Means over completed, scored sessions in the selection. Units with few sessions are not "
+        "comparable; scenarios and difficulty levels differ between units unless filtered.",
     }

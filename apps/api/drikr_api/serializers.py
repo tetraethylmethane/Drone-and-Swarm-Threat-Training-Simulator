@@ -35,6 +35,7 @@ def user_out(u: User) -> dict[str, Any]:
         "mfa_enabled": u.mfa_enabled,
         "deactivated_at": _dt(u.deactivated_at),
         "anonymised_at": _dt(u.anonymised_at),
+        "unit": u.unit,
         "created_at": _dt(u.created_at),
     }
 

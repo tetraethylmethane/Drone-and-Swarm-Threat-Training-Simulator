@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from drikr_api.config import Settings
 from drikr_api.db import Database
 from drikr_api.errors import ApiError, forbidden
+from drikr_api.metrics import RequestMetrics
 from drikr_api.models import AuthSession, Role, User, utcnow
 from drikr_api.security.rate_limit import SlidingWindowLimiter
 from drikr_api.security.rbac import Permission, has_permission
@@ -32,6 +33,7 @@ class AppContext:
     database: Database
     login_limiter: SlidingWindowLimiter
     action_limiter: SlidingWindowLimiter = field(default_factory=lambda: SlidingWindowLimiter(600, 60))
+    metrics: RequestMetrics = field(default_factory=RequestMetrics)
 
 
 def get_ctx(request: Request) -> AppContext:

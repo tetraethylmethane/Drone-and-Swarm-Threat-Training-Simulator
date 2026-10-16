@@ -48,6 +48,23 @@ def score_and_store(db: Session, s: TrainingSession, end_ms: int) -> ScoreResult
     return row
 
 
+def assessment_summary(result: dict[str, Any]) -> dict[str, Any]:
+    """The assessment itself, independent of explanation wording or added detail fields.
+
+    Used to check results scored by an earlier engine version: a newer engine may add fields
+    (for example evidence references) without changing any score, status or outcome.
+    """
+    return {
+        "status": result.get("status"),
+        "overall": result.get("overall"),
+        "passed": result.get("passed"),
+        "dimensions": {k: (v or {}).get("score") for k, v in sorted((result.get("dimensions") or {}).items())},
+        "objectives": [(o.get("id"), o.get("status")) for o in result.get("objectives") or []],
+        "errors": {k: len(v) for k, v in sorted((result.get("errors") or {}).items())},
+        "counts": result.get("counts"),
+    }
+
+
 def verify(db: Session, s: TrainingSession) -> dict[str, Any]:
     """Re-derive the timeline and the score from stored inputs and compare digests."""
     scenario = ScenarioContract.model_validate(s.effective_definition)
@@ -92,16 +109,27 @@ def verify(db: Session, s: TrainingSession) -> dict[str, Any]:
             score_reproduced=digest(recomputed) == result.result_digest,
             input_digest_matches=recomputed["input_digest"] == result.input_digest,
         )
-    if report.get("score_checked") and result is not None and result.scoring_engine_version != SCORING_ENGINE_VERSION:
-        # A different engine version is expected to produce different output; the stored
-        # result remains authoritative for that session and is never rewritten.
+    cross_version = bool(
+        report.get("score_checked") and result is not None and result.scoring_engine_version != SCORING_ENGINE_VERSION
+    )
+    if cross_version and result is not None:
+        # A different engine version may produce different output detail; the stored result stays
+        # authoritative and is never rewritten. What must not change is the assessment itself.
+        values_match = assessment_summary(recomputed) == assessment_summary(result.result)
+        report["assessment_values_match"] = values_match
         report["score_note"] = (
             f"Scored with {result.scoring_engine_version}; the running engine is {SCORING_ENGINE_VERSION}. "
-            "The stored result is retained unchanged."
+            "The stored result is retained unchanged. "
+            + (
+                "Re-scoring with the running engine gives the same scores, outcomes and error counts."
+                if values_match
+                else "Re-scoring with the running engine gives a different assessment; the stored result applies."
+            )
         )
-    report["reproducible"] = bool(
-        report["timeline_reproduced"]
-        and report["stored_log_intact"]
-        and (not report["score_checked"] or report.get("score_reproduced"))
+    score_ok = (
+        not report["score_checked"]
+        or report.get("score_reproduced")
+        or (cross_version and report.get("assessment_values_match"))
     )
+    report["reproducible"] = bool(report["timeline_reproduced"] and report["stored_log_intact"] and score_ok)
     return report

@@ -70,6 +70,7 @@ def create_user(
         role=body.role,
         password_hash=hash_password(body.password),
         must_change_password=True,
+        unit=body.unit,
     )
     db.add(user)
     db.flush()
@@ -119,6 +120,9 @@ def update_user(
     if body.role is not None and body.role is not u.role:
         changes["role"] = [u.role.value, body.role.value]
         u.role = body.role
+    if "unit" in body.model_fields_set and body.unit != u.unit:
+        changes["unit"] = [u.unit, body.unit]
+        u.unit = body.unit
     if body.is_active is not None and body.is_active != u.is_active:
         changes["is_active"] = [u.is_active, body.is_active]
         if u.anonymised_at is not None and body.is_active:

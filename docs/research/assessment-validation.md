@@ -9,7 +9,7 @@
 |---|---|
 | Script | `research/assessment_validation/run_validation.py` |
 | Raw output | `research/assessment_validation/results.json` |
-| Engines | simulation `simcore-1.0.0`, scoring `scoring-1.1.0`, rubric `standard-assessment v1` |
+| Engines | simulation `simcore-1.0.0`, scoring `scoring-1.1.0`, rubric `standard-assessment v1`. `scoring-1.2.0` (2026-10-16) only adds evidence references; scores are unchanged |
 | Scenarios | the four seeded demo scenarios, at their default difficulty unless stated |
 | Master seed | 20261015 |
 | Run | 2026-10-15, CPython 3.12.4, Windows 11. Two consecutive full runs produced identical `results.json` apart from the runtime field. |

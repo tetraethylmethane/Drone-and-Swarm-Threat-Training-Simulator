@@ -102,6 +102,8 @@ class User(Base):
     # Data retention
     deactivated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     anonymised_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: Optional organisational unit (team, squad, course) for unit-level reporting.
+    unit: Mapped[str | None] = mapped_column(String(80), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow
@@ -110,6 +112,7 @@ class User(Base):
     __table_args__ = (
         CheckConstraint("username ~ '^[a-z0-9][a-z0-9._-]{2,63}$'", name="username_format"),
         CheckConstraint("(mfa_secret_enc IS NULL) = (mfa_enabled_at IS NULL)", name="mfa_consistent"),
+        CheckConstraint("unit IS NULL OR length(btrim(unit)) BETWEEN 1 AND 80", name="unit_not_blank"),
     )
 
     @property

@@ -43,11 +43,15 @@ actions: `packages/contracts/schemas/*.json`.
 | `GET /analytics/overview` | staff | Dashboard counts |
 | `GET /reports/sessions.csv` | instructor, administrator | CSV export (same filters as `/sessions`) |
 | `GET /reports/study.csv?scenario_key=&date_from=&date_to=` | instructor, administrator | Pseudonymised research dataset (audited) |
-| `GET /analytics/learning-gains?trainee_id=&scenario_key=&same_difficulty_only=` | staff all; trainee own | First versus latest attempt with cohort statistics (observational) |
+| `GET /analytics/learning-gains?trainee_id=&unit=&scenario_key=&same_difficulty_only=` | staff all; trainee own | First versus latest attempt with cohort statistics (observational) |
+| `GET /analytics/competency?trainee_id=&scenario_key=` | staff (trainee required); trainee own | Dimension trends, recurring errors, identical-exercise groups, with the rule stated in `method` |
+| `GET /analytics/compare?a=&b=` | staff; trainee own sessions only | Two scored attempts side by side, with `comparability` (`identical`, `same_scenario`, `different_scenarios`); track detail only when identical and permitted |
+| `GET /analytics/units?scenario_key=&date_from=&date_to=` | staff | Unit-level summary |
 | `GET /reports/sessions/{id}.pdf` | staff; trainee own when detailed feedback | PDF AAR |
 | `GET /audit`, `GET /audit/verify` | administrator | Audit log and chain verification |
 | `GET/PUT /admin/settings`, `GET /admin/system` | administrator | Settings (including `mfa_required_roles`, `retention_policy`), system health |
 | `GET /admin/retention/preview`, `POST /admin/retention/run {dry_run}`, `GET /admin/retention/runs` | administrator | Data retention |
+| `GET /admin/reproducibility?limit=` | administrator | Verify the latest completed sessions (1 to 500); audited |
 
 When a signed-in user's role requires MFA and they have not enrolled, every endpoint except
 `/auth/*` returns `403 mfa_enrollment_required`. `GET /sessions/{id}/timeline` adds

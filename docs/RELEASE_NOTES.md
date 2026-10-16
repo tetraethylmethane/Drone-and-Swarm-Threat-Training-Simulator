@@ -1,8 +1,8 @@
-# Release notes — 1.0.0-rc3 (2026-10-15)
+# Release notes — 1.0.0-rc4 (2026-10-16)
 
 Release candidate of the Drikr Systems drone and swarm threat training simulator.
 Component versions: API 1.0.0, contracts 1.0.0, simulation engine `simcore-1.0.0`,
-scoring engine `scoring-1.1.0`, database schema revision `0002`.
+scoring engine `scoring-1.2.0`, database schema revision `0003`.
 
 ## What works end to end (automatically tested)
 
@@ -13,6 +13,11 @@ and PDF. The trainee step can be done in the browser or in the Unity desktop cli
 tested against the same deployment. The browser path is covered by
 `tests/e2e/specs/full-workflow.spec.ts` (dev stack and Docker deployment); the Unity path by the
 Unity live protocol test and the built-player smoke test (Docker deployment over HTTPS).
+
+New in rc4: traceable assessments (evidence events per scored item), reproducibility suite and
+bulk reports, verification across scoring-engine versions, competency tracking with recurring
+errors, attempt comparison, unit-level reporting, measured performance on System health, and the
+research and product documents in `docs/research/` and `docs/product/`.
 
 New in rc3: multi-factor authentication, HTTPS for network access, a data-retention workflow,
 learning-gain analytics with a pseudonymised research export, the official Drikr logo, and
@@ -34,8 +39,12 @@ upgraded build and test tooling with no open advisories.
 
 ## Upgrade notes
 
-From rc1 or rc2: back up, load the new images and start them. The API applies migration `0002`
-automatically, and existing data is kept (verified on 2026-10-15). After the upgrade:
+From rc3: back up, load the new images and start them. The API applies migration `0003` (optional
+`unit` per user). Existing data is kept, and stored results keep their scoring-engine version
+(verified on 2026-10-16: 22 of 22 sessions reproduced afterwards).
+
+From rc1 or rc2: as above. Migrations `0002` and `0003` are applied in order, and existing data is
+kept (`0002` verified on 2026-10-15). After upgrading from rc1 or rc2:
 
 1. Administrators must use MFA by default: each administrator is asked to set it up at the next
    sign-in. Change this under **Settings** if needed.

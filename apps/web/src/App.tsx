@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/panel";
 import { LoadingState } from "@/components/ui/states";
 import { AarPage } from "@/features/aar/AarPage";
+import { ComparePage } from "@/features/aar/ComparePage";
 import { AuditPage, SettingsPage, SystemPage, UsersPage } from "@/features/admin/AdminPages";
 import { AccountPage } from "@/features/auth/AccountPage";
 import { LoginPage } from "@/features/auth/LoginPage";
@@ -74,6 +75,7 @@ export function App() {
         <Route path="/exercise/:sessionId" element={guard(<ExercisePage />, TRAINEE)} />
 
         <Route path="/sessions/:sessionId/result" element={<AarPage />} />
+        <Route path="/sessions/compare" element={<ComparePage />} />
 
         <Route path="/instructor" element={guard(<InstructorHome />, INSTRUCTOR)} />
         <Route path="/instructor/scenarios" element={guard(<ScenarioListPage />, INSTRUCTOR)} />

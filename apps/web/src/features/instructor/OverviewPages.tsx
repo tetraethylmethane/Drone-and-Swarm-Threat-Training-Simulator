@@ -7,8 +7,10 @@ import { PageHeader, Panel, PanelHeader } from "@/components/ui/panel";
 import { Alert, Tag, toneForStatus } from "@/components/ui/status";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/states";
 import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
+import { CompetencyPanel } from "@/features/analytics/Competency";
 import { LearningGainsPanel } from "@/features/analytics/LearningGains";
 import { ProgressSection } from "@/features/analytics/ProgressCharts";
+import { UnitsPanel } from "@/features/analytics/Units";
 import { api, download, qs } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { formatDateTime, formatPercent } from "@/lib/format";
@@ -28,7 +30,8 @@ interface Overview {
 interface Filters {
   scenarios: { key: string; name: string }[];
   objectives: { id: string; description: string }[];
-  trainees: { id: string; display_name: string }[];
+  trainees: { id: string; display_name: string; unit?: string | null }[];
+  units?: string[];
 }
 
 function Metric({ label: l, value, hint }: { label: string; value: string | number; hint?: string }) {
@@ -277,17 +280,22 @@ export function AnalyticsPage() {
   const filters = useAsync((sig) => api.get<Filters>("/analytics/filters", sig), []);
   const [f, setF] = useState({
     trainee_id: "",
+    unit: "",
     scenario_key: "",
     objective_id: "",
     date_from: "",
     date_to: "",
   });
-  const query = qs({
-    trainee_id: f.trainee_id,
-    scenario_key: f.scenario_key,
-    objective_id: f.objective_id,
+  const dates = {
     date_from: f.date_from ? new Date(f.date_from).toISOString() : "",
     date_to: f.date_to ? new Date(`${f.date_to}T23:59:59`).toISOString() : "",
+  };
+  const query = qs({
+    trainee_id: f.trainee_id,
+    unit: f.unit,
+    scenario_key: f.scenario_key,
+    objective_id: f.objective_id,
+    ...dates,
   });
   const st = useAsync(
     (sig) => api.get<{ points: ProgressPoint[] }>(`/analytics/progress${query}`, sig),
@@ -302,7 +310,17 @@ export function AnalyticsPage() {
         description="Progress across repeated sessions, computed only from persisted, scored results."
       />
       <Panel className="mb-4">
-        <div className="grid gap-3 px-4 py-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-3 px-4 py-3 sm:grid-cols-2 lg:grid-cols-6">
+          <Field label="Unit">
+            <Select value={f.unit} onChange={(e) => set("unit", e.target.value)}>
+              <option value="">All units</option>
+              {(filters.data?.units ?? []).map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </Select>
+          </Field>
           <Field label="Trainee">
             <Select value={f.trainee_id} onChange={(e) => set("trainee_id", e.target.value)}>
               <option value="">All trainees</option>
@@ -348,8 +366,14 @@ export function AnalyticsPage() {
       ) : (
         <div className="space-y-4">
           <ProgressSection points={points} showTrainee />
+          {f.trainee_id ? (
+            <CompetencyPanel traineeId={f.trainee_id} scenarioKey={f.scenario_key || undefined} />
+          ) : (
+            <UnitsPanel query={qs({ scenario_key: f.scenario_key, ...dates })} />
+          )}
           <LearningGainsPanel
             traineeId={f.trainee_id}
+            unit={f.unit}
             scenarioKey={f.scenario_key}
             canExport={can("reports:export")}
           />

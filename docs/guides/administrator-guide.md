@@ -22,6 +22,9 @@ administrator access or the last active administrator.
 
 Tags show whether an account uses MFA, is locked, must change its password, or has been anonymised.
 
+**Unit**: select the unit cell (or "Set unit") to put a user in a team, section or course, or leave
+it empty to remove them. Units drive the unit-level summary in Analytics. Changes are audited.
+
 * **Reset MFA** (for a user who lost their authenticator and recovery codes): turns MFA off and
   signs the user out everywhere. If their role requires MFA, they set it up again at the next
   sign-in. Confirm the person's identity outside the system first.
@@ -77,6 +80,15 @@ hash from each backup in separate storage.
 Versions of every component, database latency and size, record counts, audit-chain status, and a
 confirmation that the system has no external runtime dependencies or telemetry.
 
+* **Measured performance**: request counts and server-side median, 95th-percentile and slowest
+  times per endpoint, measured by the running API since it last started. Only route templates are
+  kept, never IDs or content.
+* **Reproducibility**: **Check last 50 sessions** re-verifies recent completed sessions and lists
+  any that no longer reproduce, with the reason (timeline differs, stored log changed, score
+  differs). Each run is audited. For a scheduled check, run
+  `docker compose exec -T api drikr-api reproducibility-report --limit 200`; the exit code is 1 if
+  any session differs.
+
 ## Operational commands
 
 | Command | Purpose |
@@ -87,6 +99,7 @@ confirmation that the system has no external runtime dependencies or telemetry.
 | `drikr-api sweep` | Finalise timed-out or abandoned sessions once |
 | `drikr-api reset-mfa --username <name>` | Turn off MFA for an account and sign it out (audited) |
 | `drikr-api retention-run [--dry-run]` | Apply the saved retention policy (audited; for scheduled jobs) |
+| `drikr-api reproducibility-report [--limit N]` | Verify recent sessions; exit code 1 if any differ (audited) |
 
 ## Training analytics and research data
 

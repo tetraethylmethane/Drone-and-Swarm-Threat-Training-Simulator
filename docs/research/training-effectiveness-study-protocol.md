@@ -77,7 +77,7 @@ of effectiveness.
 
 | Measure | Source | When |
 |---|---|---|
-| **Primary: overall assessment score** (mean of the two test scenarios) | Scoring engine `scoring-1.1.0`, rubric `standard-assessment v1`. Both are frozen for the whole study. | Pre, post, retention |
+| **Primary: overall assessment score** (mean of the two test scenarios) | Scoring engine current when the study starts (`scoring-1.2.0` at the time of writing), rubric `standard-assessment v1`. Both are frozen for the whole study. | Pre, post, retention |
 | Dimension scores | Same | Pre, post, retention |
 | Track counts (observable, classified) and objectives met | Study CSV export | Pre, post, retention |
 | Classification accuracy and decision time per track | Each session's scored result (`GET /sessions/{id}/result`, item table), looked up by session, not by name | Pre, post, retention |

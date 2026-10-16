@@ -36,11 +36,12 @@ module = ["reportlab.*", "argon2.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests/unit", "tests/integration"]
+testpaths = ["tests/unit", "tests/reproducibility", "tests/integration"]
 addopts = "-ra --strict-markers"
 markers = [
   "integration: requires PostgreSQL (TEST_DATABASE_URL)",
   "slow: long-running reproducibility or performance checks",
+  "reproducibility: same configuration and seed must give identical events and scores",
 ]
 filterwarnings = [
   "error::DeprecationWarning:drikr_.*",

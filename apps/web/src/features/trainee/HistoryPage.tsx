@@ -2,6 +2,7 @@ import { PageHeader, Panel, PanelHeader } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/status";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/states";
 import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
+import { CompetencyPanel } from "@/features/analytics/Competency";
 import { ProgressSection } from "@/features/analytics/ProgressCharts";
 import { api } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
@@ -31,6 +32,7 @@ export function HistoryPage() {
         ) : (
           <ProgressSection points={progress.data!.points} showTrainee={false} />
         )}
+        <CompetencyPanel />
         <Panel>
           <PanelHeader
             title="Difficulty adjustments"

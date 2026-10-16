@@ -3,6 +3,25 @@
 All notable changes to this project are documented here. Versions follow semantic versioning.
 Engine versions are tracked separately because they affect reproducibility.
 
+## [1.0.0-rc4] - 2026-10-16
+
+### Added
+- Traceable assessments: every scored item lists the recorded events it rests on (scoring engine
+  `scoring-1.2.0`), shown as an Evidence column in the AAR.
+- Verification across scoring-engine versions compares the assessment (scores, outcomes, error
+  counts). Stored results are never rewritten.
+- Reproducibility suite (`tests/reproducibility`, 40 tests), bulk reproducibility report
+  (`/admin/reproducibility`, `drikr-api reproducibility-report`, System health).
+- Competency tracking (trends, recurring errors with evidence, identical-exercise groups) on
+  My progress and Analytics; a Compare attempts page linked from the AAR.
+- Units: optional `unit` per user (migration `0003`), a unit filter, and a unit summary in Analytics.
+- Measured request performance on System health; `scripts/measure-performance.py`.
+- Research and product documents: competitor landscape and evidence register, research and reuse,
+  positioning, differentiation roadmap, requirements-to-tests.
+
+### Changed
+- Database schema revision `0003`.
+
 ## [1.0.0-rc3] - 2026-10-15
 
 ### Added

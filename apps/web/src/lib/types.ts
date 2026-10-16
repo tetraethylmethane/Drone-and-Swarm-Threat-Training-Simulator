@@ -13,6 +13,7 @@ export interface Me {
   mfa_enabled: boolean;
   deactivated_at: string | null;
   anonymised_at: string | null;
+  unit?: string | null;
   permissions: string[];
   /** The role requires multi-factor authentication (administrator setting). */
   mfa_required: boolean;
@@ -262,6 +263,15 @@ export interface ResultItem {
   }[];
   evidence_at_decision: number | null;
   decisions: number;
+  /** Recorded events behind this item (scoring-1.2.0 and later; absent in older results). */
+  evidence_events?: {
+    seq: number;
+    event_id: string;
+    t_s: number | null;
+    kind: "classification" | "response" | "sensor_confirmation";
+    value: string | null;
+    confidence: string | null;
+  }[];
 }
 
 export interface ScoreResult {

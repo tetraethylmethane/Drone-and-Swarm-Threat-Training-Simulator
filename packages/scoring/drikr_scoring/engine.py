@@ -43,7 +43,7 @@ from drikr_scoring.rubric import (
 from drikr_simcore.canonical import digest
 from drikr_simcore.ground_truth import GroundTruthIndex, TrackRecord
 
-SCORING_ENGINE_VERSION = "scoring-1.1.0"
+SCORING_ENGINE_VERSION = "scoring-1.2.0"
 
 DIMENSION_LABELS = {
     "recognition": "Recognition accuracy",
@@ -64,6 +64,7 @@ class Decision:
     confidence: str | None
     response: str | None
     action_id: str
+    event_id: str = ""
 
 
 def _h(value: str | None) -> str:
@@ -90,12 +91,22 @@ def extract_decisions(events: Iterable[Mapping[str, Any]]) -> dict[str, list[Dec
                         p["confidence"],
                         None,
                         str(p["client_action_id"]),
+                        str(ev.get("event_id", "")),
                     )
                 )
         elif ev["type"] == "response_submitted":
             for tid in p["track_ids"]:
                 out.setdefault(tid, []).append(
-                    Decision(ev["seq"], ev["t_ms"], "respond", None, None, p["response"], str(p["client_action_id"]))
+                    Decision(
+                        ev["seq"],
+                        ev["t_ms"],
+                        "respond",
+                        None,
+                        None,
+                        p["response"],
+                        str(p["client_action_id"]),
+                        str(ev.get("event_id", "")),
+                    )
                 )
     return out
 
@@ -142,6 +153,33 @@ def evaluate_tree(
         node = node.if_true if result else node.if_false
     path.append({"node": node.id, "leaf": True})
     return node, path
+
+
+def _evidence_events(decs: list[Decision], confirmations: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = [
+        {
+            "seq": d.seq,
+            "event_id": d.event_id,
+            "t_s": _s(d.t_ms),
+            "kind": "classification" if d.kind == "classify" else "response",
+            "value": d.classification if d.kind == "classify" else d.response,
+            "confidence": d.confidence,
+        }
+        for d in decs
+    ]
+    rows += [
+        {
+            "seq": c["seq"],
+            "event_id": str(c.get("event_id", "")),
+            "t_s": _s(c["t_ms"]),
+            "kind": "sensor_confirmation",
+            "value": c["payload"].get("class_hint"),
+            "confidence": None,
+        }
+        for c in confirmations
+        if "seq" in c
+    ]
+    return sorted(rows, key=lambda r: r["seq"])
 
 
 def _timing_credit(delta_s: float, target: float, max_s: float) -> float:
@@ -385,6 +423,8 @@ def score_session(
                 "decision_path": path,
                 "evidence_at_decision": evidence_at_decision,
                 "decisions": len(decs),
+                # Recorded events this item's assessment rests on (traceable in the AAR timeline).
+                "evidence_events": _evidence_events(decs, it.confirmations),
             }
         )
 

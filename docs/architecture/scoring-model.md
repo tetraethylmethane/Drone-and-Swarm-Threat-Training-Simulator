@@ -1,4 +1,4 @@
-# Scoring model (scoring engine `scoring-1.1.0`)
+# Scoring model (scoring engine `scoring-1.2.0`)
 
 Implementation: `packages/scoring/drikr_scoring/engine.py`. Demonstration rubric:
 `packages/scoring/drikr_scoring/default_rubrics/standard-assessment.json`.
@@ -65,10 +65,20 @@ These are training rubric rules for a virtual exercise, not operational procedur
   (SHA-256 of the canonical event list) and the stored result's digest.
 * Rubrics are immutable; editing creates a new version. Existing results keep their version.
 * `POST /sessions/{id}/verify` re-scores stored events with the stored rubric and compares digests.
-  If the running engine version differs from the recorded one, the response says so and the stored
-  result is retained unchanged.
+  If the running engine version differs from the recorded one, the stored result is retained
+  unchanged. Verification then compares the **assessment** instead of the byte digest: status,
+  overall, pass or fail, every dimension score, objective outcomes, error counts and track counts
+  (`assessment_values_match`). The session counts as reproducible only if these are equal.
+* Each item lists `evidence_events`: the sequence number, event ID, time, kind
+  (classification, response or sensor confirmation), value and confidence of every recorded event
+  the item's assessment is based on.
+* Bulk check: `GET /admin/reproducibility` and `drikr-api reproducibility-report` run the same
+  verification over recent sessions and list any that do not reproduce, with the reason.
 * Change log: `scoring-1.0.0` → `scoring-1.1.0` changed only the wording of explanations
   (human-readable class and response names). Numeric scoring is unchanged.
+  `scoring-1.1.0` → `scoring-1.2.0` added `evidence_events` to each item. No score changes: on
+  2026-10-16, all 22 stored sessions on the development deployment gave the same assessment when
+  re-scored with 1.2.0.
 
 ## Adaptive difficulty (rules-based, `drikr_scoring/adaptive.py`)
 

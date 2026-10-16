@@ -7,6 +7,7 @@ import { Checkbox, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components
 import { KeyValues, PageHeader, Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Alert, Tag, toneForStatus } from "@/components/ui/status";
 import { ErrorState, LoadingState } from "@/components/ui/states";
+import { compareHref, type AttemptMeta } from "@/features/analytics/Competency";
 import { api, ApiError, download } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
@@ -97,6 +98,7 @@ export function AarPage() {
             </Alert>
           ) : null}
           <OverviewSection session={s} result={r} />
+          <OtherAttempts session={s} />
         </TabsContent>
         {detailed ? (
           <TabsContent value="tracks">
@@ -447,5 +449,50 @@ function ExportSection({
         </PanelBody>
       </Panel>
     </div>
+  );
+}
+
+/** Other scored attempts at the same scenario by the same trainee, for side-by-side comparison. */
+function OtherAttempts({ session }: { session: SessionState }) {
+  const st = useAsync(
+    (sig) =>
+      api.get<{ sessions: (AttemptMeta & { seed: number })[] }>(
+        `/analytics/competency?trainee_id=${session.trainee.id}&scenario_key=${encodeURIComponent(session.scenario.key)}`,
+        sig,
+      ),
+    [session.id],
+  );
+  const others = (st.data?.sessions ?? []).filter((x) => x.session_id !== session.id);
+  if (st.loading || st.error || !others.length) return null;
+  return (
+    <Panel className="mt-4">
+      <PanelHeader
+        title="Compare with another attempt"
+        description="Other scored attempts at this scenario. Identical exercises (same seed and difficulty) can be compared track by track."
+      />
+      <ul className="divide-y divide-border">
+        {others
+          .slice(-8)
+          .reverse()
+          .map((o) => {
+            const identical = o.seed === session.seed && o.difficulty_level === session.difficulty_level;
+            return (
+              <li
+                key={o.session_id}
+                className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 text-sm"
+              >
+                <span>
+                  {formatDateTime(o.completed_at)} · level {o.difficulty_level} · overall{" "}
+                  {o.overall === null ? "—" : `${o.overall.toFixed(1)}%`}{" "}
+                  {identical ? <Tag tone="success">Identical exercise</Tag> : null}
+                </span>
+                <Link className="text-brand hover:underline" to={compareHref(o.session_id, session.id)}>
+                  Compare
+                </Link>
+              </li>
+            );
+          })}
+      </ul>
+    </Panel>
   );
 }

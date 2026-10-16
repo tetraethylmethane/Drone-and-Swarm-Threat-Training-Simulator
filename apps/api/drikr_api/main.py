@@ -106,6 +106,12 @@ def create_app(settings: Settings | None = None, database: Database | None = Non
         if request.url.path.startswith("/api"):
             response.headers.setdefault("Cache-Control", "no-store")
         response.headers["X-Request-ID"] = rid
+        duration_ms = (time.perf_counter() - start) * 1000
+        if request.url.path.startswith(API_PREFIX):
+            route = request.scope.get("route")
+            template = getattr(route, "path", None)
+            key = f"{request.method} {template.removeprefix(API_PREFIX)}" if template else "unmatched"
+            request.app.state.ctx.metrics.record(key, duration_ms, response.status_code)
         log.info(
             "request",
             extra={

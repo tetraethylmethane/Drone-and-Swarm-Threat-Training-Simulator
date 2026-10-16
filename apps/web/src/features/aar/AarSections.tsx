@@ -203,7 +203,7 @@ export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
     <Panel>
       <PanelHeader
         title="Track decisions and scoring outcomes"
-        description="Ground truth is shown after the exercise. Rubric path shows how the expected response was derived."
+        description="Ground truth is shown after the exercise. Rubric path shows how the expected response was derived. Evidence lists the recorded events each assessment is based on; find them by ID in the Event timeline."
       />
       <Table>
         <THead>
@@ -215,6 +215,7 @@ export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
             <TH>Your response</TH>
             <TH>Rubric expected</TH>
             <TH>Credit</TH>
+            <TH>Evidence</TH>
           </TR>
         </THead>
         <TBody>
@@ -273,6 +274,29 @@ export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
                         {DIMENSION_LABELS[d]!.split(" ")[0]} {Math.round(c[d]!.credit * 100)}%
                       </p>
                     ) : null,
+                  )}
+                </TD>
+                <TD className="text-2xs text-ink-muted">
+                  {it.evidence_events === undefined ? (
+                    <span title="Results scored before scoring-1.2.0 do not list evidence events.">
+                      Not recorded for this engine version
+                    </span>
+                  ) : it.evidence_events.length === 0 ? (
+                    "No decisions recorded"
+                  ) : (
+                    <ul className="space-y-0.5">
+                      {it.evidence_events.map((ev) => (
+                        <li key={ev.seq}>
+                          <span className="font-medium text-ink">{ev.event_id || `#${ev.seq}`}</span> at{" "}
+                          {formatClock((ev.t_s ?? 0) * 1000)}:{" "}
+                          {ev.kind === "classification"
+                            ? `classified ${label(CLASSIFICATION_LABELS, ev.value)}${ev.confidence ? ` (${label(CONFIDENCE_LABELS, ev.confidence)})` : ""}`
+                            : ev.kind === "response"
+                              ? label(RESPONSE_LABELS, ev.value)
+                              : `confirmation ${ev.value ? label(CLASSIFICATION_LABELS, ev.value) : "no contact"}`}
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </TD>
               </TR>

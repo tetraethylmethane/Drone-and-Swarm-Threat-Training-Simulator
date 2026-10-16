@@ -91,6 +91,7 @@ USER_COLUMNS = (
     "mfa_last_step",
     "deactivated_at",
     "anonymised_at",
+    "unit",
 )
 
 

@@ -66,6 +66,31 @@ test("capture key screens @screens", async ({ browser, page }) => {
     path: `${OUT}/07-aar-errors.png`,
     fullPage: true,
   });
+  await trainee.getByRole("tab", { name: "Summary" }).click();
+  const compare = trainee
+    .getByRole("link", { name: "Compare", exact: true })
+    .first();
+  if (await compare.isVisible()) {
+    await compare.click();
+    await expect(
+      trainee.getByRole("heading", { name: "Compare attempts" }),
+    ).toBeVisible();
+    await trainee.screenshot({
+      path: `${OUT}/18-compare-attempts.png`,
+      fullPage: true,
+    });
+  }
+  await trainee.goto("/trainee/history");
+  await expect(
+    trainee.getByRole("heading", { name: "Competency tracking" }),
+  ).toBeVisible();
+  await trainee
+    .getByRole("heading", { name: "Competency tracking" })
+    .scrollIntoViewIfNeeded();
+  await trainee.screenshot({
+    path: `${OUT}/17-competency.png`,
+    fullPage: true,
+  });
 
   const instructor = await newUserPage(browser, "instructor");
   await instructor.screenshot({
@@ -85,6 +110,16 @@ test("capture key screens @screens", async ({ browser, page }) => {
   await page.getByRole("link", { name: "Audit log" }).click();
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: `${OUT}/11-audit.png` });
+  await page.goto("/admin/system");
+  await page.getByRole("button", { name: "Check last 50 sessions" }).click();
+  await expect(page.getByText(/sessions reproduced/)).toBeVisible({
+    timeout: 60_000,
+  });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: `${OUT}/19-system-health.png`,
+    fullPage: true,
+  });
   await page.goto("/account");
   await page.waitForLoadState("networkidle");
   await page.screenshot({

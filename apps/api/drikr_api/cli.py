@@ -10,6 +10,7 @@ Usage::
     drikr-api sweep                         finalise timed-out sessions once
     drikr-api reset-mfa --username NAME     break-glass removal of a user's MFA (audited)
     drikr-api retention-run [--dry-run]     apply the data-retention policy (for scheduled jobs)
+    drikr-api reproducibility-report [--limit N]  verify recent sessions; exit code 1 if any differ
 
 Demonstration content is flagged ``is_demo`` and is clearly separated from real trainee records.
 Demo users are only created with ``--with-demo-users`` and a password supplied in DRIKR_DEMO_PASSWORD.
@@ -33,7 +34,13 @@ from drikr_api.config import get_settings
 from drikr_api.db import Database
 from drikr_api.models import Role, Rubric, Scenario, User
 from drikr_api.security.passwords import hash_password, policy_violations
-from drikr_api.services import catalog_service, mfa_service, retention_service, session_service
+from drikr_api.services import (
+    catalog_service,
+    mfa_service,
+    reproducibility_service,
+    retention_service,
+    session_service,
+)
 from drikr_scoring import load_default_rubrics
 from drikr_simcore import load_demo_scenarios
 
@@ -160,6 +167,8 @@ def main(argv: list[str] | None = None) -> None:
     rm.add_argument("--username", required=True)
     rr = sub.add_parser("retention-run")
     rr.add_argument("--dry-run", action="store_true")
+    rep = sub.add_parser("reproducibility-report")
+    rep.add_argument("--limit", type=int, default=100)
     args = parser.parse_args(argv)
 
     settings = get_settings()
@@ -203,6 +212,14 @@ def main(argv: list[str] | None = None) -> None:
             record = retention_service.run(db, None, dry_run=args.dry_run, trigger="cli")
             db.commit()
             print(json.dumps(retention_service.run_out(record), default=str))
+    elif args.cmd == "reproducibility-report":
+        database = Database(url)
+        with database.session_factory() as db:
+            out = reproducibility_service.report(db, max(1, min(args.limit, 5000)))
+            append_audit(db, actor=None, action="cli.reproducibility_report", details=out["counts"])
+            db.commit()
+        print(json.dumps(out, default=str))
+        sys.exit(0 if out["counts"]["not_reproducible"] == 0 else 1)
 
 
 if __name__ == "__main__":

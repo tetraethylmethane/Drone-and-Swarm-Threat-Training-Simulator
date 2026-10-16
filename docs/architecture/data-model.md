@@ -5,7 +5,7 @@ Source of truth: `apps/api/drikr_api/models.py` and migration `database/migratio
 
 | Table | Purpose | Key integrity rules |
 |---|---|---|
-| `users` | Accounts with role `administrator`, `instructor` or `trainee`; Argon2id hash; lockout counters; `must_change_password`; MFA secret sealed with AES-GCM (`mfa_secret_enc`, pending secret during setup), `mfa_enabled_at`, last accepted TOTP step; `deactivated_at`, `anonymised_at`. | Unique username; username format CHECK; role is a PostgreSQL enum; `mfa_consistent` (secret present ⇔ enabled). |
+| `users` | Accounts with role `administrator`, `instructor` or `trainee`; Argon2id hash; lockout counters; `must_change_password`; MFA secret sealed with AES-GCM (`mfa_secret_enc`, pending secret during setup), `mfa_enabled_at`, last accepted TOTP step; `deactivated_at`, `anonymised_at`; optional `unit` (team or course, migration `0003`). | Unique username; username format CHECK; role is a PostgreSQL enum; `mfa_consistent` (secret present ⇔ enabled). |
 | `auth_sessions` | Server-side sign-in sessions. Stores HMAC digests of the session and CSRF tokens only. | Unique token digest; `kind ∈ {cookie, bearer}`; revocation timestamp. |
 | `mfa_recovery_codes` | Single-use recovery codes, HMAC digests only, with `used_at`. | FK to user (CASCADE). |
 | `mfa_challenges` | Pending second sign-in step: token digest, mode, expiry, attempts, `used_at`. | `mode ∈ {cookie, token}`. |

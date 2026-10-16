@@ -11,13 +11,13 @@ from sqlalchemy.orm import Session
 
 from drikr_api import __version__
 from drikr_api.audit import append_audit, verify_chain
-from drikr_api.deps import Principal, get_db, require
+from drikr_api.deps import AppContext, Principal, get_ctx, get_db, require
 from drikr_api.errors import ApiError
 from drikr_api.models import AuditEvent, RetentionRun, Scenario, SessionEvent, TrainingSession, User
 from drikr_api.schemas import RetentionRunBody, SettingsBody
 from drikr_api.security.rbac import Permission
 from drikr_api.serializers import page
-from drikr_api.services import retention_service, settings_service
+from drikr_api.services import reproducibility_service, retention_service, settings_service
 from drikr_contracts import CONTRACTS_VERSION
 from drikr_scoring import SCORING_ENGINE_VERSION
 from drikr_simcore import ENGINE_VERSION
@@ -132,7 +132,11 @@ def retention_runs(
 
 
 @router.get("/admin/system")
-def system(_: Principal = Depends(require(Permission.SYSTEM_HEALTH)), db: Session = Depends(get_db)) -> dict[str, Any]:
+def system(
+    _: Principal = Depends(require(Permission.SYSTEM_HEALTH)),
+    db: Session = Depends(get_db),
+    ctx: AppContext = Depends(get_ctx),
+) -> dict[str, Any]:
     t0 = time.perf_counter()
     db.execute(text("SELECT 1"))
     latency_ms = round((time.perf_counter() - t0) * 1000, 2)
@@ -159,7 +163,28 @@ def system(_: Principal = Depends(require(Permission.SYSTEM_HEALTH)), db: Sessio
         "audit_chain": verify_chain(db),
         "simulation": {
             "engine": "drikr_simcore (deterministic Python logical simulation, server-authoritative)",
-            "visual_clients": "Unity 6 Windows client and browser adapter (React Three Fiber), both presentation-only",
+            "visual_clients": "Unity 6 desktop client (Windows, Linux, macOS) and browser adapter "
+            "(React Three Fiber), both presentation-only",
         },
         "network": {"external_runtime_dependencies": [], "telemetry": "none"},
+        "performance": ctx.metrics.summary(),
     }
+
+
+@router.get("/admin/reproducibility")
+def reproducibility(
+    limit: int = Query(default=50, ge=1, le=500),
+    principal: Principal = Depends(require(Permission.SYSTEM_HEALTH)),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Verify the most recent completed sessions and summarise the outcome."""
+    out = reproducibility_service.report(db, limit)
+    append_audit(
+        db,
+        actor=principal.user,
+        action="reproducibility.report",
+        details={"limit": limit, **out["counts"]},
+        ip_address=principal.ip,
+    )
+    db.commit()
+    return out

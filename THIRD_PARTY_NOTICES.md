@@ -2,7 +2,10 @@
 
 Licence data was collected on 2026-10-14 from installed package metadata (`importlib.metadata`
 for Python; `package.json` of every production dependency resolved by `npm ls --omit=dev --all`).
-No source code from the research references in `docs/research-review.md` is included. No 3D models,
+No source code from the research references in `docs/research-review.md` is included. The
+repositories and papers were re-verified on 2026-10-16 (`docs/research/research-and-reuse.md`).
+Again no code, models or assets were reused, so they need no attribution here. Brand artwork:
+official Drikr Systems logo and mark (`assets/brand/source/`), used by the owner's direction. No 3D models,
 textures, terrain data or external datasets are bundled: all scenes are generated geometrically and
 all scenario data is original synthetic content.
 
