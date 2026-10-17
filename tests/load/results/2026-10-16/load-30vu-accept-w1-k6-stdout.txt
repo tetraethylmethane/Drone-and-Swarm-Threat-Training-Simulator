@@ -1,0 +1,3 @@
+time="2026-10-16T17:17:44Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/16bd986a-29fe-4142-802e-5445b0eb2240/complete\": request timeout"
+time="2026-10-16T17:17:44Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/77f8a28a-6ce8-46f5-8eb6-7da6c6ccd59d/complete\": request timeout"
+time="2026-10-16T17:17:44Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/524a842d-13d2-4ff1-becc-d82bce4f2c62/complete\": request timeout"

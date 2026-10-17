@@ -1,0 +1,41 @@
+time="2026-10-16T14:36:03Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions\": request timeout"
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 168    0.411527/s
+    checks_succeeded...: 99.40% 167 out of 168
+    checks_failed......: 0.59%  1 out of 168
+
+    ✗ session created
+      ↳  99% — ✓ 167 / ✗ 1
+
+    CUSTOM
+    drikr_action_ms................: min=32.43ms  med=1.07s    avg=1.65s  p(90)=2.39s  p(95)=5.37s  p(99)=13.75s max=16.79s count=835 
+    drikr_complete_ms..............: min=323.51ms med=6.95s    avg=7.46s  p(90)=14.71s p(95)=18.31s p(99)=19.55s max=20.19s count=167 
+    drikr_create_session_ms........: min=1.63s    med=15.89s   avg=14.81s p(90)=23.11s p(95)=26.5s  p(99)=29.22s max=30s    count=169 
+    drikr_failed_requests..........: 0.01%  1 out of 7894
+    drikr_feed_ms..................: min=20.76ms  med=905.88ms avg=1.22s  p(90)=2.27s  p(95)=3.77s  p(99)=9.54s  max=18.72s count=6247
+    drikr_inconsistent_results.....: 3      0.007349/s
+    drikr_sessions_completed.......: 167    0.409077/s
+    drikr_sessions_resumed.........: 19     0.046542/s
+    drikr_sessions_scored..........: 167    0.409077/s
+
+    HTTP
+    http_req_duration..............: min=20.76ms  med=982.6ms  avg=1.96s  p(90)=4.16s  p(95)=9.38s  p(99)=17.99s max=30s    count=7894
+      { expected_response:true }...: min=20.76ms  med=981.72ms avg=1.95s  p(90)=4.14s  p(95)=9.19s  p(99)=17.98s max=29.56s count=7886
+    http_req_failed................: 0.10%  8 out of 7894
+    http_reqs......................: 7894   19.336867/s
+
+    EXECUTION
+    iteration_duration.............: min=21.27s   med=2m7s     avg=2m8s   p(90)=2m43s  p(95)=2m46s  p(99)=2m57s  max=3m8s   count=169 
+    iterations.....................: 169    0.413976/s
+    vus............................: 12     min=12        max=60
+    vus_max........................: 60     min=60        max=60
+
+    NETWORK
+    data_received..................: 27 MB  67 kB/s
+    data_sent......................: 2.0 MB 4.9 kB/s
+
+
+

@@ -24,14 +24,11 @@ class Base(DeclarativeBase):
 
 class Database:
     def __init__(self, url: str, **engine_kwargs: Any) -> None:
-        self.engine: Engine = create_engine(
-            url,
-            pool_pre_ping=True,
-            pool_size=10,
-            max_overflow=10,
-            future=True,
-            **engine_kwargs,
-        )
+        # Synchronous routes run in Starlette's worker-thread pool (40 threads by default). The
+        # connection pool matches it, so a request that has a thread never queues for a connection;
+        # a 20-connection pool timed out under load (docs/testing/load-resilience-report.md, L-01).
+        options: dict[str, Any] = {"pool_size": 20, "max_overflow": 20, **engine_kwargs}
+        self.engine: Engine = create_engine(url, pool_pre_ping=True, future=True, **options)
         self.session_factory = sessionmaker(bind=self.engine, expire_on_commit=False, autoflush=False)
 
     def session(self) -> Iterator[Session]:

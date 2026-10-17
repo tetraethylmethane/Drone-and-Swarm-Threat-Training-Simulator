@@ -6,36 +6,109 @@ Status values: **Accepted** (implemented and tested), **Accepted with limitation
 
 ## ADR-001 Simulation authority on the server; Unity and browser as visual clients
 
-**Status:** Accepted (revised 2026-10-15 when Unity 6000.3.26f1 became available)
+**Status:** Accepted. Revised 2026-10-15 (Unity client added) and **re-verified 2026-10-16**
+(Sprint 10 audit of the code and tests).
 
-**Context.** The brief prefers Unity (C#) as the authoritative 3D simulation engine and also
-requires simulation state and scoring to be separate from presentation, reproducible from seeds,
-and testable without launching Unity. It forbids running a second full simulation alongside
-Unity. The first build environment had no Unity; it was later found installed with Windows
-standalone support and a working licence in batch mode.
+### Decision
 
-**Decision.**
+The server is the single source of truth for simulation state, event ordering, scenario execution,
+timestamps, random seeds, scoring inputs and completed session records. Unity (and the browser
+adapter) present the state and collect the trainee's decisions. Neither computes an authoritative
+outcome or score.
 
-* The authoritative *logical* simulation remains `packages/simcore` (`drikr_simcore`): a
-  deterministic, pure-Python engine that expands a scenario, seed and difficulty into the complete
-  event timeline. The server stores it and releases trainee-visible events on its own clock.
-* **Unity is the 3D visual environment** (`apps/simulator/DrikrUnityClient`, Unity 6; Windows x64, Linux x86_64, macOS universal):
-  virtual environment, drone representations, environmental look, event playback and the trainee's
-  decision controls. It implements the documented adapter protocol and holds no authoritative state.
-* The browser adapter (`apps/web/src/features/exercise`) is a second visual client using the same
-  protocol, used where installing a desktop client is not wanted.
+### Why the server remains authoritative
 
-**Why Unity is not the authoritative engine.** Making Unity authoritative would put timing and
-ground truth on the trainee's machine, where they are not tamper-resistant. It would also require
-Unity to run for every scoring, verification and test, and would duplicate the engine the backend
-needs for validation and reproducibility checks. Server authority gives one engine, one timeline,
-one score, whichever client is used. Bit-identical reproduction has been verified across Windows
-and Linux (ADR-011).
+- **One engine, one timeline, one score**, whichever client is used. The deterministic Python engine
+  (`packages/simcore`) generates the whole event timeline from the scenario version, seed and
+  difficulty, and the same process scores it (`packages/scoring`).
+- **Integrity:** timing and ground truth never live on the trainee's machine, where they could be
+  changed. The server stamps every decision with its own clock.
+- **Testability:** generation, scoring and verification run without Unity, in CI, on every change.
+- **Reproducibility:** a stored session can be regenerated and re-scored from its record alone
+  (below). Achieving this inside a game engine would need its own determinism work, with no user
+  need identified for it.
 
-**Consequences.** Logic, event schema, scoring and persistence are tested without Unity. The Unity
-client is tested separately (EditMode unit and contract tests, a live protocol test, and a smoke
-test of the built player). Visual fidelity is that of a flat tactical display, not physical flight
-simulation. Unity builds need a licensed workstation and are not part of GitHub CI.
+### How clients receive and present state (adapter protocol, ADR-003)
+
+1. The client creates or opens a session and receives the session state (status, server simulation
+   time, duration, seed and difficulty for display).
+2. While running, it polls `GET /sessions/{id}/feed?since_ms=` once a second (every 4 s when idle).
+   The server returns only **trainee-visible** events whose `available_at_ms` has passed, plus the
+   authoritative state. Ground-truth events are never sent.
+3. The client projects those events into its track picture (`TrackPicture.cs`, `trackPicture.ts`:
+   order-independent and duplicate-tolerant).
+4. Decisions go to `POST /sessions/{id}/actions` with a client-generated `client_action_id`
+   (idempotency key). The server validates the decision against *its* state (tracks visible at
+   *server* time), stamps it and appends it to the log.
+5. Results are fetched from `GET /sessions/{id}/result`. The Unity client only displays them.
+
+**Client-side behaviour found in the audit (all presentation-only, none authoritative):**
+- the displayed clock is extrapolated between polls, capped at 2 s ahead of the last server time,
+  and never sent back;
+- `client_action_id` is generated on the client, but only to make retries idempotent;
+- track selection, camera and the chosen classification before submission are local UI state;
+- the Unity client displays the result from the server (`DrikrClientApp.cs` `ShowResult`).
+
+No duplicated simulation authority was found, so nothing had to be removed.
+
+### How events are recorded
+
+- At session creation the full generated timeline is stored in `session_events` (sequence numbers
+  0…n−1), with the scenario version, effective configuration, seed, difficulty, engine version and
+  timeline digest on the session row.
+- Trainee decisions and system events (pause, connection loss, sensor confirmations) are appended
+  with the next sequence number in the same transaction as the state change.
+- Sequence numbers are unique and contiguous; `(session, client_action_id)` is unique, so a
+  retried action is recorded once.
+- Since migration `0004`, the database refuses `UPDATE` on `session_events` and `UPDATE` or
+  `DELETE` on `score_results`. The API's database role cannot do either at all (`docs/security/security-findings.md` F-01).
+
+### How reproducibility is tested
+
+`tests/reproducibility` (reproducibility marker), `tests/integration/test_integrity.py`,
+`test_traceability.py`, `test_perimeter_basics.py`, the per-session `verify` endpoint and the bulk
+report (`/admin/reproducibility`, `drikr-api reproducibility-report`). Results:
+`docs/testing/reproducibility-report.md`.
+
+### Disconnections and interrupted sessions
+
+- **Client disappears:** with no poll for longer than the grace period (15 s), the server pauses the
+  session at the last heartbeat plus grace (`pause_reason = connection_lost`). Exercise time does not
+  run while nobody is watching. The trainee resumes explicitly.
+- **Client reloads or reconnects:** it fetches the feed from time 0 and rebuilds the picture from
+  the server. It never invents a new state (`test_reconnecting_client_rebuilds_the_same_state_from_the_server`).
+  The Unity client discards its local picture when it opens a session.
+- **API restart:** sessions continue from the database. No exercise state is held only in memory
+  (`test_session_continues_after_the_api_restarts`, plus the resilience test in
+  `docs/testing/load-resilience-report.md`).
+- **Abandoned or timed-out sessions** are finalised by the sweeper. Completed results are written
+  once and are idempotent under retries.
+
+### Limits of deterministic replay
+
+- The guarantee is **logical equivalence**: the same scenario version, configuration, seed and
+  difficulty give the same canonical event records (positions rounded to 0.1 m, qualities to 0.01
+  before hashing; ADR-011), so the timeline digest is identical. Identical stored events with the
+  same rubric and engine version give byte-identical score output.
+- Not replayed: rendering frames, camera movement, client frame timing, or the moment *within a
+  100 ms tick* at which the trainee clicked. Decisions are quantised to the server tick.
+- Across scoring-engine versions, the guarantee is that the **assessment** (scores, outcomes, error
+  counts) is unchanged, not the byte output.
+- Cross-platform equality is verified on Windows/CPython 3.12.4 and Linux/CPython 3.12.7 and
+  3.12.14. Other platforms are expected but not verified.
+
+### Conditions that would justify reconsidering
+
+- A training requirement for real-time physics or sensor effects that the server cannot generate in
+  advance (for example closed-loop flight control by the trainee). The timeline would then depend on
+  continuous client input.
+- Hard real-time multiplayer interaction where polling at 1 s cannot meet a measured latency
+  requirement (ADR-003 lists push transport as the first step before moving authority).
+- A measured scalability limit that server-side generation cannot meet with more API processes.
+  The 2026-10-16 load test found a capacity limit in the **single API process** (it is CPU-bound in
+  Python), not in server authority: generation and scoring run per session, and the per-request
+  cost is what limits throughput. That limit is addressed inside this architecture
+  (`docs/testing/load-resilience-report.md`), so it is not a reason to move authority to the client.
 
 ---
 

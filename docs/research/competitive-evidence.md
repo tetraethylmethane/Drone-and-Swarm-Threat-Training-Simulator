@@ -117,3 +117,38 @@ are reproduced as the source states them, and none of them has been independentl
 - Vendor sites describe themselves favourably, and secondary sources can repeat press releases.
 - Maturity labels ("emerging", "established") are judgements from public signals (portfolio
   breadth, investor material, deployment claims), not audited facts.
+
+## Verification of unresolved claims (Sprint 10, 2026-10-16)
+
+Method: the primary page for each claim was read directly on 2026-10-16. Where a page did not
+answer the question, the answer stays **Unknown**. Nothing below was confirmed with the vendors.
+Only public pages were read: no demonstrations, brochures or procurement records.
+
+| # | Claim or question | Evidence found | Missing evidence | Method and source | Result | Confidence |
+|---|---|---|---|---|---|---|
+| 1a | Althimis legal name | The press release names "Althimis Inc." | Company registry record | Read the EIN Presswire release, 2026-07-24: https://www.einpresswire.com/article/929075696 | **Resolved**: "Althimis Inc." (self-described) | Medium (vendor press release) |
+| 1b | Althimis headquarters | The release has a "Storkow, Germany" dateline (the demonstration site) and no headquarters | Any primary statement of headquarters | Same release; althimis.com still refuses automated access | **Unknown** | n/a |
+| 1c | Guardian commercially available? | The release describes "Guardian's introduction to the market" and says it "will continue to demonstrate the platform"; no price or contract is mentioned | Customer, contract or price | Same release | **Early-market demonstrator**; no evidence of sales | Medium |
+| 1d | Guardian outcome scoring | Each threat is scored as "identified and mitigated early, mitigated too late, or missed entirely" | How scores are computed or audited | Same release, consistent with The Defense Post | **Confirmed as claimed** (vendor wording) | Medium |
+| 2a | KAVACH-SIM AAR analytics: what is measured | Main page: AAR analytics "run on Indian infrastructure" (platform-level); product page: "From briefing to debrief", with no detail | Description of measures | Read https://defencevr.in/ and https://defencevr.in/products/kavach-sim | **Unknown** | n/a |
+| 2b | KAVACH-SIM scoring rules visible to instructors; replay or re-scoring | Not mentioned | Any statement | Same pages | **Unknown** | n/a |
+| 2c | KAVACH-SIM scenario authoring | Platform FAQ: "instructor tools allow havildar-rank personnel to author scenarios without vendor escalation" (not product-specific) | Product-specific authoring | Same pages | **Partly answered** (platform-level claim) | Low |
+| 2d | KAVACH-SIM adaptive difficulty | Product page: adaptive threat engine "observes operator performance and escalates difficulty run-over-run" | Rules, bounds, instructor control | https://defencevr.in/products/kavach-sim | **New claim recorded**: adaptive difficulty claimed; mechanism unknown | Low (vendor) |
+| 3a | VR Astra "adaptive scoring" and "AI Assessment" | Home page lists these as a general offering; the drone page lists measured flight metrics, instructor review and a dashboard, but mentions neither adaptive scoring nor AI assessment | Whether either applies to drones; how they work | Read https://vrastra.com/ and https://vrastra.com/defence-simulators/drone-uav-simulator | **Unknown for drones**; the drone product measures flight skills, not counter-drone decisions | Medium |
+| 3b | VR Astra audit or export of results | Not mentioned on either page | Any statement | Same pages | **Unknown** | n/a |
+| 3c | "From ₹2.5L" price | Shown next to "STARTS FROM" for defence simulators, without saying which product or what it includes | Quotation | Home page | **Unresolved**; the drone page lists no price | n/a |
+| 4a | Zen counter-drone training mode | The Integrated Air Defence Combat Simulator page (Ministry of Defence, Department of Defence Production) lists "anti-drone operations", "drone threat scenarios", an instructor station, AAR and "quantified performance assessment" | Whether it covers recognition and decision-making for C-UAS | Read https://www.ddpmod.gov.in/hi/node/7179 (government-hosted product listing) | **Partly confirmed**: drone threats are part of an air-defence *gunnery* simulator; no dedicated counter-drone training mode is described | Medium |
+| 4b | Zen UAV Sim instructor station and debrief | The page says it "assesses the proficiency level of trainees"; it mentions neither an instructor station nor a debrief | Any statement | Read https://www.zentechnologies.com/zen-uav-training-simulator.html | **Unknown** | n/a |
+| 5 | MAK AAR or replay for FPV and counter-drone | The FPV page mentions counter-drone play ("defend against incoming drones") but no AAR, replay or scoring; search results attribute AAR to MAK Data Logger and ST Engineering MARS | A primary page tying AAR to this configuration | Read https://www.mak.com/simulation-solutions/fpv-drone-simulator | **Unknown for this configuration**; available elsewhere in the wider product range (secondary evidence only) | Low |
+| 6 | Bagira UAV Mission Simulator scope and assessment | Product page: mission and procedures training, "tens of thousands of entities", conditions "set up by the instructor"; no assessment, AAR or counter-drone content | Assessment features | Read https://www.bagirasys.com/b-one-simulation/bagira-uav-mission-simulator/ | **Scope confirmed; assessment unknown**; not a counter-drone product on this evidence | Medium |
+| 7 | Any published training-effectiveness study | None on any vendor page read; a literature search returned only manned-aircraft transfer studies | Peer-reviewed or official C-UAS training evaluation | Vendor pages above; web search, 2026-10-16 | **None found** (the same applies to Drikr: docs/research/training-effectiveness-study-protocol.md) | Medium (absence of evidence) |
+| 8 | Big Bang Boom countries figure | The page states both "7+ COUNTRIES" and "15+ COUNTRIES"; no counter-drone training product is listed | Primary contract evidence | Read http://www.bigbangboom.com/ | **Still conflicting**; treat both as unverified. Not a counter-drone training competitor on this evidence | Medium |
+
+Effect on [competitor-landscape.md](competitor-landscape.md) and the roadmap:
+- DefenceVR KAVACH-SIM now has a **claimed** adaptive difficulty feature, so Drikr's adaptive
+  difficulty is not unique *as a claim*. What remains distinctive, on the evidence available, is
+  transparency: recorded reasons, bounds, instructor override and reproducibility. This rests on the
+  absence of public detail from the competitor, not on proof that the competitor lacks these
+  features.
+- Zen's air-defence simulator includes drone threats with an AAR. Zen is therefore a competitor
+  for drone-threat *engagement* training, not for recognition and decision assessment.

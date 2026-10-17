@@ -1,32 +1,236 @@
 {
   "schema_version": "1.0",
   "key": "demo-perimeter-basics",
-  "version": 1,
+  "version": 2,
   "name": "Perimeter Awareness Basics",
-  "description": "DEMONSTRATION SCENARIO. Introductory daytime exercise around a rural virtual site. Separates a cooperative survey multirotor and a non-cooperative hovering multirotor from bird activity.",
+  "description": "DEMONSTRATION SCENARIO. Introductory daytime exercise around a rural virtual site. Separates cooperative survey multirotors and non-cooperative multirotors from near and distant bird activity.",
   "briefing": "You are monitoring the simulated sensor picture around a protected virtual site in clear daylight. Observe each track, classify it, and select the appropriate training response. Cooperative aircraft broadcast a simulated beacon on the RF sensor. Birds produce no RF emissions.",
   "learning_objectives": [
-    {"id": "classify-multirotor", "description": "Correctly classify every observed small multirotor.", "criterion": {"kind": "classify_correctly", "entity_class": "small_multirotor", "min_fraction": 1.0}},
-    {"id": "classify-birds", "description": "Correctly classify at least half of the observed bird tracks.", "criterion": {"kind": "classify_correctly", "entity_class": "bird_or_clutter", "min_fraction": 0.5}},
-    {"id": "no-false-clear", "description": "Do not log a non-cooperative virtual drone as cleared.", "criterion": {"kind": "no_false_clearance"}}
+    {
+      "id": "classify-multirotor",
+      "description": "Correctly classify every observed small multirotor.",
+      "criterion": {
+        "kind": "classify_correctly",
+        "entity_class": "small_multirotor",
+        "min_fraction": 1.0
+      }
+    },
+    {
+      "id": "classify-birds",
+      "description": "Correctly classify at least half of the observed bird tracks.",
+      "criterion": {
+        "kind": "classify_correctly",
+        "entity_class": "bird_or_clutter",
+        "min_fraction": 0.5
+      }
+    },
+    {
+      "id": "no-false-clear",
+      "description": "Do not log a non-cooperative virtual drone as cleared.",
+      "criterion": {
+        "kind": "no_false_clearance"
+      }
+    }
   ],
-  "environment": {"terrain": "rural", "time_of_day": "day", "weather": "clear", "visibility_km": 15, "wind_mps": 3},
+  "environment": {
+    "terrain": "rural",
+    "time_of_day": "day",
+    "weather": "clear",
+    "visibility_km": 15,
+    "wind_mps": 3
+  },
   "sensors": {
-    "radar": {"enabled": true, "range_m": 4000, "update_interval_s": 2, "detection_probability": 0.92, "position_noise_m": 20, "latency_s": 0.5, "clutter_tracks_per_min": 0},
-    "electro_optical": {"enabled": true, "range_m": 2500, "update_interval_s": 3, "detection_probability": 0.85, "classification_accuracy": 0.85, "latency_s": 1},
-    "rf": {"enabled": true, "range_m": 3000, "update_interval_s": 4, "detection_probability": 0.8, "latency_s": 1.5}
+    "radar": {
+      "enabled": true,
+      "range_m": 4000,
+      "update_interval_s": 2,
+      "detection_probability": 0.92,
+      "position_noise_m": 20,
+      "latency_s": 0.5,
+      "clutter_tracks_per_min": 0
+    },
+    "electro_optical": {
+      "enabled": true,
+      "range_m": 2500,
+      "update_interval_s": 3,
+      "detection_probability": 0.85,
+      "classification_accuracy": 0.85,
+      "latency_s": 1
+    },
+    "rf": {
+      "enabled": true,
+      "range_m": 3000,
+      "update_interval_s": 4,
+      "detection_probability": 0.8,
+      "latency_s": 1.5
+    }
   },
   "entities": [
-    {"id": "survey", "label": "Cooperative survey multirotor", "entity_class": "small_multirotor", "behavior": "transit", "cooperative": true, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 5, "max": 25}, "speed_mps": {"min": 10, "max": 14}, "altitude_m": {"min": 60, "max": 90}, "closest_approach_m": {"min": 500, "max": 900}},
-    {"id": "intruder", "label": "Non-cooperative hovering multirotor", "entity_class": "small_multirotor", "behavior": "hover", "cooperative": false, "count": {"min": 1, "max": 1}, "spawn_time_s": {"min": 30, "max": 60}, "speed_mps": {"min": 9, "max": 12}, "altitude_m": {"min": 50, "max": 80}, "closest_approach_m": {"min": 600, "max": 1000}, "dwell_s": {"min": 70, "max": 100}},
-    {"id": "birds", "label": "Bird activity", "entity_class": "bird_or_clutter", "behavior": "erratic", "cooperative": false, "count": {"min": 2, "max": 3}, "spawn_time_s": {"min": 0, "max": 80}, "speed_mps": {"min": 6, "max": 11}, "altitude_m": {"min": 20, "max": 60}, "closest_approach_m": {"min": 700, "max": 1500}}
+    {
+      "id": "survey",
+      "label": "Cooperative survey multirotor",
+      "entity_class": "small_multirotor",
+      "behavior": "transit",
+      "cooperative": true,
+      "count": {
+        "min": 1,
+        "max": 2
+      },
+      "spawn_time_s": {
+        "min": 5,
+        "max": 60
+      },
+      "speed_mps": {
+        "min": 10,
+        "max": 14
+      },
+      "altitude_m": {
+        "min": 60,
+        "max": 90
+      },
+      "closest_approach_m": {
+        "min": 500,
+        "max": 900
+      }
+    },
+    {
+      "id": "intruder",
+      "label": "Non-cooperative hovering multirotor",
+      "entity_class": "small_multirotor",
+      "behavior": "hover",
+      "cooperative": false,
+      "count": {
+        "min": 1,
+        "max": 1
+      },
+      "spawn_time_s": {
+        "min": 30,
+        "max": 60
+      },
+      "speed_mps": {
+        "min": 9,
+        "max": 12
+      },
+      "altitude_m": {
+        "min": 50,
+        "max": 80
+      },
+      "closest_approach_m": {
+        "min": 600,
+        "max": 1000
+      },
+      "dwell_s": {
+        "min": 70,
+        "max": 100
+      }
+    },
+    {
+      "id": "intruder-late",
+      "label": "Non-cooperative transiting multirotor",
+      "entity_class": "small_multirotor",
+      "behavior": "transit",
+      "cooperative": false,
+      "count": {
+        "min": 1,
+        "max": 1
+      },
+      "spawn_time_s": {
+        "min": 120,
+        "max": 170
+      },
+      "speed_mps": {
+        "min": 9,
+        "max": 12
+      },
+      "altitude_m": {
+        "min": 50,
+        "max": 80
+      },
+      "closest_approach_m": {
+        "min": 500,
+        "max": 900
+      }
+    },
+    {
+      "id": "birds",
+      "label": "Bird activity",
+      "entity_class": "bird_or_clutter",
+      "behavior": "erratic",
+      "cooperative": false,
+      "count": {
+        "min": 2,
+        "max": 3
+      },
+      "spawn_time_s": {
+        "min": 0,
+        "max": 80
+      },
+      "speed_mps": {
+        "min": 6,
+        "max": 11
+      },
+      "altitude_m": {
+        "min": 20,
+        "max": 60
+      },
+      "closest_approach_m": {
+        "min": 700,
+        "max": 1500
+      }
+    },
+    {
+      "id": "birds-distant",
+      "label": "Distant bird activity",
+      "entity_class": "bird_or_clutter",
+      "behavior": "erratic",
+      "cooperative": false,
+      "count": {
+        "min": 2,
+        "max": 3
+      },
+      "spawn_time_s": {
+        "min": 90,
+        "max": 200
+      },
+      "speed_mps": {
+        "min": 6,
+        "max": 11
+      },
+      "altitude_m": {
+        "min": 20,
+        "max": 60
+      },
+      "closest_approach_m": {
+        "min": 2000,
+        "max": 2400
+      }
+    }
   ],
   "event_schedule": [
-    {"type": "exercise_message", "id": "welcome", "at_s": 0, "message": "Exercise control: picture is clear. Report anything non-cooperative near the site."}
+    {
+      "type": "exercise_message",
+      "id": "welcome",
+      "at_s": 0,
+      "message": "Exercise control: picture is clear. Report anything non-cooperative near the site."
+    }
   ],
-  "randomization": {"seed": 1001, "allow_seed_override": true},
-  "difficulty": {"level": 2, "adaptive_allowed": true, "min_level": 1, "max_level": 4},
-  "scoring": {"rubric_key": "standard-assessment", "rubric_version": 1},
-  "time_limits": {"duration_s": 240, "allow_pause": true},
+  "randomization": {
+    "seed": 1001,
+    "allow_seed_override": true
+  },
+  "difficulty": {
+    "level": 2,
+    "adaptive_allowed": true,
+    "min_level": 1,
+    "max_level": 4
+  },
+  "scoring": {
+    "rubric_key": "standard-assessment",
+    "rubric_version": 1
+  },
+  "time_limits": {
+    "duration_s": 300,
+    "allow_pause": true
+  },
   "self_guided": true
 }

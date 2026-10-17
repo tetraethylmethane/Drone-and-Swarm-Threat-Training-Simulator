@@ -9,7 +9,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 FILE="${1:?usage: restore.sh <dump file> --yes}"
 [ "${2:-}" = "--yes" ] || { echo "refusing to restore without --yes (this replaces all current data)" >&2; exit 2; }
-set -a; . ./.env; set +a
+# DRIKR_ENV_FILE selects another stack's settings (default: the deployment's .env).
+set -a; . "${DRIKR_ENV_FILE:-./.env}"; set +a
 
 ( cd "$(dirname "$FILE")" && sha256sum -c "$(basename "$FILE").sha256" )
 

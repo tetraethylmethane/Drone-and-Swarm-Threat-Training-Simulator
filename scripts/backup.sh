@@ -11,7 +11,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 OUT="${1:-backups}"
 mkdir -p "$OUT"
-set -a; . ./.env; set +a
+# DRIKR_ENV_FILE selects another stack's settings (default: the deployment's .env).
+set -a; . "${DRIKR_ENV_FILE:-./.env}"; set +a
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 FILE="$OUT/drikr-$STAMP.dump"
 

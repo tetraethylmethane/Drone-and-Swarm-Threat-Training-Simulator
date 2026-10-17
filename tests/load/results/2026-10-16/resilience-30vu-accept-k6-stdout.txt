@@ -1,0 +1,40 @@
+time="2026-10-16T17:04:18Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions\": request timeout"
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 614    1.380902/s
+    checks_succeeded...: 19.54% 120 out of 614
+    checks_failed......: 80.45% 494 out of 614
+
+    ✗ session created
+      ↳  19% — ✓ 120 / ✗ 494
+
+    CUSTOM
+    drikr_action_ms................: min=22.84ms  med=488.04ms avg=510.67ms p(90)=860.22ms p(95)=929.73ms p(99)=1.24s max=3.84s count=590 
+    drikr_complete_ms..............: min=405.52µs med=1.65s    avg=1.89s    p(90)=4.83s    p(95)=5.37s    p(99)=5.41s max=5.86s count=120 
+    drikr_create_session_ms........: min=371.69µs med=79.57ms  avg=781.77ms p(90)=2.87s    p(95)=4.27s    p(99)=5.95s max=30s   count=657 
+    drikr_failed_requests..........: 8.48%  822 out of 9692
+    drikr_feed_ms..................: min=415.55µs med=274.09ms avg=335.33ms p(90)=626.04ms p(95)=802.09ms p(99)=1.59s max=4.23s count=7935
+    drikr_sessions_completed.......: 78     0.175424/s
+    drikr_sessions_resumed.........: 1      0.002249/s
+    drikr_sessions_scored..........: 66     0.148436/s
+
+    HTTP
+    http_req_duration..............: min=369.1µs  med=285.06ms avg=432.49ms p(90)=770.9ms  p(95)=1.24s    p(99)=3.87s max=30s   count=9692
+      { expected_response:true }...: min=18.8ms   med=306.26ms avg=446.65ms p(90)=774.21ms p(95)=1.19s    p(99)=3.99s max=6.63s count=8823
+    http_req_failed................: 8.96%  869 out of 9692
+    http_reqs......................: 9692   21.797562/s
+
+    EXECUTION
+    iteration_duration.............: min=2s       med=2.08s    avg=19.98s   p(90)=1m37s    p(95)=1m39s    p(99)=1m43s max=1m45s count=657 
+    iterations.....................: 657    1.47761/s
+    vus............................: 9      min=9           max=30
+    vus_max........................: 30     min=30          max=30
+
+    NETWORK
+    data_received..................: 27 MB  60 kB/s
+    data_sent......................: 2.4 MB 5.4 kB/s
+
+
+

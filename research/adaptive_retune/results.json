@@ -1,0 +1,1441 @@
+{
+  "scenario": "demo-perimeter-basics",
+  "bounds": [
+    1,
+    4
+  ],
+  "start_level": 2,
+  "agents": 40,
+  "sessions": 10,
+  "outlier_every": 4,
+  "sessions_played": 2785,
+  "seconds": 245,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.4",
+    "cpus": 12
+  },
+  "candidates": {
+    "A_current": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 100.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": false,
+        "robust_demotion": false
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 13,
+            "2": 27,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.325,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.325,
+          "level_changes_per_agent": 0.33,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 39
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.975,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.98,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.5
+          ],
+          "final_level_distribution": {
+            "1": 20,
+            "2": 14,
+            "3": 6,
+            "4": 0
+          },
+          "share_final_at_min": 0.5,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.65,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 37,
+            "2": 3,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.925,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.925,
+          "level_changes_per_agent": 3.33,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": 9,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 4.0,
+          "outlier_sessions_above_min": 35,
+          "outlier_decrease_rate": 0.8,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": false,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "B_outlier_guard": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 65.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": false,
+        "robust_demotion": false
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 10,
+            "2": 30,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.25,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.25,
+          "level_changes_per_agent": 0.25,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 39
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.975,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.98,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.5
+          ],
+          "final_level_distribution": {
+            "1": 20,
+            "2": 14,
+            "3": 6,
+            "4": 0
+          },
+          "share_final_at_min": 0.5,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.65,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 33,
+            "2": 6,
+            "3": 1,
+            "4": 0
+          },
+          "share_final_at_min": 0.825,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.825,
+          "level_changes_per_agent": 3.2,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": 9,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 34,
+            "2": 6,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.85,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.85,
+          "level_changes_per_agent": 0.85,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 4.0,
+          "outlier_sessions_above_min": 48,
+          "outlier_decrease_rate": 0.333,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": true,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "C_same_level": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 100.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": true,
+        "robust_demotion": false
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 13,
+            "2": 27,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.325,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.325,
+          "level_changes_per_agent": 0.33,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 3,
+            "4": 37
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.925,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.93,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.5
+          ],
+          "final_level_distribution": {
+            "1": 20,
+            "2": 20,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.5,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.5,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            2.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 26,
+            "2": 14,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.65,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.65,
+          "level_changes_per_agent": 2.45,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": 9.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 4.0,
+          "outlier_sessions_above_min": 35,
+          "outlier_decrease_rate": 0.8,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": false,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "D_guard_and_same_level": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 65.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": true,
+        "robust_demotion": false
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 10,
+            "2": 30,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.25,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.25,
+          "level_changes_per_agent": 0.25,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 3,
+            "4": 37
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.925,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.93,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.5
+          ],
+          "final_level_distribution": {
+            "1": 20,
+            "2": 20,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.5,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.5,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 2.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            2.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 24,
+            "2": 14,
+            "3": 2,
+            "4": 0
+          },
+          "share_final_at_min": 0.6,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.6,
+          "level_changes_per_agent": 2.35,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": 9.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 34,
+            "2": 6,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.85,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.85,
+          "level_changes_per_agent": 0.85,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 4.0,
+          "outlier_sessions_above_min": 48,
+          "outlier_decrease_rate": 0.333,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": true,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "E_D_with_three_sessions": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 3,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 65.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": true,
+        "robust_demotion": false
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 8,
+            "2": 32,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.2,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.2,
+          "level_changes_per_agent": 0.2,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 6,
+            "4": 34
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.85,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.85,
+          "median_session_of_first_increase": 3.0,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 19,
+            "2": 21,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.475,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.975,
+          "level_changes_per_agent": 1.48,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 27,
+            "2": 12,
+            "3": 1,
+            "4": 0
+          },
+          "share_final_at_min": 0.675,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.675,
+          "level_changes_per_agent": 1.5,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 9,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 33,
+            "2": 7,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.825,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.825,
+          "level_changes_per_agent": 0.82,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 5,
+          "outlier_sessions_above_min": 55,
+          "outlier_decrease_rate": 0.327,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": false,
+        "C3_mid_stable": true,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "F_median_demotion": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 100.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": false,
+        "robust_demotion": true
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 7,
+            "2": 33,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.175,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.175,
+          "level_changes_per_agent": 0.17,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 39
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.975,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.98,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 19,
+            "2": 15,
+            "3": 6,
+            "4": 0
+          },
+          "share_final_at_min": 0.475,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.975,
+          "level_changes_per_agent": 1.62,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 36,
+            "2": 4,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.9,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.9,
+          "level_changes_per_agent": 3.3,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": 9.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 32,
+            "2": 8,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.8,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.8,
+          "level_changes_per_agent": 0.8,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 5.0,
+          "outlier_sessions_above_min": 57,
+          "outlier_decrease_rate": 0.333,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": true,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": true,
+        "C5_single_outlier": false
+      }
+    },
+    "G_F_and_same_level": {
+      "policy": {
+        "window": 3,
+        "min_sessions": 2,
+        "promote_mean": 85.0,
+        "promote_min_each": 75.0,
+        "demote_mean": 55.0,
+        "demote_max_each": 100.0,
+        "high_confidence_max_stdev": 10.0,
+        "same_level_only": true,
+        "robust_demotion": true
+      },
+      "profiles": {
+        "constant_0.3": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 40,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 1.0,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 1.0,
+          "level_changes_per_agent": 1.0,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3.0,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 7,
+            "2": 33,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.175,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.175,
+          "level_changes_per_agent": 0.17,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.9": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "final_level_distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 3,
+            "4": 37
+          },
+          "share_final_at_min": 0.0,
+          "share_final_at_max": 0.925,
+          "share_ever_at_level_1": 0.0,
+          "level_changes_per_agent": 1.93,
+          "median_session_of_first_increase": 2.5,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "improving_0.2_to_0.95": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 19,
+            "2": 21,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.475,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.975,
+          "level_changes_per_agent": 1.48,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 3,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "declining_0.95_to_0.2": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "final_level_distribution": {
+            "1": 16,
+            "2": 23,
+            "3": 1,
+            "4": 0
+          },
+          "share_final_at_min": 0.4,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.4,
+          "level_changes_per_agent": 2.17,
+          "median_session_of_first_increase": 2.0,
+          "median_session_of_first_decrease": null,
+          "outlier_sessions_above_min": 0,
+          "outlier_decrease_rate": null,
+          "bound_or_step_violations": 0
+        },
+        "constant_0.6_with_outliers": {
+          "median_level_by_session": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "final_level_distribution": {
+            "1": 32,
+            "2": 8,
+            "3": 0,
+            "4": 0
+          },
+          "share_final_at_min": 0.8,
+          "share_final_at_max": 0.0,
+          "share_ever_at_level_1": 0.8,
+          "level_changes_per_agent": 0.8,
+          "median_session_of_first_increase": null,
+          "median_session_of_first_decrease": 5.0,
+          "outlier_sessions_above_min": 57,
+          "outlier_decrease_rate": 0.333,
+          "bound_or_step_violations": 0
+        }
+      },
+      "criteria": {
+        "C1_bounds_and_steps": true,
+        "C2_weak_to_min_strong_to_max": true,
+        "C3_mid_stable": true,
+        "C4_improving_not_later": null,
+        "C4_declining_not_later": false,
+        "C5_single_outlier": false
+      }
+    }
+  }
+}

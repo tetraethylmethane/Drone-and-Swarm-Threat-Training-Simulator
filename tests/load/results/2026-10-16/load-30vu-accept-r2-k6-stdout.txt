@@ -1,0 +1,37 @@
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 109     0.277287/s
+    checks_succeeded...: 100.00% 109 out of 109
+    checks_failed......: 0.00%   0 out of 109
+
+    ✓ session created
+
+    CUSTOM
+    drikr_action_ms................: min=19.52ms  med=315.34ms avg=348.99ms p(90)=743.74ms p(95)=820.11ms p(99)=916.71ms max=1.88s count=545 
+    drikr_complete_ms..............: min=185.01ms med=2.77s    avg=2.57s    p(90)=4.44s    p(95)=4.65s    p(99)=5.05s    max=5.1s  count=109 
+    drikr_create_session_ms........: min=538.36ms med=2.62s    avg=2.58s    p(90)=3.66s    p(95)=3.74s    p(99)=3.97s    max=4.16s count=109 
+    drikr_failed_requests..........: 0.00%  0 out of 9086
+    drikr_feed_ms..................: min=12.06ms  med=125.2ms  avg=207.68ms p(90)=480.54ms p(95)=621.56ms p(99)=1s       max=2.9s  count=8045
+    drikr_sessions_completed.......: 109    0.277287/s
+    drikr_sessions_scored..........: 109    0.277287/s
+
+    HTTP
+    http_req_duration..............: min=12.06ms  med=148.04ms avg=288.68ms p(90)=596.37ms p(95)=821.57ms p(99)=3.01s    max=5.1s  count=9086
+      { expected_response:true }...: min=12.06ms  med=148.04ms avg=288.68ms p(90)=596.37ms p(95)=821.57ms p(99)=3.01s    max=5.1s  count=9086
+    http_req_failed................: 0.00%  0 out of 9086
+    http_reqs......................: 9086   23.114017/s
+
+    EXECUTION
+    iteration_duration.............: min=1m30s    med=1m38s    avg=1m37s    p(90)=1m42s    p(95)=1m43s    p(99)=1m43s    max=1m43s count=109 
+    iterations.....................: 109    0.277287/s
+    vus............................: 3      min=3         max=30
+    vus_max........................: 30     min=30        max=30
+
+    NETWORK
+    data_received..................: 26 MB  66 kB/s
+    data_sent......................: 2.2 MB 5.7 kB/s
+
+
+

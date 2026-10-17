@@ -27,4 +27,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=5 \
   CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/ready', timeout=2).status == 200 else 1)"
 # Migrations are idempotent; running them at start keeps a fresh install to a single command.
-CMD ["sh", "-c", "drikr-api migrate && exec uvicorn --factory drikr_api.main:app_factory --host 0.0.0.0 --port 8000 --no-server-header"]
+# Migrations run as the database owner; the API then runs as the least-privilege role in
+# DRIKR_DATABASE_URL (provisioned on every start, so restores and new tables are covered).
+CMD ["sh", "-c", "drikr-api migrate && drikr-api provision-app-role && exec uvicorn --factory drikr_api.main:app_factory --host 0.0.0.0 --port 8000 --no-server-header"]

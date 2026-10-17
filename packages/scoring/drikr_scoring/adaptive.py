@@ -25,7 +25,17 @@ class AdaptivePolicy(BaseModel):
     promote_mean: float = Field(ge=0, le=100, default=85.0)
     promote_min_each: float = Field(ge=0, le=100, default=75.0)
     demote_mean: float = Field(ge=0, le=100, default=55.0)
+    #: A decrease also needs every recent score below this, mirroring ``promote_min_each``: one very
+    #: poor session among adequate ones must not lower the level. 100 (the default) disables it; the
+    #: retune chose ``robust_demotion`` instead (docs/research/adaptive-difficulty.md).
+    demote_max_each: float = Field(ge=0, le=100, default=100.0)
     high_confidence_max_stdev: float = Field(ge=0, le=100, default=10.0)
+    #: Use only the most recent run of sessions played at the current level as evidence, so results
+    #: from an easier or harder level never justify a change at this one.
+    same_level_only: bool = False
+    #: A decrease needs a full window and the *median* recent score below ``demote_mean``, so at
+    #: least two poor sessions out of three; a single failed session never lowers the level.
+    robust_demotion: bool = True
 
     @model_validator(mode="after")
     def _order(self) -> AdaptivePolicy:
@@ -33,6 +43,8 @@ class AdaptivePolicy(BaseModel):
             raise ValueError("min_sessions cannot exceed window")
         if self.demote_mean >= self.promote_mean:
             raise ValueError("demote_mean must be below promote_mean")
+        if self.demote_max_each < self.demote_mean:
+            raise ValueError("demote_max_each cannot be below demote_mean")
         return self
 
 
@@ -69,10 +81,19 @@ def recommend_level(
     if not (1 <= min_level <= max_level <= 5):
         raise ValueError("invalid difficulty bounds")
     current = max(min_level, min(max_level, current_level))
-    recent = history[-policy.window :]
+    considered = history
+    if policy.same_level_only:
+        run: list[SessionOutcome] = []
+        for h in reversed(history):
+            if h.difficulty_level != current:
+                break
+            run.append(h)
+        considered = list(reversed(run))
+    recent = considered[-policy.window :]
     scores = [h.overall for h in recent]
     evidence: dict[str, object] = {
         "window": policy.window,
+        "same_level_only": policy.same_level_only,
         "sessions_considered": [h.session_id for h in recent],
         "scores": scores,
         "bounds": [min_level, max_level],
@@ -134,6 +155,37 @@ def recommend_level(
             f"score >= {policy.promote_min_each:g}.",
             evidence,
         )
+    median = statistics.median(scores)
+    evidence["median"] = round(median, 2)
+    if (
+        mean < policy.demote_mean
+        and policy.robust_demotion
+        and (len(recent) < policy.window or median >= policy.demote_mean)
+    ):
+        why = (
+            f"{len(recent)} of {policy.window} sessions are available"
+            if len(recent) < policy.window
+            else f"the median {median:.1f} is not below {policy.demote_mean:g}"
+        )
+        return Recommendation(
+            current,
+            current,
+            "hold",
+            confidence,
+            f"Holding at level {current}: mean {mean:.1f} is below {policy.demote_mean:g} but {why}, "
+            "so one poor session is not enough.",
+            evidence,
+        )
+    if mean < policy.demote_mean and max(scores) >= policy.demote_max_each:
+        return Recommendation(
+            current,
+            current,
+            "hold",
+            confidence,
+            f"Holding at level {current}: mean {mean:.1f} is below {policy.demote_mean:g} but a recent score "
+            f"reached {max(scores):.1f} (>= {policy.demote_max_each:g}), so one poor session is not enough.",
+            evidence,
+        )
     if mean < policy.demote_mean:
         if current <= min_level:
             return Recommendation(
@@ -150,7 +202,8 @@ def recommend_level(
             current - 1,
             "decrease",
             confidence,
-            f"Decreasing to level {current - 1}: mean {mean:.1f} < {policy.demote_mean:g}.",
+            f"Decreasing to level {current - 1}: mean {mean:.1f} < {policy.demote_mean:g} and every recent "
+            f"score < {policy.demote_max_each:g}.",
             evidence,
         )
     return Recommendation(

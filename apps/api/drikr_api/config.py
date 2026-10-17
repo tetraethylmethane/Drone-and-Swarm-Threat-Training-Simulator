@@ -20,6 +20,9 @@ class Settings(BaseSettings):
 
     environment: Literal["development", "test", "production"] = "development"
     database_url: str = Field(description="SQLAlchemy URL, e.g. postgresql+psycopg://user:pass@host:5432/drikr")
+    #: Owner connection for migrations and role provisioning. When it differs from database_url, the
+    #: API runs as the least-privilege role named in database_url (docs/security/security-findings.md F-01).
+    migration_database_url: str | None = Field(default=None, description="Owner URL; defaults to database_url")
     secret_key: SecretStr = Field(description="At least 32 characters; used to key token digests")
 
     session_ttl_minutes: int = Field(default=480, ge=5, le=24 * 60)
@@ -36,12 +39,18 @@ class Settings(BaseSettings):
 
     heartbeat_grace_s: int = Field(default=15, ge=3, le=600)
     sweeper_interval_s: int = Field(default=10, ge=0, le=3600)
+    #: Worker processes for timeline generation (drikr_api/cpu.py); 0 runs it inside the API process.
+    cpu_workers: int = Field(default=2, ge=0, le=16)
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
 
-    @field_validator("database_url")
+    @property
+    def owner_url(self) -> str:
+        return self.migration_database_url or self.database_url
+
+    @field_validator("database_url", "migration_database_url")
     @classmethod
-    def _postgres_only(cls, v: str) -> str:
-        if not v.startswith("postgresql+psycopg://"):
+    def _postgres_only(cls, v: str | None) -> str | None:
+        if v is not None and not v.startswith("postgresql+psycopg://"):
             raise ValueError(
                 "database_url must use the postgresql+psycopg:// driver (PostgreSQL is the only supported database)"
             )

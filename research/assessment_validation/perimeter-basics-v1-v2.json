@@ -1,0 +1,96 @@
+{
+  "v1": [
+    {
+      "icc": 0.745,
+      "sem": 11.8,
+      "rho": 0.905,
+      "uncertainty_assessable": 0.278,
+      "ceiling": 0.078,
+      "tracks": 4.5,
+      "mean": 60.6
+    },
+    {
+      "icc": 0.721,
+      "sem": 12.2,
+      "rho": 0.841,
+      "uncertainty_assessable": 0.233,
+      "ceiling": 0.1,
+      "tracks": 4.5,
+      "mean": 61.0
+    },
+    {
+      "icc": 0.771,
+      "sem": 11.8,
+      "rho": 0.857,
+      "uncertainty_assessable": 0.278,
+      "ceiling": 0.1,
+      "tracks": 4.5,
+      "mean": 60.6
+    },
+    {
+      "icc": 0.785,
+      "sem": 11.2,
+      "rho": 0.901,
+      "uncertainty_assessable": 0.256,
+      "ceiling": 0.1,
+      "tracks": 4.6,
+      "mean": 56.8
+    },
+    {
+      "icc": 0.723,
+      "sem": 11.8,
+      "rho": 0.809,
+      "uncertainty_assessable": 0.278,
+      "ceiling": 0.044,
+      "tracks": 4.5,
+      "mean": 55.7
+    }
+  ],
+  "v2": [
+    {
+      "icc": 0.855,
+      "sem": 8.5,
+      "rho": 0.937,
+      "uncertainty_assessable": 0.4,
+      "ceiling": 0.067,
+      "tracks": 8.4,
+      "mean": 58.7
+    },
+    {
+      "icc": 0.862,
+      "sem": 8.6,
+      "rho": 0.924,
+      "uncertainty_assessable": 0.467,
+      "ceiling": 0.067,
+      "tracks": 8.6,
+      "mean": 58.9
+    },
+    {
+      "icc": 0.868,
+      "sem": 8.6,
+      "rho": 0.914,
+      "uncertainty_assessable": 0.444,
+      "ceiling": 0.078,
+      "tracks": 8.5,
+      "mean": 60.7
+    },
+    {
+      "icc": 0.871,
+      "sem": 8.3,
+      "rho": 0.937,
+      "uncertainty_assessable": 0.433,
+      "ceiling": 0.033,
+      "tracks": 8.6,
+      "mean": 55.5
+    },
+    {
+      "icc": 0.846,
+      "sem": 8.1,
+      "rho": 0.928,
+      "uncertainty_assessable": 0.478,
+      "ceiling": 0.022,
+      "tracks": 8.4,
+      "mean": 56.2
+    }
+  ]
+}

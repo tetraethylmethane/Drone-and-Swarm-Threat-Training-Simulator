@@ -30,7 +30,8 @@ RUBRIC = Rubric.model_validate(load_default_rubrics()[0])
 GOLDEN = {
     "demo-degraded-picture": "435b48025d27b480eb824f83b08e89a5b8cc752ffa504af4467d512ac6daad33",
     "demo-night-loiter": "7cd9c8a503ac54d98512e7d11170dd4555c2ac078dbfd6383629c7e5c9a260f3",
-    "demo-perimeter-basics": "66f645ecced4e437f60aac111aa33293ae119d1d71c03eed51d809e5410a3ec0",
+    # version 2; version 1 is covered by tests/reproducibility/test_perimeter_basics.py
+    "demo-perimeter-basics": "6a652ed253a706fedb56d1fd1053d0afdeb574823db5e594b0eccdbdda0e80d1",
     "demo-swarm-recognition": "9a54292ce3ccb508629b79badcc55253b0d23e8570d0ecad07f0ddb22b463082",
 }
 

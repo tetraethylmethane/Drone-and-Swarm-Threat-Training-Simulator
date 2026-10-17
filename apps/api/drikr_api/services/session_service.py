@@ -25,9 +25,11 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Any
 
-from sqlalchemy import insert, select
+from psycopg.types.json import Jsonb
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from drikr_api import cpu
 from drikr_api.errors import ApiError, conflict
 from drikr_api.models import (
     Assignment,
@@ -195,7 +197,7 @@ def create_session(
     except ValueError as exc:
         raise ApiError(422, "selection_not_permitted", str(exc).splitlines()[0]) from exc
     seed = effective.randomization.seed
-    timeline = generate_timeline(effective, seed=seed, difficulty_level=level)
+    timeline = cpu.run(generate_timeline, effective, seed=seed, difficulty_level=level)
     eff_json = effective.model_dump(mode="json")
 
     s = TrainingSession(
@@ -220,22 +222,51 @@ def create_session(
     )
     db.add(s)
     db.flush()
-    rows = [
-        {
-            "session_id": s.id,
-            "seq": e["seq"],
-            "event_id": e["event_id"],
-            "t_ms": e["t_ms"],
-            "available_at_ms": e["available_at_ms"],
-            "type": e["type"],
-            "visibility": e["visibility"],
-            "origin": e["origin"],
-            "payload": e["payload"],
-        }
-        for e in timeline.events
-    ]
-    db.execute(insert(SessionEvent), rows)
+    _copy_events(db, s.id, timeline.events)
     return s
+
+
+_EVENT_COLUMNS = (
+    "session_id",
+    "seq",
+    "event_id",
+    "t_ms",
+    "available_at_ms",
+    "type",
+    "visibility",
+    "origin",
+    "payload",
+    "recorded_at",
+)
+
+
+def _copy_events(db: Session, session_id: uuid.UUID, events: list[dict[str, Any]]) -> None:
+    """Write a generated timeline (thousands of rows) with COPY inside the caller's transaction.
+
+    A parameterised multi-row INSERT took about 0.7 s of API CPU per session and held a pooled
+    connection throughout; under concurrent session creation that exhausted the pool
+    (docs/testing/load-resilience-report.md, defect L-01). COPY writes the same rows in a single
+    round trip, and the table's constraints and triggers apply exactly as for INSERT.
+    """
+    now = utcnow()
+    raw = db.connection().connection.driver_connection
+    assert raw is not None  # a live psycopg connection inside the session's transaction
+    with raw.cursor() as cur, cur.copy(f"COPY session_events ({', '.join(_EVENT_COLUMNS)}) FROM STDIN") as copy:
+        for e in events:
+            copy.write_row(
+                (
+                    session_id,
+                    e["seq"],
+                    e["event_id"],
+                    e["t_ms"],
+                    e["available_at_ms"],
+                    e["type"],
+                    e["visibility"],
+                    e["origin"],
+                    Jsonb(e["payload"]),
+                    now,
+                )
+            )
 
 
 # ---------------------------------------------------------------------------

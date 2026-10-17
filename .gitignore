@@ -48,3 +48,4 @@ apps/simulator/DrikrUnityClient/*.csproj
 apps/simulator/DrikrUnityClient/*.sln
 apps/simulator/*.log
 apps/simulator/*.xml
+deploy/loadtest/loadtest.env

@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from drikr_api import cpu
 from drikr_api.audit import append_audit
 from drikr_api.deps import Principal, get_db, require
 from drikr_api.errors import ApiError, not_found
@@ -194,7 +195,7 @@ def preview(
     """Instructor planning view: expanded entities and timeline statistics (contains ground truth)."""
     s = _scenario(db, scenario_id)
     scn = ScenarioContract.model_validate(s.definition)
-    tl = generate_timeline(scn, seed=seed, difficulty_level=difficulty_level)
+    tl = cpu.run(generate_timeline, scn, seed=seed, difficulty_level=difficulty_level)
     idx = GroundTruthIndex(tl.events)
     entities = [
         {

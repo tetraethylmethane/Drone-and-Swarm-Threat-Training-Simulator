@@ -216,7 +216,7 @@ def test_time_limit_completes_and_scores_via_sweeper(
 
     sid = launch(trainee, assign(instructor, trainee)["id"])["id"]
     trainee.post(f"/sessions/{sid}/start")
-    for _ in range(25):  # 250 s of polling; demo duration is 240 s
+    for _ in range(31):  # 310 s of polling; demo duration is 300 s (version 2)
         clock.advance(10)
         trainee.get(f"/sessions/{sid}/feed")
     st = trainee.get(f"/sessions/{sid}").json()
@@ -314,7 +314,7 @@ def test_adaptive_difficulty_records_reasons(world: World, trainee: Api, instruc
         instructor, trainee, difficulty_mode="adaptive", difficulty_level=3, min_level=2, max_level=4, max_attempts=5
     )
     levels = []
-    for _ in range(3):
+    for _ in range(4):
         sid = launch(trainee, a["id"])["id"]
         levels.append(trainee.get(f"/sessions/{sid}").json()["difficulty_level"])
         trainee.post(f"/sessions/{sid}/start")
@@ -322,11 +322,13 @@ def test_adaptive_difficulty_records_reasons(world: World, trainee: Api, instruc
         trainee.get(f"/sessions/{sid}/feed")
         trainee.post(f"/sessions/{sid}/complete")  # idle trainee: low scores
     hist = instructor.get(f"/analytics/difficulty?trainee_id={trainee.user['id']}").json()["items"]  # type: ignore[index]
-    assert len(hist) == 3 and all(h["reason"] for h in hist)
+    assert len(hist) == 4 and all(h["reason"] for h in hist)
     assert hist[-1]["change"] == "hold" and "required before adjusting" in hist[-1]["reason"]  # first session
-    assert levels[0] == 3
+    # Robust demotion (docs/research/adaptive-difficulty.md): two poor sessions are not yet enough.
+    assert hist[-2]["change"] == "hold" and "2 of 3 sessions are available" in hist[-2]["reason"]
+    assert levels[:3] == [3, 3, 3]
+    assert levels[3] == 2  # demoted after three low scores
     assert min(levels) >= 2  # never below the instructor minimum
-    assert levels[2] == 2  # demoted after two low scores
     assert hist[0]["to_level"] == 2  # most recent: held at the minimum bound
     assert "instructor minimum" in hist[0]["reason"]
 

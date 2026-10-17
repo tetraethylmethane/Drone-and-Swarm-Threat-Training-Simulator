@@ -6,7 +6,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 FILE="${1:?usage: verify-backup.sh <dump file>}"
-set -a; . ./.env; set +a
+# DRIKR_ENV_FILE selects another stack's settings (default: the deployment's .env).
+set -a; . "${DRIKR_ENV_FILE:-./.env}"; set +a
 SCRATCH="drikr_restore_check"
 PY="$(command -v python3 >/dev/null 2>&1 && python3 -c "" 2>/dev/null && echo python3 || echo python)"
 

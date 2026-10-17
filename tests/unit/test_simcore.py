@@ -74,7 +74,7 @@ def test_golden_digest_regression() -> None:
     assert tl.digest == GOLDEN_PERIMETER_DIGEST
 
 
-GOLDEN_PERIMETER_DIGEST = "66f645ecced4e437f60aac111aa33293ae119d1d71c03eed51d809e5410a3ec0"
+GOLDEN_PERIMETER_DIGEST = "6a652ed253a706fedb56d1fd1053d0afdeb574823db5e594b0eccdbdda0e80d1"  # scenario version 2
 
 
 @pytest.mark.parametrize("key", sorted(DEMOS))

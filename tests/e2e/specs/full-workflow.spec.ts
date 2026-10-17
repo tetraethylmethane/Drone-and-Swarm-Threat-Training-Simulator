@@ -16,9 +16,16 @@ test("instructor assigns, trainee completes, instructor reviews and exports", as
   const instructor = await newUserPage(browser, "instructor");
   await instructor.getByRole("link", { name: "Assignments" }).click();
   await instructor.getByRole("link", { name: "New assignment" }).click();
-  await instructor
-    .getByLabel("Scenario", { exact: true })
-    .selectOption({ label: "Perimeter Awareness Basics (v1)" });
+  // The form lists each scenario's latest version, so select Perimeter basics whatever its version
+  // (version 2 since Sprint 10; a hard-coded "(v1)" label waited for an option that no longer exists).
+  const scenarioSelect = instructor.getByLabel("Scenario", { exact: true });
+  const perimeter = scenarioSelect.locator("option", {
+    hasText: /^Perimeter Awareness Basics \(v\d+\)$/,
+  });
+  await expect(perimeter).toHaveCount(1);
+  await scenarioSelect.selectOption({
+    value: (await perimeter.getAttribute("value"))!,
+  });
   await instructor.getByLabel("Title").fill(title);
   await instructor.getByLabel("Demo Trainee One (trainee1)").check();
   await instructor.getByRole("button", { name: "Assign exercise" }).click();

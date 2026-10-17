@@ -1,0 +1,186 @@
+ts,role,state,connections
+17:12:18,drikr,active,1
+17:12:18,drikr_app,active,3
+17:12:18,drikr_app,idle,3
+17:12:18,drikr_app,idle in transaction,25
+17:12:23,drikr,active,1
+17:12:23,drikr_app,active,1
+17:12:23,drikr_app,idle,14
+17:12:23,drikr_app,idle in transaction,16
+17:12:28,drikr,active,1
+17:12:28,drikr_app,active,3
+17:12:28,drikr_app,idle,15
+17:12:28,drikr_app,idle in transaction,4
+17:12:33,drikr,active,1
+17:12:33,drikr_app,idle,16
+17:12:33,drikr_app,idle in transaction,4
+17:12:38,drikr,active,1
+17:12:38,drikr_app,idle,5
+17:12:38,drikr_app,idle in transaction,15
+17:12:45,drikr,active,1
+17:12:45,drikr_app,idle,16
+17:12:45,drikr_app,idle in transaction,4
+17:12:51,drikr,active,1
+17:12:51,drikr_app,idle,10
+17:12:51,drikr_app,idle in transaction,10
+17:12:56,drikr,active,1
+17:12:56,drikr_app,idle,18
+17:12:56,drikr_app,idle in transaction,2
+17:13:02,drikr,active,1
+17:13:02,drikr_app,idle,17
+17:13:02,drikr_app,idle in transaction,3
+17:13:07,drikr,active,1
+17:13:07,drikr_app,active,2
+17:13:07,drikr_app,idle,16
+17:13:07,drikr_app,idle in transaction,2
+17:13:13,drikr,active,1
+17:13:13,drikr_app,idle,20
+17:13:18,drikr,active,1
+17:13:18,drikr_app,idle,3
+17:13:18,drikr_app,idle in transaction,17
+17:13:24,drikr,active,1
+17:13:24,drikr_app,idle,7
+17:13:24,drikr_app,idle in transaction,13
+17:13:30,drikr,active,1
+17:13:30,drikr_app,idle,12
+17:13:30,drikr_app,idle in transaction,8
+17:13:36,drikr,active,1
+17:13:36,drikr_app,idle,7
+17:13:36,drikr_app,idle in transaction,13
+17:13:42,drikr,active,1
+17:13:42,drikr_app,idle,11
+17:13:42,drikr_app,idle in transaction,9
+17:13:48,drikr,active,1
+17:13:48,drikr_app,idle,12
+17:13:48,drikr_app,idle in transaction,8
+17:13:53,drikr,active,1
+17:13:53,drikr_app,idle,11
+17:13:53,drikr_app,idle in transaction,19
+17:13:58,drikr,active,1
+17:13:58,drikr_app,active,1
+17:13:58,drikr_app,idle,5
+17:13:58,drikr_app,idle in transaction,25
+17:14:03,drikr,active,1
+17:14:03,drikr_app,idle,12
+17:14:03,drikr_app,idle in transaction,19
+17:14:08,drikr,active,1
+17:14:08,drikr_app,idle,18
+17:14:08,drikr_app,idle in transaction,2
+17:14:13,drikr,active,1
+17:14:13,drikr_app,active,1
+17:14:13,drikr_app,idle,13
+17:14:13,drikr_app,idle in transaction,6
+17:14:19,drikr,active,1
+17:14:19,drikr_app,idle,11
+17:14:19,drikr_app,idle in transaction,9
+17:14:24,drikr,active,1
+17:14:24,drikr_app,idle,14
+17:14:24,drikr_app,idle in transaction,6
+17:14:30,drikr,active,1
+17:14:30,drikr_app,idle,10
+17:14:30,drikr_app,idle in transaction,10
+17:14:36,drikr,active,1
+17:14:36,drikr_app,idle,14
+17:14:36,drikr_app,idle in transaction,6
+17:14:41,drikr,active,1
+17:14:41,drikr_app,idle,9
+17:14:41,drikr_app,idle in transaction,11
+17:14:47,drikr,active,1
+17:14:47,drikr_app,idle,11
+17:14:47,drikr_app,idle in transaction,12
+17:14:53,drikr,active,1
+17:14:53,drikr_app,idle,7
+17:14:53,drikr_app,idle in transaction,13
+17:14:59,drikr,active,1
+17:14:59,drikr_app,idle,7
+17:14:59,drikr_app,idle in transaction,13
+17:15:04,drikr,active,1
+17:15:04,drikr_app,idle,12
+17:15:04,drikr_app,idle in transaction,9
+17:15:09,drikr,active,1
+17:15:09,drikr_app,idle,19
+17:15:09,drikr_app,idle in transaction,1
+17:15:15,drikr,active,1
+17:15:15,drikr_app,active,1
+17:15:15,drikr_app,idle,14
+17:15:15,drikr_app,idle in transaction,5
+17:15:21,drikr,active,1
+17:15:21,drikr_app,active,1
+17:15:21,drikr_app,idle,11
+17:15:21,drikr_app,idle in transaction,8
+17:15:27,drikr,active,1
+17:15:27,drikr_app,idle,13
+17:15:27,drikr_app,idle in transaction,7
+17:15:32,drikr,active,1
+17:15:32,drikr_app,active,1
+17:15:32,drikr_app,idle,8
+17:15:32,drikr_app,idle in transaction,13
+17:15:37,drikr,active,1
+17:15:37,drikr_app,idle,7
+17:15:37,drikr_app,idle in transaction,23
+17:15:42,drikr,active,1
+17:15:42,drikr_app,idle,14
+17:15:42,drikr_app,idle in transaction,9
+17:15:47,drikr,active,1
+17:15:47,drikr_app,active,1
+17:15:47,drikr_app,idle,11
+17:15:47,drikr_app,idle in transaction,8
+17:15:53,drikr,active,1
+17:15:53,drikr_app,idle,15
+17:15:53,drikr_app,idle in transaction,5
+17:15:59,drikr,active,1
+17:15:59,drikr_app,idle,11
+17:15:59,drikr_app,idle in transaction,9
+17:16:04,drikr,active,1
+17:16:04,drikr_app,idle,15
+17:16:04,drikr_app,idle in transaction,5
+17:16:10,drikr,active,1
+17:16:10,drikr_app,active,1
+17:16:10,drikr_app,idle,19
+17:16:16,drikr,active,1
+17:16:16,drikr_app,idle,17
+17:16:16,drikr_app,idle in transaction,3
+17:16:21,drikr,active,1
+17:16:21,drikr_app,idle,13
+17:16:21,drikr_app,idle in transaction,7
+17:16:27,drikr,active,1
+17:16:27,drikr_app,idle,16
+17:16:27,drikr_app,idle in transaction,4
+17:16:32,drikr,active,1
+17:16:32,drikr_app,active,1
+17:16:32,drikr_app,idle,12
+17:16:32,drikr_app,idle in transaction,7
+17:16:37,drikr,active,1
+17:16:37,drikr_app,idle,6
+17:16:37,drikr_app,idle in transaction,14
+17:16:43,drikr,active,1
+17:16:43,drikr_app,idle,13
+17:16:43,drikr_app,idle in transaction,7
+17:16:49,drikr,active,1
+17:16:49,drikr_app,idle,20
+17:16:54,drikr,active,1
+17:16:54,drikr_app,idle,16
+17:16:54,drikr_app,idle in transaction,4
+17:17:00,drikr,active,1
+17:17:00,drikr_app,idle,13
+17:17:00,drikr_app,idle in transaction,7
+17:17:06,drikr,active,1
+17:17:06,drikr_app,idle,18
+17:17:06,drikr_app,idle in transaction,4
+17:17:11,drikr,active,1
+17:17:11,drikr_app,active,2
+17:17:11,drikr_app,idle,12
+17:17:11,drikr_app,idle in transaction,14
+17:17:17,drikr,active,1
+17:17:17,drikr_app,active,31
+17:17:22,drikr,active,1
+17:17:22,drikr_app,active,31
+17:17:27,drikr,active,1
+17:17:27,drikr_app,active,31
+17:17:27,drikr_app,idle,1
+17:17:32,drikr,active,1
+17:17:32,drikr_app,active,31
+17:17:32,drikr_app,idle,1
+17:17:37,drikr,active,1
+17:17:37,drikr_app,active,31
+17:17:37,drikr_app,idle,1

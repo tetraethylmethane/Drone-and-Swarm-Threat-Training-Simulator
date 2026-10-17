@@ -50,16 +50,17 @@ def test_versioning_never_overwrites_history(world: World, instructor: Api, trai
     a = assign(instructor, trainee, "inst-custom")
     sid = trainee.post("/sessions", {"assignment_id": a["id"]}).json()["id"]
 
+    original_s = v1["definition"]["time_limits"]["duration_s"]
     d2 = _new_definition()
-    d2["time_limits"]["duration_s"] = 300
+    d2["time_limits"]["duration_s"] = original_s + 60  # a real change, whatever the demo duration is
     v2 = instructor.post("/scenarios/key/inst-custom/versions", {"definition": d2}).json()
     assert v2["version"] == 2 and v2["id"] != v1["id"]
     again = instructor.get(f"/scenarios/{v1['id']}").json()
-    assert again["definition"]["time_limits"]["duration_s"] == 240 and again["digest"] == v1["digest"]
+    assert again["definition"]["time_limits"]["duration_s"] == original_s and again["digest"] == v1["digest"]
     assert [v["version"] for v in again["versions"]] == [1, 2]
     # Existing session still references version 1.
     s = trainee.get(f"/sessions/{sid}").json()
-    assert s["scenario"]["version"] == 1 and s["duration_ms"] == 240_000
+    assert s["scenario"]["version"] == 1 and s["duration_ms"] == original_s * 1000
     # Listing shows only the latest version.
     listed = [x for x in instructor.get("/scenarios").json()["items"] if x["key"] == "inst-custom"]
     assert len(listed) == 1 and listed[0]["version"] == 2 and listed[0]["version_count"] == 2

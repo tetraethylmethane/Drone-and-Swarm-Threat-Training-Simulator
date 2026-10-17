@@ -6,13 +6,24 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from drikr_api.audit import append_audit
 from drikr_api.deps import Principal, get_db, require
 from drikr_api.errors import ApiError, conflict, not_found
-from drikr_api.models import Assignment, Role, Scenario, ScoreResult, SessionStatus, TrainingSession, User
+from drikr_api.models import (
+    Assignment,
+    DifficultyAdjustment,
+    DifficultyMode,
+    Role,
+    Scenario,
+    ScoreResult,
+    SessionStatus,
+    TrainingSession,
+    User,
+)
 from drikr_api.schemas import AssignmentCreate
 from drikr_api.security.rbac import Permission
 from drikr_api.serializers import assignment_out, page
@@ -199,3 +210,54 @@ def cancel(
         )
         db.commit()
     return assignment_out(a, progress(db, a))
+
+
+class DifficultyOverride(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    level: int = Field(ge=1, le=5)
+    reason: str = Field(min_length=3, max_length=280)
+
+
+@router.post("/{assignment_id}/difficulty")
+def override_difficulty(
+    assignment_id: uuid.UUID,
+    body: DifficultyOverride,
+    principal: Principal = Depends(require(Permission.ASSIGNMENTS_MANAGE)),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Instructor override of an adaptive assignment's next level (one step at a time, within bounds)."""
+    a = _load(db, assignment_id, principal)
+    if a.difficulty_mode is not DifficultyMode.ADAPTIVE:
+        raise conflict("not_adaptive", "Only adaptive assignments have a level to override; edit fixed ones directly")
+    current = adaptive_service.next_level_for_assignment(db, a)
+    if not a.min_level <= body.level <= a.max_level:
+        raise ApiError(
+            422, "level_out_of_bounds", f"Choose a level between {a.min_level} and {a.max_level} for this assignment"
+        )
+    if abs(body.level - current) > 1:
+        raise ApiError(422, "one_step_only", f"Change one level at a time (current level {current})")
+    change = "increase" if body.level > current else "decrease" if body.level < current else "hold"
+    adj = DifficultyAdjustment(
+        trainee_id=a.trainee_id,
+        assignment_id=a.id,
+        scenario_key=a.scenario.key,
+        triggered_by_session_id=None,
+        from_level=current,
+        to_level=body.level,
+        change=change,
+        confidence="high",
+        reason=f"Instructor override by {principal.user.display_name}: {body.reason}",
+        evidence={"override": True, "by": principal.user.username, "previous_level": current},
+    )
+    db.add(adj)
+    append_audit(
+        db,
+        actor=principal.user,
+        action="assignment.difficulty_override",
+        target_type="assignment",
+        target_id=a.id,
+        details={"from_level": current, "to_level": body.level, "reason": body.reason},
+        ip_address=principal.ip,
+    )
+    db.commit()
+    return {"assignment_id": str(a.id), "from_level": current, "to_level": body.level, "change": change}

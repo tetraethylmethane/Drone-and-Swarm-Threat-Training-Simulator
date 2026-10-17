@@ -7,6 +7,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from drikr_api import cpu
 from drikr_api.models import ScoreResult, SessionEvent, TrainingSession
 from drikr_contracts.scenario import Scenario as ScenarioContract
 from drikr_scoring import SCORING_ENGINE_VERSION, score_session
@@ -14,10 +15,18 @@ from drikr_scoring import Rubric as RubricContract
 from drikr_simcore import generate_timeline
 from drikr_simcore.canonical import digest
 
+_EVENT_FIELDS = ("event_id", "seq", "t_ms", "available_at_ms", "type", "visibility", "origin", "payload")
+
 
 def _events(db: Session, s: TrainingSession) -> list[dict[str, Any]]:
-    rows = db.scalars(select(SessionEvent).where(SessionEvent.session_id == s.id).order_by(SessionEvent.seq)).all()
-    return [r.as_event() for r in rows]
+    """The stored log as event dicts (the same shape as ``SessionEvent.as_event``).
+
+    Reads columns rather than ORM objects: building about 3,700 objects per session took most of
+    the time to finish and score an exercise (docs/testing/load-resilience-report.md, L-02).
+    """
+    cols = [getattr(SessionEvent, f) for f in _EVENT_FIELDS]
+    rows = db.execute(select(*cols).where(SessionEvent.session_id == s.id).order_by(SessionEvent.seq))
+    return [dict(zip(_EVENT_FIELDS, r, strict=True)) for r in rows]
 
 
 def compute(db: Session, s: TrainingSession, end_ms: int) -> dict[str, Any]:
@@ -68,7 +77,7 @@ def assessment_summary(result: dict[str, Any]) -> dict[str, Any]:
 def verify(db: Session, s: TrainingSession) -> dict[str, Any]:
     """Re-derive the timeline and the score from stored inputs and compare digests."""
     scenario = ScenarioContract.model_validate(s.effective_definition)
-    regenerated = generate_timeline(scenario, seed=s.seed, difficulty_level=s.difficulty_level)
+    regenerated = cpu.run(generate_timeline, scenario, seed=s.seed, difficulty_level=s.difficulty_level)
     stored = _events(db, s)
     stored_generated = [e for e in stored if e["seq"] < s.generated_event_count]
     report: dict[str, Any] = {

@@ -1,6 +1,6 @@
 # Sprint status
 
-Last updated 2026-10-15. This release was built in a single continuous development pass. The
+Last updated 2026-10-17 (Sprint 10). This release was built in a single continuous development pass. The
 eight-sprint structure from the brief is used below to report what each sprint's checklist covers
 and the evidence for it. The sprints were not separate two-week calendar iterations.
 
@@ -9,7 +9,27 @@ and the evidence for it. The sprints were not separate two-week calendar iterati
 Python 3.12.14, PostgreSQL 17.11, nginx 1.30.4 since 2026-10-15; earlier runs: Python 3.12.7, PostgreSQL 17.2, nginx 1.27). Unity 6000.3.26f1 with Windows standalone support was
 located on 2026-10-15 (initially not found on `PATH`) and used for the Unity client.
 
-## Test results (latest runs, 2026-10-16, release candidate 4)
+## Test results (Sprint 10, final code, 2026-10-17)
+
+All runs on the same Windows 11 laptop, against the uncommitted Sprint 10 working tree (rc4 plus
+Sprint 10). Load and resilience tooling: k6 2.3.0 in Docker; Unity 6000.3.26f1.
+
+| Suite | Result |
+|---|---|
+| Python unit, reproducibility and integration (`pytest`, PostgreSQL 17.5) | **328 passed**, 0 failed, **0 skipped** (361 s). Plus `test_dev_scripts.py` (D-01, added afterwards): 1 passed |
+| Ruff lint and format, mypy strict (67 files) | Clean |
+| Web: ESLint, Prettier, `tsc`, Vitest 5, production build | Clean; **40 passed** (7 files; new: instructor Difficulty page) |
+| E2E (Playwright 1.63, Chromium, dev stack) | **24 passed**, 1 skipped (opt-in screenshots). The first run failed the full-workflow test on a stale "(v1)" scenario label; the test was fixed and the whole suite re-run |
+| Unity EditMode (batch mode) | **18 passed**, 0 failed, 1 skipped (`LiveHttpsWithPinnedCa`, not enabled, to avoid writing to the main deployment). The live protocol test ran a full exercise against the final server |
+| Load and resilience (k6) | See `docs/testing/load-resilience-report.md`. Design load of 30: latency criteria met in **4 of 5** runs; 0 errors; 0 server-caused pauses; **memory criterion A7 not met**; recovery from an API kill, a database outage and an unplanned host restart |
+| Reproducibility of stored data | Load-test database: **955 of 955** sessions reproduce (uncapped report) |
+| pip-audit; npm audit (web, E2E) | 0 known vulnerabilities |
+| gitleaks 8.30.1 (history; all 169 uncommitted files) | No leaks |
+| Trivy 0.66.0 (API and web images as load-tested) | 0 fixable HIGH/CRITICAL |
+| Backup → verify → restore with the least-privilege role | Verified (security-findings.md 3.3) |
+| Log scan with canary secrets at INFO | No credentials or tokens in API, nginx or audit records (F-07) |
+
+### Previous results (2026-10-16, release candidate 4)
 
 | Suite | Result |
 |---|---|
@@ -211,6 +231,33 @@ Architecture note: the follow-up brief lists Unity as the authoritative engine. 
 ADR-001 (authoritative deterministic Python engine, Unity as a presentation client), because the
 reproducibility guarantees depend on it. See the roadmap for the reasoning.
 
+## Sprint 10: Reliability, verification and validation (2026-10-16/17)
+
+Work began in one development session and was completed and verified in a second one (the two
+coordinated the split of files and runs). The status per workstream follows. The detail is in the
+linked reports; known gaps are in `docs/testing/known-limitations-and-backlog.md`; the release
+decision is in `docs/testing/release-acceptance-checklist.md` (**not ready for operational use**;
+candidate for a supervised pilot).
+
+| Workstream | Status | Evidence |
+|---|---|---|
+| Architecture: server authority (ADR-001) | **Verified**: no client computes outcomes or scores; the ADR now covers event recording, reconnection, interruption, replay limits and the conditions for reconsidering | ADR-001; `test_integrity.py`; Unity live protocol test |
+| A. Perimeter basics | **Fixed and regression-tested** (synthetic evidence). Root cause: too few scored items. Version 2: ICC 0.85–0.87 against 0.72–0.79; repeated-run test of 8 runs, 4 interrupted. The seeding defect that would have kept v2 from existing installations is fixed | perimeter-basics-report.md |
+| B. Determinism and data integrity | **Tested**: logical equivalence (not bit-for-bit) documented with tolerances; immutability triggers (`0004`); least-privilege role; duplicate, reconnect, rollback and restart tests | reproducibility-report.md |
+| C. Load and resilience | **Measured on one laptop** against criteria fixed beforehand. Defects L-01 (pool exhaustion) and L-02 (feed starvation and forced pauses) fixed; L-03 harness defect fixed. Open: memory retention (B-03), little headroom at 30, no admission control, target hardware (B-10) | load-resilience-report.md |
+| D. Security | **Triaged**: F-01 (High) to F-04 fixed with tests; F-09 (Low) open; no Critical; threat model and controls updated; residual risks R1–R9. Internal review, not a certification | security-findings.md, threat-model.md, security-controls.md |
+| E. Instructor usability | **Protocol ready; blocked** (participants and approval). Developer walkthrough only; U-01 fixed with tests | instructor-usability-protocol.md |
+| F. Adaptive difficulty | **Retuned; partly supported**: robust demotion adopted; C1–C3 met; C4 and C5 not met by any candidate | adaptive-difficulty.md |
+| G. Training-effectiveness study | **Pending**: protocol complete; no approval; no participants. No effectiveness claim may be made | training-effectiveness-study-protocol.md §10 |
+| H. Competitors | **Public sources verified**; two matrix cells changed; unknowns stay unknown | competitive-evidence.md, competitor-landscape.md, differentiation-roadmap.md |
+
+Defects found and fixed while verifying (each has a regression test): two contract tests that
+stopped testing rejection after v2; lint failures in two new test files; D-01 (`dev-api.sh` broken
+by the owner-URL change); a stale E2E scenario label. Process lapses recorded honestly: the raw
+output of the L-01 reproduction was deleted; two load runs overlapped a Docker failure and were
+excluded; one earlier security claim (F-07, "70,000 log lines") could not be reproduced and was
+replaced by a new test.
+
 ## Open items
 
 | ID | Item |
@@ -226,5 +273,5 @@ reproducibility guarantees depend on it. See the roadmap for the reasoning.
 | O9 | Move the repository out of OneDrive for development: sync locking slows npm and caused one E2E artifact failure |
 | O10 | Replace `httpx` with the client Starlette now recommends for its TestClient (deprecation warning in tests) |
 | O12 | Postgres image: Go stdlib CVEs reported in the upstream image's `gosu` helper; track upstream or build a derived image |
-| O13 | Sprint 10 (proposed): usability test, adaptive retune, Perimeter basics v2, competitor verification, load test, human pilot |
-| O11 | Review the adaptive-policy thresholds and the Perimeter basics scenario using the synthetic-validation findings |
+| O13 | Sprint 10 done as recorded above. Remaining P1 items: usability test (B-08), human pilot (B-09), load test on target hardware (B-10), independent security assessment (B-14) |
+| O11 | ~~Adaptive thresholds and Perimeter basics~~ done in Sprint 10. Remaining: adaptive promotion lag (B-05) |

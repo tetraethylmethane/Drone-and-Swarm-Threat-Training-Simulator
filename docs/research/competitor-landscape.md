@@ -31,9 +31,14 @@ capability is missing. `Not applicable`: the offering is not a training product 
 Columns: DVR = DefenceVR, VRA = VR Astra, ZEN = Zen Technologies, BBB = Big Bang Boom, UNI =
 Unistring, MAK = MAK Technologies, R6 = Red 6, BAG = Bagira, CMB = Combatica, ALT = Althimis.
 
+Updated 2026-10-16 (Sprint 10) from the verification table in competitive-evidence.md: DVR adaptive
+training (vendor claim, mechanism unknown) and ZEN counter-drone training content (drone threats
+in an air-defence gunnery simulator) moved from Unknown to Partially documented. Every other
+Unknown stays Unknown.
+
 | Dimension | DVR | VRA | ZEN | BBB | UNI | MAK | R6 | BAG | CMB | ALT |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Counter-drone *training* content | Documented | Unknown | Unknown | Not applicable | Partially documented | Partially documented | Unknown | Unknown | Unknown | Documented |
+| Counter-drone *training* content | Documented | Unknown | Partially documented | Not applicable | Partially documented | Partially documented | Unknown | Unknown | Unknown | Documented |
 | Standard desktop deployment | Partially documented | Unknown | Unknown | Not applicable | Not applicable | Unknown | Not applicable | Unknown | Unknown | Unknown |
 | Offline operation | Documented | Unknown | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
 | Scenario creation and controlled randomisation | Partially documented | Unknown | Partially documented | Not applicable | Not applicable | Partially documented | Unknown | Unknown | Unknown | Partially documented |
@@ -41,7 +46,7 @@ Unistring, MAK = MAK Technologies, R6 = Red 6, BAG = Bagira, CMB = Combatica, AL
 | Transparency of scoring and assessment | Partially documented | Partially documented | Partially documented | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Partially documented |
 | Individual and unit-level reporting | Partially documented | Partially documented | Partially documented | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
 | Progress tracking across sessions | Unknown | Partially documented | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
-| Adaptive training on demonstrated competency | Unknown | Partially documented | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
+| Adaptive training on demonstrated competency | Partially documented | Partially documented | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
 | Instructor usability | Unknown | Unknown | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
 | Accessibility and interface clarity | Unknown | Unknown | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |
 | Automated testing and reliability | Unknown | Unknown | Unknown | Not applicable | Not applicable | Unknown | Unknown | Unknown | Unknown | Unknown |

@@ -79,9 +79,11 @@ def _evidence(track: Any, confirmations: list[dict[str, Any]], t_ms: int) -> flo
     return best
 
 
-def play(job: Job) -> dict[str, Any]:
-    """One synthetic session: generate the timeline, act as the agent, score with the real engine."""
-    scn = Scenario.model_validate(SCENARIOS[job.scenario])
+def play(job: Job, definition: dict[str, Any] | None = None) -> dict[str, Any]:
+    """One synthetic session: generate the timeline, act as the agent, score with the real engine.
+
+    `definition` overrides the packaged scenario (used to compare scenario versions)."""
+    scn = Scenario.model_validate(definition or SCENARIOS[job.scenario])
     tl = generate_timeline(scn, seed=job.seed, difficulty_level=job.level)
     idx = GroundTruthIndex(tl.events)
     rng = Rng.stream(job.behaviour_seed, "agent")

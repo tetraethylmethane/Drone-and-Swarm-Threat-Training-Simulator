@@ -168,3 +168,19 @@ analysis, because it has no control group.
 
 Indicative timeline: ethics review, then pilot (2 weeks), then Stage B recruitment and training
 (about 8 weeks including retention), then analysis and report (2 weeks).
+
+## 10. Status (Sprint 10, 2026-10-16)
+
+| Item | Status |
+|---|---|
+| Protocol, analysis plan, sample-size estimates | Complete (draft for ethics review) |
+| Measurement prerequisites | **Partially verified with synthetic agents only.** *Perimeter basics* version 2 now gives a reliable single-session measure (ICC 0.85–0.87, docs/testing/perimeter-basics-report.md); records are reproducible and immutable at the database level (docs/testing/reproducibility-report.md) |
+| Study export (`/reports/study.csv`, pseudonymised) | Implemented and tested (`test_study.py`) |
+| Adaptive difficulty used by the adaptive arm | Retuned and tested as a policy (docs/research/adaptive-difficulty.md); its effect on learning is **a hypothesis** this study would test |
+| Scenario freeze for the study | Planned: freeze the scenario and rubric versions at the start of the pilot; *Perimeter basics* v1 sessions must not be pooled with v2 |
+| Ethics or equivalent approval | **Blocked**: needs the deploying organisation |
+| Pilot | **Not run** |
+| Stage B, analysis and report | **Not run** |
+
+**No participant has been enrolled, and no human data exists.** No claim that the simulator
+improves training may be made until this study, or an equivalent one, has been run and reported.

@@ -22,6 +22,13 @@ def test_demo_scenarios_are_valid(key: str) -> None:
     assert "DEMONSTRATION" in scn.description
 
 
+# Positions in the demo (Perimeter basics) are looked up by meaning, so that a new scenario version
+# cannot silently turn a rejection case into a valid scenario.
+_DEMO = demo()
+_DURATION_S = _DEMO["time_limits"]["duration_s"]
+_BIRDS = next(i for i, e in enumerate(_DEMO["entities"]) if e["entity_class"] == "bird_or_clutter")
+
+
 def _mutate(path: list[str | int], value: object) -> dict:
     data = demo()
     target = data
@@ -36,9 +43,13 @@ def _mutate(path: list[str | int], value: object) -> dict:
     [
         (["entities", 0, "speed_mps"], {"min": 20, "max": 5}, "min must be less than or equal to max"),
         (["environment", "weather"], "fog", "fog requires visibility_km"),
-        (["entities", 0, "spawn_time_s"], {"min": 200, "max": 230}, "at least 30 s before the time limit"),
+        (
+            ["entities", 0, "spawn_time_s"],
+            {"min": _DURATION_S - 40, "max": _DURATION_S - 10},
+            "at least 30 s before the time limit",
+        ),
         (["entities", 0, "entity_class"], "coordinated_swarm", "require a swarm configuration"),
-        (["entities", 2, "cooperative"], True, "cannot be cooperative"),
+        (["entities", _BIRDS, "cooperative"], True, "cannot be cooperative"),
         (["time_limits", "duration_s"], 30, "greater than or equal to 60"),
         (["difficulty"], {"level": 5, "min_level": 1, "max_level": 3}, "within min_level..max_level"),
         (["randomization", "seed"], -1, "greater than or equal to 0"),

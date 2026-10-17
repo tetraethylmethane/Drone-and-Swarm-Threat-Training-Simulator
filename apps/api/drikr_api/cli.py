@@ -2,7 +2,8 @@
 
 Usage::
 
-    drikr-api migrate                       apply database migrations
+    drikr-api migrate                       apply database migrations (owner connection)
+    drikr-api provision-app-role            create or update the least-privilege API role
     drikr-api seed-demo [--with-demo-users] load demonstration rubric and scenarios (idempotent)
     drikr-api create-admin --username NAME  create the first administrator
                                             (password from DRIKR_ADMIN_PASSWORD or prompt)
@@ -24,11 +25,13 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from alembic import command
 from alembic.config import Config
 from sqlalchemy import select
 
+from drikr_api import db_roles
 from drikr_api.audit import append_audit, verify_chain
 from drikr_api.config import get_settings
 from drikr_api.db import Database
@@ -41,6 +44,7 @@ from drikr_api.services import (
     retention_service,
     session_service,
 )
+from drikr_contracts import Scenario as ScenarioContract
 from drikr_scoring import load_default_rubrics
 from drikr_simcore import load_demo_scenarios
 
@@ -71,6 +75,20 @@ def migrate(url: str) -> None:
     command.upgrade(cfg, "head")
 
 
+def _same_content(stored: dict[str, Any], packaged: dict[str, Any]) -> bool:
+    """Demo scenario content equal apart from the version number the database assigns.
+
+    Both sides are compared in canonical form (defaults filled in), as stored by the catalogue.
+    """
+
+    def canon(d: dict[str, Any]) -> dict[str, Any]:
+        c = ScenarioContract.model_validate({**d, "version": 1}).model_dump(mode="json")
+        c.pop("version")
+        return c
+
+    return canon(stored) == canon(packaged)
+
+
 def seed_demo(db_url: str, with_users: bool) -> dict[str, int]:
     database = Database(db_url)
     created = {"rubrics": 0, "scenarios": 0, "users": 0}
@@ -86,9 +104,18 @@ def seed_demo(db_url: str, with_users: bool) -> dict[str, int]:
             )
             created["rubrics"] += 1
         for definition in load_demo_scenarios():
-            if db.scalar(select(Scenario.id).where(Scenario.key == definition["key"])):
+            exists = db.scalar(select(Scenario.id).where(Scenario.key == definition["key"]).limit(1)) is not None
+            latest_demo = db.scalar(
+                select(Scenario)
+                .where(Scenario.key == definition["key"], Scenario.is_demo.is_(True))
+                .order_by(Scenario.version.desc())
+                .limit(1)
+            )
+            if latest_demo is not None and _same_content(latest_demo.definition, definition):
                 continue
-            scn = catalog_service.create_scenario(db, definition, None, new_key=True, is_demo=True)
+            # A changed packaged demo becomes a new version; earlier versions (and the sessions and
+            # assignments that reference them) are kept unchanged.
+            scn = catalog_service.create_scenario(db, definition, None, new_key=not exists, is_demo=True)
             append_audit(
                 db,
                 actor=None,
@@ -156,6 +183,7 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="drikr-api")
     sub = parser.add_subparsers(dest="cmd", required=True)
     sub.add_parser("migrate")
+    sub.add_parser("provision-app-role")
     seed = sub.add_parser("seed-demo")
     seed.add_argument("--with-demo-users", action="store_true")
     adm = sub.add_parser("create-admin")
@@ -174,7 +202,19 @@ def main(argv: list[str] | None = None) -> None:
     settings = get_settings()
     url = settings.database_url
     if args.cmd == "migrate":
-        migrate(url)
+        migrate(settings.owner_url)
+    elif args.cmd == "provision-app-role":
+        target = db_roles.app_role_from_urls(settings.database_url, settings.owner_url)
+        if target is None:
+            print(json.dumps({"provisioned": False, "reason": "the API uses the owner connection"}))
+            return
+        owner = Database(settings.owner_url)
+        try:
+            with owner.engine.begin() as conn:
+                out = db_roles.provision(conn, *target)
+        finally:
+            owner.dispose()
+        print(json.dumps({"provisioned": True, **out}))
     elif args.cmd == "seed-demo":
         print(json.dumps(seed_demo(url, args.with_demo_users)))
     elif args.cmd == "create-admin":

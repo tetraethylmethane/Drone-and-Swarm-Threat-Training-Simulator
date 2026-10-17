@@ -11,6 +11,7 @@ import { AuditPage, SettingsPage, SystemPage, UsersPage } from "@/features/admin
 import { AccountPage } from "@/features/auth/AccountPage";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { ExercisePage } from "@/features/exercise/ExercisePage";
+import { AssignmentDifficultyPage } from "@/features/instructor/AssignmentDifficulty";
 import { AssignmentCreatePage, AssignmentsPage } from "@/features/instructor/AssignmentPages";
 import { AnalyticsPage, InstructorHome, SessionsPage } from "@/features/instructor/OverviewPages";
 import { RubricDetailPage, RubricListPage } from "@/features/instructor/RubricPages";
@@ -92,6 +93,10 @@ export function App() {
         <Route path="/instructor/rubrics/:rubricId" element={guard(<RubricDetailPage />, INSTRUCTOR)} />
         <Route path="/instructor/assignments" element={guard(<AssignmentsPage />, INSTRUCTOR)} />
         <Route path="/instructor/assignments/new" element={guard(<AssignmentCreatePage />, INSTRUCTOR)} />
+        <Route
+          path="/instructor/assignments/:assignmentId/difficulty"
+          element={guard(<AssignmentDifficultyPage />, INSTRUCTOR)}
+        />
         <Route path="/instructor/sessions" element={guard(<SessionsPage />, STAFF)} />
         <Route path="/instructor/analytics" element={guard(<AnalyticsPage />, STAFF)} />
 

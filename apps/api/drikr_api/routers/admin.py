@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
-from drikr_api import __version__
+from drikr_api import __version__, db_roles
 from drikr_api.audit import append_audit, verify_chain
 from drikr_api.deps import AppContext, Principal, get_ctx, get_db, require
 from drikr_api.errors import ApiError
@@ -152,7 +152,12 @@ def system(
             "schema_revision": revision,
             "postgresql": pg_version,
         },
-        "database": {"status": "ok", "latency_ms": latency_ms, "size_bytes": size},
+        "database": {
+            "status": "ok",
+            "latency_ms": latency_ms,
+            "size_bytes": size,
+            "role": db_roles.describe_current_role(db.connection()),
+        },
         "counts": {
             "users": db.scalar(select(func.count()).select_from(User)) or 0,
             "scenarios": db.scalar(select(func.count()).select_from(Scenario)) or 0,

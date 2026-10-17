@@ -1,0 +1,61 @@
+# Isolated stack for load and resilience tests (tests/load/README.md). Uses the same images as the
+# deployment, its own database volume and its own secrets, so tests never touch real records.
+# Only difference from production settings: the per-IP sign-in rate limit is raised, because every
+# simulated trainee signs in from the one load-generator address.
+#
+#   bash tests/load/run.sh            # creates loadtest.env, starts this stack, runs the tests
+name: drikrload
+
+services:
+  db:
+    image: postgres:17.11-alpine3.24
+    environment:
+      POSTGRES_DB: drikr
+      POSTGRES_USER: drikr
+      POSTGRES_PASSWORD: ${LT_DB_PASSWORD:?run tests/load/run.sh}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    volumes: [ltdata:/var/lib/postgresql/data]
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drikr -d drikr"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  api:
+    image: drikr-api:1.0.0
+    environment:
+      DRIKR_ENVIRONMENT: production
+      DRIKR_MIGRATION_DATABASE_URL: postgresql+psycopg://drikr:${LT_DB_PASSWORD}@db:5432/drikr
+      DRIKR_DATABASE_URL: postgresql+psycopg://drikr_app:${LT_APP_PASSWORD:?run tests/load/run.sh}@db:5432/drikr
+      DRIKR_SECRET_KEY: ${LT_SECRET_KEY:?run tests/load/run.sh}
+      DRIKR_COOKIE_SECURE: "true"
+      DRIKR_TRUST_PROXY_HEADERS: "true"
+      DRIKR_LOGIN_RATE_LIMIT_PER_MINUTE: "1000"
+      DRIKR_LOG_LEVEL: ${LT_LOG_LEVEL:-WARNING}
+      DRIKR_DEMO_PASSWORD: ${LT_USER_PASSWORD:?run tests/load/run.sh}
+      DRIKR_CPU_WORKERS: ${LT_CPU_WORKERS:-2}
+    depends_on:
+      db: {condition: service_healthy}
+    networks: [backend]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  web:
+    image: drikr-web:1.0.0
+    depends_on:
+      api: {condition: service_healthy}
+    ports: ["127.0.0.1:9080:8080"]
+    networks: [backend, frontend]
+    read_only: true
+    tmpfs: ["/tmp", "/var/cache/nginx"]
+    cap_drop: [ALL]
+
+networks:
+  backend: {internal: true}
+  frontend: {}
+
+volumes:
+  ltdata: {}

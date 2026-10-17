@@ -139,7 +139,25 @@ configurable report templates; advanced visualisation. Revisit after user resear
   2026-10-16), research and reuse, positioning, this roadmap, requirements-to-tests.
   **Done.**
 
-## Sprint 10 (proposed): Validate with users
+## Sprint 10: Validate with users (outcome 2026-10-17)
+
+| Item | Outcome | Evidence |
+|---|---|---|
+| 10.1 Adaptive retune | **Partly supported.** Robust (median) demotion adopted; C1–C3 met; the improving-learner lag (C4) and the single-outlier criterion (C5) are **not** met by any candidate | docs/research/adaptive-difficulty.md |
+| 10.2 Perimeter basics | **Done** (synthetic evidence): version 2, ICC 0.85–0.87 | docs/testing/perimeter-basics-report.md |
+| 10.3 Instructor usability test | **Blocked**: protocol ready; no participants; U-01 fixed from a developer walkthrough | docs/testing/instructor-usability-protocol.md |
+| 10.4 Competitor verification | **Partly done**: public pages only; two matrix cells changed; demonstrations not obtained | docs/research/competitive-evidence.md |
+| 10.5 Human pilot | **Blocked**: no ethics approval; no participants | study protocol §10 |
+| 10.6 Load test | **Done on one laptop**; requirements for the target server **not yet set** (B-10) | docs/testing/load-resilience-report.md |
+
+Differentiation after verification: DefenceVR KAVACH-SIM now *claims* adaptive difficulty, so
+adaptive difficulty alone is not a differentiator. What remains distinctive on the available
+evidence is that the adaptation is transparent, bounded, explained and overridable, with
+reproducible records. That rests on the absence of public detail from competitors, not on proof
+that they lack these features.
+
+The original plan follows.
+
 
 | Item | Objective | Tasks | Files or modules | Tests | Acceptance | Risks | Definition of done |
 |---|---|---|---|---|---|---|---|

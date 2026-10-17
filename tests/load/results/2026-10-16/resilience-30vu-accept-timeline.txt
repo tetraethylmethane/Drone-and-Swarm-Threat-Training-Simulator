@@ -1,0 +1,5 @@
+17:00:14 start
+17:01:44 api: restart (kill)
+17:03:47 db: stop for 30 s
+17:04:19 db: start
+17:07:41 k6 finished

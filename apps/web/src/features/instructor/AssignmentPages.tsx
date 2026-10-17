@@ -102,6 +102,14 @@ export function AssignmentsPage() {
                   <TD className="tabular">{formatPercent(a.progress?.best_overall)}</TD>
                   <TD className="text-xs">{formatDate(a.due_at)}</TD>
                   <TD className="whitespace-nowrap text-right">
+                    {a.difficulty_mode === "adaptive" ? (
+                      <Link
+                        className="mr-3 text-sm text-brand hover:underline"
+                        to={`/instructor/assignments/${a.id}/difficulty`}
+                      >
+                        Difficulty
+                      </Link>
+                    ) : null}
                     {a.progress?.sessions.length ? (
                       <Link
                         className="mr-3 text-sm text-brand hover:underline"

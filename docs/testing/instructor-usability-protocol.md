@@ -1,0 +1,96 @@
+# Instructor usability protocol and results (Sprint 10, workstream E)
+
+**Status: protocol ready; no participant sessions have been run.** No instructor has used the
+system under this protocol, so there are **no participant results** in this document. Section 6 is a
+heuristic walkthrough by the development team. It is a design review, not user data, and must not
+be reported as usability evidence.
+
+## 1. Purpose and questions
+
+Can a qualified instructor, without help from developers, do the instructor's core work: prepare a
+scenario, assign it, follow progress, review a result and act on it? We want to know:
+
+- Q1: whether each core task can be completed unaided (effectiveness);
+- Q2: how long each task takes and how many errors occur (efficiency);
+- Q3: whether instructors understand and trust what the system says about scores, evidence,
+  reproducibility and adaptive difficulty (comprehension);
+- Q4: perceived usability (System Usability Scale, SUS).
+
+## 2. Participants
+
+- 5 to 8 instructors who run counter-UAS or air-defence awareness training, or similar
+  procedural training. Five participants find most severe problems in a formative test; more are
+  needed for stable SUS estimates.
+- Exclude anyone who took part in development or saw a demonstration.
+- Recruitment, consent and any approval follow the same route as the training-effectiveness study
+  (docs/research/training-effectiveness-study-protocol.md). Participation is voluntary, and results
+  are not used to assess the participants.
+- Record only role, years instructing and self-rated computer confidence (1–5). No names go in the
+  results.
+
+## 3. Setup
+
+- Offline Docker deployment on a laptop (docs/operations/offline-deployment.md), HTTPS profile,
+  Chromium or Edge at 1920×1080, with seeded demo scenarios and a synthetic cohort of 6 trainees with
+  completed sessions. The cohort is created by script before each session; it is fictitious and
+  contains no real trainee data.
+- The moderator reads a fixed script and does not demonstrate. A hint is given only after 3
+  minutes without progress, and it is recorded.
+- Screen and audio are recorded only with consent. Recordings are deleted after analysis.
+
+## 4. Tasks
+
+| # | Task given to the participant | Success criterion | Time limit |
+|---|---|---|---|
+| T1 | Sign in with the instructor account | home page reached | 3 min |
+| T2 | Find the *Perimeter basics* scenario and preview it at difficulty level 3 | planning preview shown at level 3 | 5 min |
+| T3 | Create a new version of *Night loiter* with fog, and save it | new version saved and valid | 10 min |
+| T4 | Assign *Perimeter basics* to two trainees, adaptive between levels 1 and 3, two attempts, due in a week | two assignments with the right settings | 6 min |
+| T5 | Find which trainee had the lowest score last week | correct trainee named | 4 min |
+| T6 | Open that trainee's latest result and explain why one track was marked incorrect | correct track and reason given, using the evidence or decision table | 6 min |
+| T7 | Check that this result can be reproduced | verification run, outcome stated correctly | 3 min |
+| T8 | Write a review with one strength and one improvement, and share it with the trainee | review saved and shared, private note not shared | 5 min |
+| T9 | For an adaptive assignment, find why the level changed, then move it up one level with a reason | reason stated; override recorded | 5 min |
+| T10 | Export the PDF report for one session | PDF downloaded | 3 min |
+
+Comprehension check after T6, T7 and T9: "In your own words, what does this score, *reproducible*,
+or this level change mean?" Answers are scored against the documented meaning (scoring model,
+ADR-001, docs/research/adaptive-difficulty.md) as correct, partly correct or incorrect.
+
+## 5. Measures and analysis
+
+- Per task: completion (unaided, with a hint, or failed), time on task, errors (wrong path,
+  wrong result) and hints.
+- SUS (10 items) after all tasks; a short interview of 3 questions: most difficult, most useful,
+  anything you would not trust.
+- Problems are rated for severity: 4 means it blocks the task or causes a wrong training
+  judgement; 3 means a major delay or a misunderstanding of a score; 2 is minor; 1 is cosmetic.
+- **Acceptance (set before testing):** every task completed unaided by at least 80% of
+  participants; no open severity-4 problem; median SUS of at least 70; no incorrect answers about
+  what *reproducible* means.
+- Each severity 3 or 4 problem becomes a backlog item with a reproduction and, when fixed, a
+  regression test (docs/testing/known-limitations-and-backlog.md).
+
+## 6. Heuristic walkthrough by the development team (not user data)
+
+Method: one developer walked T1–T10 against the dev stack on 2026-10-16, checking Nielsen's
+heuristics and the documented instructor workflows. Findings:
+
+| ID | Task | Finding | Severity (estimate) | Status |
+|---|---|---|---|---|
+| U-01 | T9 | Instructors could not see why an adaptive assignment's level changed, because the adjustment history was shown only to the trainee, and they could not override the level from the interface (the override existed only in the API) | 4 (the task was impossible in the UI) | **Fixed**: a *Difficulty* page per adaptive assignment, linked from **Assignments**, with history, reason, confidence, the triggering session and a one-step override that requires a reason. Regression tests: `apps/web/src/features/instructor/AssignmentDifficulty.test.tsx` and `tests/integration/test_adaptive_override.py` |
+| U-02 | T6 | The evidence column shows event ids; matching them to the timeline needs the Event timeline tab and a search by id | 2 | Open (backlog B-06) |
+| U-03 | T5 | No sort by score on the sessions list; finding the lowest score needs Analytics or a CSV export | 2 | Open (backlog B-07) |
+
+Only U-01 was a defect with a clear expected behaviour, so only U-01 was changed. U-02 and U-03 are
+hypotheses for the participant sessions to confirm or reject.
+
+## 7. Status
+
+| Item | Status |
+|---|---|
+| Protocol, tasks, measures, acceptance criteria | Complete |
+| Synthetic cohort script for sessions | Planned (uses `tests/load/create_users.py` patterns) |
+| Participant recruitment and consent route | **Blocked**: needs the deploying organisation |
+| Participant sessions and results | **Not run** |
+| Heuristic walkthrough | Done (development team; not user data) |
