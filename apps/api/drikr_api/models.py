@@ -30,6 +30,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy import Enum as SAEnum
+from sqlalchemy import false as sa_false
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -231,6 +232,10 @@ class Assignment(Base):
     min_level: Mapped[int] = mapped_column(Integer, nullable=False)
     max_level: Mapped[int] = mapped_column(Integer, nullable=False)
     max_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=3)
+    #: Each attempt gets its own recorded seed (migration 0006); False repeats the identical exercise.
+    vary_seed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default=sa_false())
+    #: Plan each session's threat against the trainee's recorded weaknesses (drikr_simcore.adversary).
+    adaptive_adversary: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=sa_false())
     feedback_level: Mapped[FeedbackLevel] = mapped_column(_enum(FeedbackLevel, "feedback_level"), nullable=False)
     due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="active")
@@ -269,6 +274,8 @@ class TrainingSession(Base):
     difficulty_level: Mapped[int] = mapped_column(Integer, nullable=False)
     selection: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict)
     effective_definition: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    #: The adaptive adversary's plan and reasons, when the assignment enabled it (migration 0006).
+    adversary_plan: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     config_digest: Mapped[str] = mapped_column(String(64), nullable=False)
     timeline_digest: Mapped[str] = mapped_column(String(64), nullable=False)
     engine_version: Mapped[str] = mapped_column(String(32), nullable=False)

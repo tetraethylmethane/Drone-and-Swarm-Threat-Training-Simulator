@@ -31,7 +31,8 @@ def full_timeline(api: Api, sid: str) -> list[dict]:  # type: ignore[type-arg]
 
 
 def test_repeated_runs_with_interruption_persist_and_reproduce(instructor: Api, trainee: Api, clock: FakeClock) -> None:
-    a = assign(instructor, trainee, max_attempts=REPEATS)
+    # The same inputs on every run (attempts vary by default since migration 0006).
+    a = assign(instructor, trainee, max_attempts=REPEATS, vary_seed=False)
     digests, overalls = set(), []
     for run in range(REPEATS):
         s = launch(trainee, a["id"])

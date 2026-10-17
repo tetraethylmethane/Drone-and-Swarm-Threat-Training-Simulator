@@ -1,7 +1,9 @@
 {
   "name": "Drikr.Runtime",
   "rootNamespace": "Drikr",
-  "references": [],
+  "references": [
+    "Unity.XR.Management"
+  ],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

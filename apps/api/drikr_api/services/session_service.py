@@ -22,6 +22,7 @@ Allowed transitions::
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import threading
 import uuid
 from collections.abc import Iterator
@@ -38,6 +39,7 @@ from drikr_api.models import (
     Assignment,
     DifficultyMode,
     Scenario,
+    ScoreResult,
     SessionEvent,
     SessionMode,
     SessionStatus,
@@ -52,6 +54,7 @@ from drikr_contracts.events import TICK_MS, EventOrigin, EventType, EventVisibil
 from drikr_contracts.scenario import Scenario as ScenarioContract
 from drikr_contracts.scenario import TraineeOptions, TraineeSelection
 from drikr_simcore import ENGINE_VERSION, GroundTruthIndex, generate_timeline, sensor_confirmation_event
+from drikr_simcore.adversary import plan_adversary
 from drikr_simcore.canonical import digest
 
 S = SessionStatus
@@ -203,6 +206,29 @@ def _attempts_used(db: Session, assignment_id: uuid.UUID) -> int:
     )
 
 
+def attempt_seed(base_seed: int, trainee_id: uuid.UUID, context: str, attempt: int) -> int:
+    """The seed for one attempt: different per trainee, assignment (or practice scenario) and
+    attempt, derived deterministically and stored with the session, so it is reproducible."""
+    h = hashlib.sha256(f"drikr-attempt-seed-1:{base_seed}:{trainee_id}:{context}:{attempt}".encode()).digest()
+    return int.from_bytes(h[:8], "big") & (2**53 - 1)
+
+
+#: How many of the trainee's latest scored sessions the adaptive adversary considers.
+ADVERSARY_HISTORY = 10
+
+
+def recent_results(db: Session, trainee_id: uuid.UUID, limit: int = ADVERSARY_HISTORY) -> list[dict[str, Any]]:
+    """The trainee's latest scored results (any scenario), newest first, for the adaptive adversary."""
+    rows = db.scalars(
+        select(ScoreResult.result)
+        .join(TrainingSession, TrainingSession.id == ScoreResult.session_id)
+        .where(TrainingSession.trainee_id == trainee_id, ScoreResult.result["status"].astext == "scored")
+        .order_by(TrainingSession.completed_at.desc())
+        .limit(limit)
+    ).all()
+    return list(rows)
+
+
 def create_session(
     db: Session,
     trainee: User,
@@ -273,7 +299,16 @@ def create_session(
         effective = base.apply_selection(options, selection)
     except ValueError as exc:
         raise ApiError(422, "selection_not_permitted", str(exc).splitlines()[0]) from exc
+    # A different exercise on every attempt (SIH26247: randomisation against rote learning), unless
+    # the trainee chose a seed, the scenario fixes its seed, or the instructor wants identical attempts.
+    vary = assignment.vary_seed if assignment is not None else True
+    if selection.seed is None and vary and effective.randomization.allow_seed_override:
+        context = f"assignment:{assignment.id}" if assignment is not None else f"practice:{scn_row.key}"
+        effective.randomization.seed = attempt_seed(effective.randomization.seed, trainee.id, context, attempt)
     seed = effective.randomization.seed
+    plan: dict[str, Any] | None = None
+    if assignment is not None and assignment.adaptive_adversary:
+        effective, plan = plan_adversary(effective, recent_results(db, trainee.id), seed)
     timeline = cpu.run(generate_timeline, effective, seed=seed, difficulty_level=level)
     eff_json = effective.model_dump(mode="json")
 
@@ -288,6 +323,7 @@ def create_session(
         difficulty_level=level,
         selection=selection.model_dump(mode="json", exclude_none=True),
         effective_definition=eff_json,
+        adversary_plan=plan,
         config_digest=config_digest(eff_json, seed, level),
         timeline_digest=timeline.digest,
         engine_version=timeline.engine_version,

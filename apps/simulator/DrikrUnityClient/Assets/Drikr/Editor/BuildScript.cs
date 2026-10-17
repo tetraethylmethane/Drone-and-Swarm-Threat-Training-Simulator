@@ -124,7 +124,20 @@ namespace Drikr.EditorTools
                 targetGroup = BuildTargetGroup.Standalone,
                 options = BuildOptions.None,
             };
-            var report = BuildPipeline.BuildPlayer(options);
+            // Build-time checks (OpenXR's included) look at the active target, so make it this one.
+            if (EditorUserBuildSettings.activeBuildTarget != target)
+                EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, target);
+            var restoreXr = XrSetup.ForBuild(target); // VR only in the Windows x64 player (ADR-013)
+            BuildReport report;
+            try
+            {
+                report = BuildPipeline.BuildPlayer(options);
+            }
+            finally
+            {
+                restoreXr();
+                AssetDatabase.SaveAssets();
+            }
             var s = report.summary;
             Debug.Log($"DRIKR_BUILD target={target} result={s.result} size={s.totalSize} errors={s.totalErrors} warnings={s.totalWarnings} output={s.outputPath}");
             if (s.result != BuildResult.Succeeded) EditorApplication.Exit(1);

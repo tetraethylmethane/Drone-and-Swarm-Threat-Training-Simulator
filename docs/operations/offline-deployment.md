@@ -100,6 +100,10 @@ curl --cacert deploy/tls/ca.crt https://drikr-training.local:8443/healthz
 
 * Install `deploy/tls/ca.crt` as a trusted root on each training workstation (and pass it to the
   Unity client with `-drikrCa`). Move `deploy/tls/ca.key` to offline storage.
+* **VR (optional, Windows x64 player only):** install the headset's OpenXR runtime (for example
+  SteamVR or Meta Quest Link) and set it as the active OpenXR runtime, then start the client with
+  `-drikrVr`. Without a headset the client reports "VR not started" and runs on the desktop. VR has
+  been built and tested without a headset only (ADR-013); try it on your headset before a class.
 * To use an organisation-issued certificate instead, put `server.crt` (with the chain) and
   `server.key` in a directory and set `DRIKR_TLS_DIR` to it.
 * The HTTPS profile: TLS 1.2 and 1.3, forward-secret AEAD ciphers, HSTS for one year, HTTP

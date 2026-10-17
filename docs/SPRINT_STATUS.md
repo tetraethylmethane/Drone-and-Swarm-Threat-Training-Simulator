@@ -277,6 +277,26 @@ lint, types and build clean; E2E **24 passed**, 1 skipped (after one discarded r
 servers). Not re-run on the final code because Docker was unavailable: Unity live test, gitleaks,
 Trivy and the post-soak record checks (B-18).
 
+## SIH26247 alignment (2026-10-17)
+
+Problem statement SIH26247 (Ministry of Defence, via MIC): *AI-Enabled Drone & Counter-Drone Threat
+Simulation Trainer*. A review against its expected outcomes found three gaps, now addressed:
+
+| Expected outcome | Before | Now | Evidence |
+|---|---|---|---|
+| Scenario randomisation to prevent rote learning | **Every attempt replayed the identical exercise** (defect D-02) | Each attempt gets its own recorded seed by default; instructors can require identical attempts | ADR-012; `test_attempt_variation.py` (5) |
+| "AI-enabled" | No AI component | **Adaptive adversary**: plans each attempt against the trainee's recorded weaknesses (four tactics, within the instructor's ranges, reasons shown in the AAR). Game-AI tactics selection, **not machine learning** | ADR-012; `test_adversary.py` (10, incl. a property test over every demo scenario); `test_adaptive_adversary.py` (2); `AdversaryPlan.test.tsx` |
+| Desktop or VR-capable simulator | Desktop only | **Optional VR sand-table view** in the Windows x64 player (OpenXR, `-drikrVr`) | ADR-013; `VrControlsTests` (4); smoke tests with and without `-drikrVr`. **Not tested on a headset** (B-20) |
+
+The other outcomes were already covered: scripted and procedural scenarios (day, dusk, night;
+degraded sensors; rural, urban, industrial, coastal; single drones and swarms), decision-tree
+scoring of detection time, classification and response, an AAR with individual and unit tracking
+over repeated sessions, and adjustable and adaptive difficulty.
+
+Runs on the final code (2026-10-17): Python **361 passed**, 0 failed, 0 skipped; web **45 passed**;
+E2E **24 passed**, 1 skipped; Unity EditMode **22 passed**, 0 failed, 1 skipped; Windows, Linux and
+macOS players built with 0 errors.
+
 ## Open items
 
 | ID | Item |

@@ -28,6 +28,18 @@ maximum attempts, due date, feedback level (*detailed* shows track ground truth 
 to the trainee; *summary* does not), difficulty (*fixed*, or *adaptive* within your minimum and
 maximum), and which options the trainee may choose (time of day, weather, custom seed).
 
+* **Vary the exercise on each attempt** (on by default): every attempt is a different exercise
+  (a new recorded seed), so trainees cannot learn a scenario by heart. Each attempt is still
+  reproducible. Untick it when you want to compare attempts directly: the attempts are then
+  identical, and the Compare page can show them track by track.
+* **Adaptive adversary** (off by default): before each attempt, the system looks at the trainee's
+  last 10 scored sessions and, where there is enough evidence of a weakness, plans the threat
+  against it: drones flying low and slow if they were taken for birds, a faster and closer run-in if
+  classification was slow, simultaneous arrivals if accuracy drops in a crowded picture, larger
+  swarms if swarm members were missed. It stays within this scenario's ranges, and the after-action
+  review shows what it did and why (never during the exercise). It is rules-based; no machine
+  learning is involved.
+
 ## Reviewing sessions
 
 **Sessions and reviews** filters by trainee, scenario, status and review state, and exports CSV for

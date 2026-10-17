@@ -1,8 +1,16 @@
 {
   "name": "Drikr.Editor",
   "rootNamespace": "Drikr.EditorTools",
-  "references": ["Drikr.Runtime"],
-  "includePlatforms": ["Editor"],
+  "references": [
+    "Drikr.Runtime",
+    "Unity.XR.Management",
+    "Unity.XR.Management.Editor",
+    "Unity.XR.OpenXR",
+    "Unity.XR.OpenXR.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
   "overrideReferences": false,

@@ -20,7 +20,7 @@ import {
   SENSOR_LABELS,
   STATUS_LABELS,
 } from "@/lib/labels";
-import type { Page, ResultItem, ScoreResult, SessionState, SimEvent } from "@/lib/types";
+import type { AdversaryPlan, Page, ResultItem, ScoreResult, SessionState, SimEvent } from "@/lib/types";
 import { useAsync } from "@/lib/useAsync";
 
 export function OverviewSection({ session, result }: { session: SessionState; result: ScoreResult }) {
@@ -182,6 +182,47 @@ function pathText(item: ResultItem): string {
     .filter((p) => !p.leaf)
     .map((p) => `${p.fact} ${p.op} ${JSON.stringify(p.value)}: ${p.result ? "yes" : "no"}`)
     .join(" → ");
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  altitude_m: "altitude (m)",
+  speed_mps: "speed (m/s)",
+  closest_approach_m: "closest approach (m)",
+  spawn_time_s: "appearance time (s)",
+  "swarm.size": "swarm size",
+};
+
+/** What the adaptive adversary planned for this session, and why. Shown with the result only. */
+export function AdversaryPlanPanel({ plan }: { plan: AdversaryPlan }) {
+  return (
+    <Panel className="mt-4">
+      <PanelHeader
+        title="Adaptive adversary"
+        description={`Planned before the exercise from ${plan.sessions_considered} earlier scored session(s). ${plan.method}`}
+      />
+      <PanelBody>
+        {plan.tactics.length === 0 ? (
+          <p className="text-sm text-ink-muted">{plan.summary}</p>
+        ) : (
+          <ul className="space-y-3">
+            {plan.tactics.map((t) => (
+              <li key={t.tactic} className="text-sm">
+                <p className="font-medium">{t.effect}</p>
+                <p className="text-ink-muted">Because {t.reason}.</p>
+                <ul className="mt-1 text-xs text-ink-subtle">
+                  {t.changes.map((c) => (
+                    <li key={`${c.group}-${c.field}`}>
+                      {c.group}: {FIELD_LABELS[c.field] ?? c.field} {c.from.join("–")} → {c.to.join("–")}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </PanelBody>
+    </Panel>
+  );
 }
 
 export function TrackDecisionsSection({

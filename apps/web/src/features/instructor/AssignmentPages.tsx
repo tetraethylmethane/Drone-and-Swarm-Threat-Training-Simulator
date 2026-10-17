@@ -159,6 +159,8 @@ const AssignmentSchema = z
     max_attempts: z.number().int().min(1, "At least 1").max(50, "At most 50"),
     feedback_level: z.enum(["summary", "detailed"]),
     due_at: z.string().nullable(),
+    vary_seed: z.boolean(),
+    adaptive_adversary: z.boolean(),
     trainee_options: z.object({
       time_of_day: z.array(z.string()),
       weather: z.array(z.string()),
@@ -190,6 +192,8 @@ export function AssignmentCreatePage() {
     tod: [] as string[],
     weather: [] as string[],
     seed: false,
+    vary_seed: true,
+    adaptive_adversary: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState<string | null>(null);
@@ -227,6 +231,8 @@ export function AssignmentCreatePage() {
       max_attempts: form.max_attempts,
       feedback_level: form.feedback_level,
       due_at: form.due ? new Date(`${form.due}T23:59:00`).toISOString() : null,
+      vary_seed: form.vary_seed,
+      adaptive_adversary: form.adaptive_adversary,
       trainee_options: { time_of_day: form.tod, weather: form.weather, allow_custom_seed: form.seed },
     };
     const parsed = AssignmentSchema.safeParse(body);
@@ -311,6 +317,28 @@ export function AssignmentCreatePage() {
                 <option value="summary">Summary only</option>
               </Select>
             </Field>
+            <div className="space-y-2">
+              <Checkbox
+                id="vary-seed"
+                checked={form.vary_seed}
+                onCheckedChange={(v) => set("vary_seed", v)}
+                label="Vary the exercise on each attempt (recommended, against rote learning)"
+              />
+              <p className="pl-6 text-xs text-ink-subtle">
+                Each attempt gets a new, recorded seed and is still reproducible. Untick to repeat the
+                identical exercise, for example to compare attempts directly.
+              </p>
+              <Checkbox
+                id="adaptive-adversary"
+                checked={form.adaptive_adversary}
+                onCheckedChange={(v) => set("adaptive_adversary", v)}
+                label="Adaptive adversary: plan each attempt against the trainee's recorded weaknesses"
+              />
+              <p className="pl-6 text-xs text-ink-subtle">
+                Rules-based tactics within this scenario's ranges, with the reasons shown in the after-action
+                review. No machine learning.
+              </p>
+            </div>
           </PanelBody>
         </Panel>
         <Panel>

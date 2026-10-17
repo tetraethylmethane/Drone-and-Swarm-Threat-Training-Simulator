@@ -140,6 +140,8 @@ def assignment_out(
         "max_level": a.max_level,
         "max_attempts": a.max_attempts,
         "feedback_level": a.feedback_level.value,
+        "vary_seed": a.vary_seed,
+        "adaptive_adversary": a.adaptive_adversary,
         "due_at": _dt(a.due_at),
         "created_at": _dt(a.created_at),
     }

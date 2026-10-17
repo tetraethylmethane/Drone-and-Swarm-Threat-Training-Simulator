@@ -57,6 +57,10 @@ When a signed-in user's role requires MFA and they have not enrolled, every endp
 `/auth/*` returns `403 mfa_enrollment_required`. `GET /sessions/{id}/timeline` adds
 `events_purged_at` when the event log was removed by the retention policy.
 
+**Assignments** accept `vary_seed` (default `true`) and `adaptive_adversary` (default `false`).
+`GET /sessions/{id}/result` includes `adversary_plan` (the plan and reasons, or `null`); it is
+available only after the exercise, like the result itself.
+
 **Admission control.** When `DRIKR_MAX_ACTIVE_SESSIONS` is set and that many exercises are active,
 `POST /sessions` and `POST /sessions/{id}/resume` return `503 capacity_reached` with a
 `Retry-After: 30` header and a message for the trainee; nothing is stored. `GET /admin/system`

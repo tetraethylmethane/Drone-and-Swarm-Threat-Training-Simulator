@@ -354,7 +354,10 @@ def result(
     r = db.scalar(select(ScoreResult).where(ScoreResult.session_id == s.id))
     if r is None:
         raise ApiError(404, "result_not_available", "This session has not been scored yet")
-    return result_for_viewer(r, trainee_view=_trainee_view(principal), level=feedback_level_for(s))
+    out = result_for_viewer(r, trainee_view=_trainee_view(principal), level=feedback_level_for(s))
+    # Shown only with the result, after the exercise: during it, the plan would reveal the threat.
+    out["adversary_plan"] = s.adversary_plan
+    return out
 
 
 @router.get("/{session_id}/timeline")

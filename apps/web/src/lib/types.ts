@@ -165,6 +165,8 @@ export interface Assignment {
   max_level: number;
   max_attempts: number;
   feedback_level: "summary" | "detailed";
+  vary_seed: boolean;
+  adaptive_adversary: boolean;
   due_at: string | null;
   created_at: string;
   progress?: AssignmentProgress;
@@ -274,7 +276,23 @@ export interface ResultItem {
   }[];
 }
 
+/** The adaptive adversary's plan for a session (shown after the exercise only). */
+export interface AdversaryPlan {
+  engine: string;
+  method: string;
+  summary: string;
+  sessions_considered: number;
+  tactics: {
+    tactic: string;
+    effect: string;
+    reason: string;
+    evidence: number;
+    changes: { group: string; field: string; from: number[]; to: number[] }[];
+  }[];
+}
+
 export interface ScoreResult {
+  adversary_plan?: AdversaryPlan | null;
   status: "scored" | "insufficient_data";
   overall: number | null;
   passed: boolean | null;

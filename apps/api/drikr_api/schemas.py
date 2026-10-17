@@ -116,6 +116,10 @@ class AssignmentCreate(Strict):
     max_attempts: int = Field(ge=1, le=50, default=3)
     feedback_level: FeedbackLevel = FeedbackLevel.DETAILED
     due_at: datetime | None = None
+    #: Each attempt is a different (recorded, reproducible) exercise; False repeats the same one.
+    vary_seed: bool = True
+    #: Plan each session's threat against the trainee's recorded weaknesses.
+    adaptive_adversary: bool = False
 
     @model_validator(mode="after")
     def _levels(self) -> Self:

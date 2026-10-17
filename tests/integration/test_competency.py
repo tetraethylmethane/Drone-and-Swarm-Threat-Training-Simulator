@@ -19,10 +19,12 @@ def test_competency_trends_recurring_errors_and_identical_attempts(
     assert all(d["trend"] == "insufficient_data" for d in empty["dimensions"].values())
 
     # Three attempts at the same assigned exercise (same scenario version, seed and difficulty):
-    # never classifying, then classifying everything.
-    s1 = run_exercise(trainee, instructor, clock, classify=None, max_attempts=5)
-    s2 = run_exercise(trainee, instructor, clock, classify=None, max_attempts=5)
-    s3 = run_exercise(trainee, instructor, clock, classify="small_multirotor", max_attempts=5)
+    # never classifying, then classifying everything. Identical attempts are requested explicitly,
+    # because attempts vary by default (migration 0006).
+    same = {"max_attempts": 5, "vary_seed": False}
+    s1 = run_exercise(trainee, instructor, clock, classify=None, **same)
+    s2 = run_exercise(trainee, instructor, clock, classify=None, **same)
+    s3 = run_exercise(trainee, instructor, clock, classify="small_multirotor", **same)
     run_exercise(trainee2, instructor, clock)  # another trainee's data must not leak in
 
     out = instructor.get(f"/analytics/competency?trainee_id={tid}").json()
@@ -46,8 +48,9 @@ def test_competency_trends_recurring_errors_and_identical_attempts(
 
 
 def test_compare_identical_attempts_shows_tracks(instructor: Api, trainee: Api, clock: FakeClock) -> None:
-    first = run_exercise(trainee, instructor, clock, classify=None, max_attempts=5)
-    second = run_exercise(trainee, instructor, clock, classify="small_multirotor", max_attempts=5)
+    # Identical attempts are requested explicitly; attempts vary by default (migration 0006).
+    first = run_exercise(trainee, instructor, clock, classify=None, max_attempts=5, vary_seed=False)
+    second = run_exercise(trainee, instructor, clock, classify="small_multirotor", max_attempts=5, vary_seed=False)
     cmp = instructor.get(f"/analytics/compare?a={first}&b={second}").json()
     assert cmp["comparability"] == "identical" and cmp["same"]["timeline"] is True
     a = instructor.get(f"/sessions/{first}/result").json()

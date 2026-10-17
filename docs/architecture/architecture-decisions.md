@@ -257,3 +257,79 @@ last-bit floating-point differences in `math.sin/cos`. A golden digest test pins
 demo scenario. **Limitation:** bit-identical reproduction is verified on Windows (CPython 3.12.4) and
 in the Linux API container (see `docs/SPRINT_STATUS.md` for the evidence); other platforms are
 expected but not verified. Any intentional change to generation logic must bump `ENGINE_VERSION`.
+
+## ADR-012 Per-attempt variation and an adaptive adversary, planned at session creation
+
+**Status:** Accepted (2026-10-17). Mechanism tested; effect on learning untested.
+
+**Context.** SIH26247 asks for an *AI-enabled* trainer with scenario randomisation that prevents
+rote learning. Until now every attempt at a scenario used the scenario's seed, so a trainee
+repeating an assignment met the identical exercise. ADR-001 requires the server to generate each
+session's whole timeline in advance, so that every session is reproducible from its record.
+
+**Decision.**
+* **Per-attempt seeds.** Each attempt's seed is derived from the scenario seed, the trainee, the
+  assignment (or practice scenario) and the attempt number (`session_service.attempt_seed`), and
+  stored with the session. New assignments vary by default; instructors can require identical
+  attempts (`vary_seed: false`), a scenario with `allow_seed_override: false` keeps its seed, and a
+  trainee's permitted custom seed is used as given. Assignments created before migration `0006` keep
+  identical attempts.
+* **Adaptive adversary** (`drikr_simcore.adversary`, opt-in per assignment). Before generation, the
+  server scores four tactics (low-and-slow approach, fast run-in, saturation, larger swarm) against
+  the trainee's last 10 scored results. A tactic needs at least 4 relevant tracks and an error
+  measure of at least 34%, and at most two are used. Each only narrows the instructor's ranges for
+  non-cooperative drone groups. The adapted scenario becomes the session's effective definition, and
+  the plan, with its evidence and reasons, is stored in `training_sessions.adversary_plan` and shown
+  with the result, never during the exercise.
+* This is game-AI tactics selection, **not machine learning**, and it is described that way.
+
+**Why at session creation, not during the exercise.** Reacting to the trainee mid-exercise would
+make the timeline depend on live input. That is the condition ADR-001 names for reconsidering server
+authority. Planning between sessions keeps one engine, one stored timeline and exact verification.
+
+**Consequences.** Attempts are no longer "identical exercises" by default, so comparisons between
+attempts show `same_scenario` rather than `identical` unless the instructor asked for identical
+attempts. Five existing tests whose purpose is identical inputs now request identical attempts
+explicitly, and one test helper now waits for the first track instead of assuming the old seed. Not
+done: within-exercise reactions (evasion when engaged); learned models; evidence that adversarial
+planning improves learning, which needs the human study.
+
+**Revisit when** a learning study shows that within-exercise adaptation is needed, or trainees'
+weaknesses need richer evidence than stored results provide.
+
+## ADR-013 Optional VR: a sand-table view in the Unity client (OpenXR)
+
+**Status:** Accepted with limitation (2026-10-17): built and tested without a headset; **not tested
+on VR hardware**.
+
+**Context.** SIH26247 asks for a "desktop or VR-capable simulator". The Unity client is desktop
+only, and its control panel is IMGUI, which does not render inside a headset.
+
+**Decision.**
+* OpenXR through XR Plugin Management (packages bundled with Unity 6000.3: `com.unity.xr.openxr`
+  1.16.1, `com.unity.xr.management` 4.6.1). The loader is **not** initialised at startup; VR starts
+  only with `-drikrVr` (`VrSession`), and without a headset or OpenXR runtime the client says so and
+  stays on the desktop. Profiles enabled: Khronos simple, Oculus Touch, Valve Index, HTC Vive
+  (`Drikr.EditorTools.XrSetup`).
+* **Sand table:** the whole 4 km picture is scaled to a 1 m-radius table at waist height in front
+  of the trainee (`VrControls.TableScale`), with a floor-level tracking origin. This keeps tracks
+  readable and avoids moving through kilometres of space.
+* **Controls (right hand):** point at a track and pull the trigger to select it; A/X changes the
+  classification and B/Y submits it. A text panel above the table shows what is selected and what
+  was recorded. Responses other than classification remain on the desktop panel, which is mirrored
+  on the monitor for an instructor.
+* **Server authority is unchanged (ADR-001):** VR adds input and presentation only. Every decision
+  is the same API call as from the desktop panel.
+
+**Consequences.** `activeInputHandler` is set to "Both", because the OpenXR plugin brings the Input
+System, while the client keeps the legacy input API. The Windows player grows from about 91 MB to
+96 MB. **VR is in the Windows x64 player only:** the OpenXR plugin supports only Windows x64 among
+this project's players, and its build validation rejects the universal macOS player. Because XR
+settings are shared by all standalone targets, `BuildScript` builds Linux and macOS with the OpenXR
+loader removed and restores it afterwards (`XrSetup.ForBuild`). It also switches the editor's active
+build target before each build, because OpenXR's checks read the active target. Without a runtime
+installed, the OpenXR plugin logs `XR_ERROR_RUNTIME_UNAVAILABLE` lines at
+startup while it queries extensions; it never creates an instance or session unless `-drikrVr` is
+given. **Not done:** testing on any headset; training responses other than classification in VR;
+VR in the Linux and macOS players.
+

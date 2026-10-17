@@ -153,6 +153,8 @@ def create_assignments(
             max_attempts=body.max_attempts,
             feedback_level=body.feedback_level,
             due_at=body.due_at,
+            vary_seed=body.vary_seed,
+            adaptive_adversary=body.adaptive_adversary,
         )
         db.add(a)
         db.flush()
@@ -166,6 +168,8 @@ def create_assignments(
                 "scenario": f"{scn.key}@{scn.version}",
                 "trainee_id": str(tid),
                 "difficulty_mode": body.difficulty_mode.value,
+                "vary_seed": body.vary_seed,
+                "adaptive_adversary": body.adaptive_adversary,
             },
             ip_address=principal.ip,
         )

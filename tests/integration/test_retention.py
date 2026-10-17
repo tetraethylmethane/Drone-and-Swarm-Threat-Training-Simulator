@@ -19,7 +19,9 @@ def finished_session(trainee: Api, instructor: Api, clock: FakeClock, note: str 
     sid = trainee.post("/sessions", {"assignment_id": a["id"]}).json()["id"]
     trainee.post(f"/sessions/{sid}/start")
     tracks: set[str] = set()
-    for _ in range(8):
+    for i in range(60):  # until a track has been seen (attempts vary, so the first one varies)
+        if i >= 8 and tracks:
+            break
         clock.advance(5)
         tracks |= {
             e["payload"]["track_id"]

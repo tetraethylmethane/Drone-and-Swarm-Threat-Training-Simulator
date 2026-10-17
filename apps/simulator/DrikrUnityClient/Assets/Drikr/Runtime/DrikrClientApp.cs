@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.XR;
 using UnityEngine.Accessibility;
 
 namespace Drikr
@@ -22,6 +23,14 @@ namespace Drikr
         string _apiUrl = "http://localhost:8080/api/v1";
         string _username = "", _password = "", _mfaCode = "";
         string _caCertPath; // -drikrCa / DRIKR_CA_CERT: private training-network CA for HTTPS
+        // -drikrVr: optional VR sand-table view (VrSession, VrControls); desktop when absent or unavailable
+        VrSession _vr;
+        VrControls _vrc;
+        TextMesh _vrText;
+        LineRenderer _vrRay;
+        Camera _backdrop;
+        string _vrPointed;
+        bool VrActive => _vr != null && _vr.Active;
         Texture2D _logo;
         Screen _screen = Screen.Login;
         DrikrApi _api;
@@ -88,6 +97,7 @@ namespace Drikr
                 AssistiveSupport.screenReaderStatusOverride = AssistiveSupport.ScreenReaderStatusOverride.ForceEnabled;
             Application.targetFrameRate = 60;
             BuildScene();
+            if (Array.IndexOf(args, "-drikrVr") >= 0) StartVr();
         }
 
         /// <summary>Command line `-drikrApi URL` wins, then DRIKR_API_URL, then the default.</summary>
@@ -101,7 +111,11 @@ namespace Drikr
             return string.IsNullOrWhiteSpace(env) ? fallback : env;
         }
 
-        void OnDestroy() => _api?.Dispose();
+        void OnDestroy()
+        {
+            _vr?.Stop();
+            _api?.Dispose();
+        }
 
         // ------------------------------------------------------------------------
         // Opt-in smoke test of the built player (CI / release verification):
@@ -180,7 +194,7 @@ namespace Drikr
                 _cam.tag = "MainCamera";
             }
             // Backdrop camera clears the whole window (including behind the control panel).
-            var backdrop = new GameObject("Backdrop Camera").AddComponent<Camera>();
+            var backdrop = _backdrop = new GameObject("Backdrop Camera").AddComponent<Camera>();
             backdrop.clearFlags = CameraClearFlags.SolidColor;
             backdrop.backgroundColor = Hex("#F6F5F1");
             backdrop.cullingMask = 0;
@@ -312,6 +326,7 @@ namespace Drikr
 
         void UpdateCamera()
         {
+            if (VrActive) return; // the headset drives the camera
             // The 3D view occupies the area to the right of the 380 px control panel.
             var panel = Mathf.Clamp01(380f / Mathf.Max(1, UnityEngine.Screen.width));
             _cam.rect = new Rect(panel, 0f, 1f - panel, 1f);
@@ -325,6 +340,15 @@ namespace Drikr
         // ------------------------------------------------------------------------
 
         void Update()
+        {
+            if (VrActive) VrUpdate();
+            else DesktopInput();
+
+            if (_screen == Screen.Exercise && !_polling && Time.realtimeSinceStartup >= _nextPoll)
+                _ = Poll();
+        }
+
+        void DesktopInput()
         {
             if (Input.GetMouseButton(1))
             {
@@ -340,9 +364,78 @@ namespace Drikr
                 if (Physics.Raycast(_cam.ScreenPointToRay(Input.mousePosition), out var hit, 5000f))
                     Toggle(hit.collider.gameObject.name, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
             }
+        }
 
-            if (_screen == Screen.Exercise && !_polling && Time.realtimeSinceStartup >= _nextPoll)
-                _ = Poll();
+        // ------------------------------------------------------------------------
+        // VR (sand table). Same selection and decisions as the desktop; input differs only.
+        // ------------------------------------------------------------------------
+
+        void StartVr()
+        {
+            _vr = new VrSession();
+            if (!_vr.TryStart())
+            {
+                _notice = $"VR not started: {_vr.FailureReason} Running on the desktop.";
+                Debug.Log("DRIKR_VR " + _notice);
+                return;
+            }
+            var area = WorldMapping.AreaRadiusM * WorldMapping.Scale * 1.15f;
+            _world.localScale = Vector3.one * VrControls.TableScale(area);
+            _world.position = new Vector3(0f, 0.85f, 1.2f); // a table at waist height in front of the trainee
+            var rig = new GameObject("VR rig").transform;
+            _cam.transform.SetParent(rig, false);
+            _cam.rect = new Rect(0f, 0f, 1f, 1f);
+            _cam.nearClipPlane = 0.02f;
+            _cam.farClipPlane = 50f;
+            if (_backdrop != null) _backdrop.enabled = false;
+            _vrc = new VrControls(Vocabulary.Classifications);
+            _vrText = new GameObject("VR status").AddComponent<TextMesh>();
+            _vrText.transform.position = new Vector3(0f, 1.55f, 1.9f);
+            _vrText.characterSize = 0.02f;
+            _vrText.fontSize = 48;
+            _vrText.anchor = TextAnchor.UpperCenter;
+            _vrText.color = Hex("#1F2421");
+            _vrRay = new GameObject("VR pointer").AddComponent<LineRenderer>();
+            _vrRay.sharedMaterial = _matRing;
+            _vrRay.widthMultiplier = 0.004f;
+            _vrRay.positionCount = 2;
+            Debug.Log("DRIKR_VR started; devices: " + VrSession.DescribeDevices());
+        }
+
+        void VrUpdate()
+        {
+            if (VrSession.Pose(XRNode.CenterEye, out var hp, out var hr))
+            {
+                _cam.transform.localPosition = hp;
+                _cam.transform.localRotation = hr;
+            }
+            _vrPointed = null;
+            if (VrSession.Pose(XRNode.RightHand, out var p, out var r))
+            {
+                var dir = r * Vector3.forward;
+                var end = p + dir * 3f;
+                if (_screen == Screen.Exercise && Physics.Raycast(p, dir, out var hit, 3f)
+                    && _picture.Tracks.ContainsKey(hit.collider.gameObject.name))
+                {
+                    _vrPointed = hit.collider.gameObject.name;
+                    end = hit.point;
+                }
+                _vrRay.SetPosition(0, p);
+                _vrRay.SetPosition(1, end);
+                _vrRay.enabled = true;
+            }
+            else _vrRay.enabled = false;
+
+            var (trigger, primary, secondary) = VrSession.Buttons(XRNode.RightHand);
+            var (select, next, submit) = _vrc.Edges(trigger, primary, secondary);
+            if (select && _vrPointed != null) Toggle(_vrPointed, additive: true);
+            if (next) _vrc.NextClassification();
+            if (submit && !_busy && _state != null && _state.Status == "running" && _selected.Count > 0)
+            {
+                var action = TraineeAction.Classify(_selected, _vrc.Classification, Vocabulary.Confidences[_confIndex]);
+                Run(() => SubmitAction(action));
+            }
+            _vrText.text = _vrc.Status(_selected, Vocabulary.Label, _vrPointed, _error ?? _notice);
         }
 
         void Toggle(string id, bool additive)

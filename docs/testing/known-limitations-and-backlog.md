@@ -45,6 +45,10 @@ operational training use; **P2** should be resolved in the next sprint; **P3** i
 | B-17 | **Synchronised-start burst**: when a whole class starts at once, sign-ins (Argon2) and timeline generation coincide; session creation p95 exceeded 10 s even with admission headroom | P2 | Options: stagger starts in the instructor workflow; more generation workers on larger hosts (B-11); pre-generate a class's timelines when an assignment is created. Re-test B1-2 | load report 5.8 |
 | B-18 | Post-soak record checks (session states, full reproducibility, audit chain) for the 2026-10-17 soak; blocked by the Docker/WSL failure | P2 | After a host restart: `docker exec drikrload-api-1 drikr-api reproducibility-report --limit 100000`, `verify-audit`, and the session-state query in `tests/load/soak.sh` | load report 5.9 |
 | B-19 | Docker Desktop failed three times during sustained runs on the development laptop (L-04) | P2 | Run the soak on the target host; if it recurs there, isolate the cause (load generator on a separate machine, WSL memory limit, Docker version) | load report L-04 |
+| B-20 | **Test the VR view on headsets** (Meta Quest via Link, Valve Index, HTC Vive) | P2 | Tracking, sand-table height, controller selection and classification on each; comfort over a 5-minute exercise; fix and re-test | ADR-013 |
+| B-21 | VR: training responses other than classification (report, confirm, clear) in the headset | P3 | Controller menu; EditMode tests | ADR-013 |
+| B-22 | Adaptive adversary: evaluate whether it targets weaknesses with synthetic agents of known weaknesses, then with trainees | P2 | Synthetic agents with a planted weakness: error rate on that weakness with and without the adversary; then the human study | ADR-012 |
+| B-23 | Adaptive adversary: reactions within an exercise (evasion when engaged) | P3 | Would need ADR-001 reconsidered (timeline depends on live input) | ADR-012 |
 
 ## 3. Defects closed in Sprint 10
 
@@ -65,4 +69,5 @@ operational training use; **P2** should be resolved in the next sprint; **P3** i
 | F-09 | A compromised API could delete a raw event log and mark it purged undetected | Migration `0005`: recorded, owner-enforced purges | `test_purge_integrity.py` |
 | L-05 | Admission control: refused requests generated a whole timeline first (and, at a synchronised start, every request did) | Creation slots held from before generation until commit | `test_admission_control.py::test_a_refused_request_does_no_generation_work`, `…::test_a_simultaneous_burst_generates_only_what_can_be_admitted` |
 | U-02, U-03 | Evidence ids had to be searched for by hand; no sort by score | B-06, B-07 | see B-06, B-07 |
+| D-02 | **Every attempt replayed the identical exercise** (same seed) unless the trainee typed a seed, against SIH26247's randomisation requirement | Per-attempt recorded seeds by default; instructors can require identical attempts (migration 0006, ADR-012) | `test_attempt_variation.py` (5) |
 | E2E | The full-workflow E2E test selected "Perimeter Awareness Basics (v1)"; after v2 the form lists only the latest version, and the test waited until it timed out. It would also have failed in CI | Select Perimeter basics at its current version, asserting exactly one match | `tests/e2e/specs/full-workflow.spec.ts` (24 passed after the fix) |

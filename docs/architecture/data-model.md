@@ -36,6 +36,10 @@ some days after completion (`training_sessions.events_purged_at` records it; sco
 kept), expired `auth_sessions` and `mfa_challenges` are deleted, and deactivated accounts can be
 anonymised. `audit_events` are never deleted. Details: `docs/security/data-retention.md`.
 
+Migration `0006` adds `assignments.vary_seed` (each attempt gets its own recorded seed; existing
+rows keep `false`), `assignments.adaptive_adversary`, and `training_sessions.adversary_plan` (JSONB:
+the adaptive adversary's tactics, evidence and reasons; ADR-012).
+
 Since migration `0005`, raw logs are deleted only by the owner-defined functions
 `drikr_purge_session_events` (retention) and `drikr_purge_user_event_logs` (anonymisation). Each
 purge is recorded in **`event_log_purges`** (one row per session: `reason ∈ {retention,

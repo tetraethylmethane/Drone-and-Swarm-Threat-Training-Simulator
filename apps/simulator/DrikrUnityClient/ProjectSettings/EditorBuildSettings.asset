@@ -8,5 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Drikr/Scenes/Main.unity
     guid: c7e2caabdf246ed48a80b36ba7731a59
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d3e48ca50d67fea4d87fff69a9790c37, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 9aca3ce72f01d8d41b2ad8acaa78830b, type: 2}
   m_UseUCBPForAssetBundles: 0

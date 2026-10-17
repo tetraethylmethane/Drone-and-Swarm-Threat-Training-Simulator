@@ -274,7 +274,7 @@ def test_attempt_limit(trainee: Api, instructor: Api, clock: FakeClock) -> None:
 
 
 def test_reproducibility_verification(trainee: Api, instructor: Api, clock: FakeClock) -> None:
-    a = assign(instructor, trainee)
+    a = assign(instructor, trainee, vary_seed=False)  # compared with an identical session below
     sid = launch(trainee, a["id"])["id"]
     trainee.post(f"/sessions/{sid}/start")
     seen = poll(trainee, sid, clock, 30)
@@ -289,7 +289,7 @@ def test_reproducibility_verification(trainee: Api, instructor: Api, clock: Fake
         and report["reproducible"]
     )
     # Same scenario version, configuration and seed reproduce the same logical timeline in a new session.
-    a2 = assign(instructor, trainee)
+    a2 = assign(instructor, trainee, vary_seed=False)
     s2 = launch(trainee, a2["id"])
     first = instructor.get(f"/sessions/{sid}").json()
     assert s2["timeline_digest"] == first["timeline_digest"] and s2["config_digest"] == first["config_digest"]
@@ -310,8 +310,17 @@ def test_self_guided_practice(trainee: Api, instructor: Api, clock: FakeClock) -
 
 
 def test_adaptive_difficulty_records_reasons(world: World, trainee: Api, instructor: Api, clock: FakeClock) -> None:
+    # The known exercise (scenario seed) shows tracks within 30 s, so each idle session is scored low;
+    # attempts vary by default since migration 0006, so identical attempts are requested.
     a = assign(
-        instructor, trainee, difficulty_mode="adaptive", difficulty_level=3, min_level=2, max_level=4, max_attempts=5
+        instructor,
+        trainee,
+        difficulty_mode="adaptive",
+        difficulty_level=3,
+        min_level=2,
+        max_level=4,
+        max_attempts=5,
+        vary_seed=False,
     )
     levels = []
     for _ in range(4):

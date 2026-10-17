@@ -15,7 +15,13 @@ import { label, STATUS_LABELS } from "@/lib/labels";
 import type { Review, ScoreResult, SessionState } from "@/lib/types";
 import { errorMessage, useAsync } from "@/lib/useAsync";
 
-import { ErrorAnalysisSection, OverviewSection, TimelineSection, TrackDecisionsSection } from "./AarSections";
+import {
+  AdversaryPlanPanel,
+  ErrorAnalysisSection,
+  OverviewSection,
+  TimelineSection,
+  TrackDecisionsSection,
+} from "./AarSections";
 
 export function AarPage() {
   const { sessionId = "" } = useParams();
@@ -105,6 +111,7 @@ export function AarPage() {
             </Alert>
           ) : null}
           <OverviewSection session={s} result={r} />
+          {r.adversary_plan ? <AdversaryPlanPanel plan={r.adversary_plan} /> : null}
           <OtherAttempts session={s} />
         </TabsContent>
         {detailed ? (

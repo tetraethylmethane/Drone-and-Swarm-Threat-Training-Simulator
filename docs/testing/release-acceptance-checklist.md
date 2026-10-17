@@ -30,11 +30,11 @@ Nothing here is a certification, accreditation or "military-grade" claim.
 
 | Suite | Result | Notes |
 |---|---|---|
-| Python unit, reproducibility, integration (`pytest`, PostgreSQL 17.5) | **344 passed, 0 failed, 0 skipped** (2026-10-17 15:12 UTC, final code) | Includes the post-sprint tests: purge integrity (6), admission control (6), sorting (1), evidence links (2), dev script (1) |
+| Python unit, reproducibility, integration (`pytest`, PostgreSQL 17.5) | **361 passed, 0 failed, 0 skipped** (2026-10-17, final code incl. ADR-012) | Adds planner (10), attempt variation (5) and adaptive adversary (2) tests |
 | Ruff lint and format; mypy strict (67 files) | Clean | 2026-10-16, final code |
-| Web: ESLint, Prettier, `tsc`, Vitest, production build | **Clean; 43 passed** (9 files), 2026-10-17, final code | |
-| E2E (Playwright 1.63, Chromium, dev stack) | **24 passed, 1 skipped** (opt-in screenshots), 2026-10-17 20:48 IST, final code | A run 20 minutes earlier was **discarded**: dev servers left over from the morning were still holding the ports, so it tested a stale API. The servers were stopped by process id, restarted, and checked to be running current code before the counted run |
-| Unity EditMode (6000.3.26f1, batch mode) | **18 passed, 0 failed, 1 skipped**, 2026-10-17 morning | Not re-run after the post-sprint changes: its live test needs the Docker load-test stack (Docker unavailable, B-18). The protocol is unchanged except that creation and resume may now return `503 capacity_reached`, which the client already shows as a message |
+| Web: ESLint, Prettier, `tsc`, Vitest, production build | **Clean; 45 passed** (10 files), 2026-10-17, final code | |
+| E2E (Playwright 1.63, Chromium, dev stack) | **24 passed, 1 skipped** (opt-in screenshots), 2026-10-17 23:40 IST, final code; servers checked fresh | An earlier run that day was discarded (stale servers holding the ports) |
+| Unity EditMode (6000.3.26f1, batch mode) | **22 passed, 0 failed, 1 skipped**, 2026-10-17 23:35 IST, final code | Includes VR logic (4) and the live protocol test against the dev API (Docker unavailable). Skipped: `LiveHttpsWithPinnedCa`, not enabled. Players: Windows x64 (VR), Linux and macOS (desktop) all built, 0 errors; the Windows player passed smoke tests with and without `-drikrVr` (no headset: falls back to the desktop). **VR not tested on a headset** |
 | Load acceptance (30 ×2, 60, resilience; admission control; soak) | A1–A6, A8 met; B-01 partly met; soak 4 h of 8 | load-resilience-report.md sections 5, 5.8, 5.9 |
 | Dependency audits; gitleaks | Clean (2026-10-17 morning, gitleaks over all 169 uncommitted files) | **Not re-run on the post-sprint changes**: the gitleaks image needs Docker (B-18). The new files contain only test-database placeholder passwords |
 | Trivy image scan (0.66.0) | **0** fixable HIGH/CRITICAL in the morning images | **Not re-run on the final image** (`2f1d9cee7379`; Docker unavailable). Base images and dependencies are unchanged since the scan |
