@@ -21,12 +21,15 @@ Allowed transitions::
 
 from __future__ import annotations
 
+import contextlib
+import threading
 import uuid
+from collections.abc import Iterator
 from datetime import datetime, timedelta
 from typing import Any
 
 from psycopg.types.json import Jsonb
-from sqlalchemy import select
+from sqlalchemy import func, or_, select, text
 from sqlalchemy.orm import Session
 
 from drikr_api import cpu
@@ -68,6 +71,80 @@ def now_sim_ms(s: TrainingSession, now: datetime, grace_s: int) -> int:
         elapsed += max(0, int((end - s.running_since).total_seconds() * 1000))
     elapsed = (elapsed // TICK_MS) * TICK_MS
     return min(elapsed, s.duration_ms)
+
+
+#: Advisory-lock key that serialises the final capacity check (any constant unique to this use).
+_CAPACITY_LOCK = 0x44524B01
+#: A created session holds a place for this long before it is started.
+CREATED_HOLD = timedelta(minutes=10)
+
+
+def active_session_count(db: Session) -> int:
+    """Running sessions, plus created ones from the last 10 minutes that are about to start."""
+    return int(
+        db.scalar(
+            select(func.count())
+            .select_from(TrainingSession)
+            .where(
+                or_(
+                    TrainingSession.status == S.RUNNING,
+                    (TrainingSession.status == S.CREATED) & (TrainingSession.created_at > func.now() - CREATED_HOLD),
+                )
+            )
+        )
+        or 0
+    )
+
+
+def _at_capacity(limit: int) -> ApiError:
+    return ApiError(
+        503,
+        "capacity_reached",
+        f"The training server is running its maximum of {limit} exercises. Try again in a minute.",
+        {"limit": limit},
+        headers={"Retry-After": "30"},
+    )
+
+
+_inflight = 0
+_inflight_lock = threading.Lock()
+
+
+@contextlib.contextmanager
+def creation_slot(db: Session, limit: int) -> Iterator[None]:
+    """Hold a place for a session being created, from before its costly generation until commit.
+
+    Refused requests must do no generation work, or they slow the admitted trainees the limit
+    protects (load-resilience-report.md 5.8, defect L-05). Uncommitted creations are invisible to
+    a database count, so at a synchronised start every request used to see an empty server. The
+    supported deployment is one API process, so an in-process count of creations in progress is
+    exact; ``enforce_capacity`` (locked, in the database) remains the guarantee if more processes
+    are ever run.
+    """
+    global _inflight
+    if limit <= 0:
+        yield
+        return
+    with _inflight_lock:
+        if active_session_count(db) + _inflight >= limit:
+            raise _at_capacity(limit)
+        _inflight += 1
+    try:
+        yield
+    finally:
+        with _inflight_lock:
+            _inflight -= 1
+
+
+def enforce_capacity(db: Session, limit: int) -> None:
+    """Admission control (backlog B-01). Call after the session being admitted is flushed, as the
+    last step before commit: the transaction-scoped advisory lock is held until commit, so two
+    trainees cannot both take the last place, while the costly generation stays outside the lock."""
+    if limit <= 0:
+        return
+    db.execute(text("SELECT pg_advisory_xact_lock(:k)"), {"k": _CAPACITY_LOCK})
+    if active_session_count(db) > limit:
+        raise _at_capacity(limit)
 
 
 def lock_session(db: Session, session_id: uuid.UUID) -> TrainingSession:

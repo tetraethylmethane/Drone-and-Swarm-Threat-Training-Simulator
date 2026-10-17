@@ -26,6 +26,7 @@ from drikr_api.main import create_app
 TEST_URL = os.environ.get("TEST_DATABASE_URL", "postgresql+psycopg://drikr:drikr_dev_only@127.0.0.1:55432/drikr_test")
 PASSWORD = "Training-Pass-2026!"
 TABLES = [
+    "event_log_purges",
     "retention_runs",
     "mfa_challenges",
     "mfa_recovery_codes",
@@ -64,6 +65,7 @@ def engine() -> Iterator[Engine]:
 
 
 MUTABLE_TABLES = [
+    "event_log_purges",
     "retention_runs",
     "mfa_challenges",
     "mfa_recovery_codes",

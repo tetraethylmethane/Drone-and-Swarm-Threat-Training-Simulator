@@ -1,4 +1,4 @@
-import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
+import { forwardRef, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes } from "react";
 
 import { cn } from "@/lib/cn";
 
@@ -18,9 +18,12 @@ export function TBody(props: HTMLAttributes<HTMLTableSectionElement>) {
   return <tbody className="divide-y divide-border" {...props} />;
 }
 
-export function TR({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) {
-  return <tr className={cn("align-top", className)} {...props} />;
-}
+export const TR = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(function TR(
+  { className, ...props },
+  ref,
+) {
+  return <tr ref={ref} className={cn("align-top", className)} {...props} />;
+});
 
 export function TH({ className, ...props }: ThHTMLAttributes<HTMLTableCellElement>) {
   return (

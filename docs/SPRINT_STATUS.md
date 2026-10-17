@@ -258,6 +258,25 @@ output of the L-01 reproduction was deleted; two load runs overlapped a Docker f
 excluded; one earlier security claim (F-07, "70,000 log lines") could not be reproduced and was
 replaced by a new test.
 
+## After Sprint 10: risk reduction toward operational use (2026-10-17)
+
+Requested after the Sprint 10 commit: remove the measured engineering risks, and prepare the four
+activities that need people or hardware (`docs/operations/operational-readiness.md`). Operational
+readiness still depends on those four activities; nothing below replaces them.
+
+| Item | Status | Evidence |
+|---|---|---|
+| F-09 / B-04 recorded purges | **Done**: migration `0005`; the app role can no longer delete raw logs or mark them purged; every purge is recorded and verified | `test_purge_integrity.py` (6); migration up/down/up and `alembic check` clean |
+| B-01 admission control | **Done; criteria partly met**: exact limit, refusals do no work (defect L-05 found and fixed in two steps). Protects in-exercise latency only when set below measured capacity; the synchronised-start burst remains (B-17) | load report 5.8; `test_admission_control.py` (6) |
+| B-03 memory | **No leak over 4 h** (peak 742 MiB at class start, settles at about 295 MiB); 8 h not completed because Docker failed a third time (B-18, B-19) | load report 5.9 |
+| B-06 evidence links, B-07 sort by score | **Done** | API and component tests; E2E |
+| D-01 `dev-api.sh` | **Fixed** (found while starting the E2E stack) | `test_dev_scripts.py` |
+
+Final runs on this code (2026-10-17): Python **344 passed**, 0 failed, 0 skipped; web **43 passed**;
+lint, types and build clean; E2E **24 passed**, 1 skipped (after one discarded run against stale
+servers). Not re-run on the final code because Docker was unavailable: Unity live test, gitleaks,
+Trivy and the post-soak record checks (B-18).
+
 ## Open items
 
 | ID | Item |

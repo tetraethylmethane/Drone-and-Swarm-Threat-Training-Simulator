@@ -89,6 +89,9 @@ Integration tests in `tests/integration/test_retention.py` cover:
 - that scores and the PDF report survive a purge, and that verification still regenerates the
   timeline;
 - that repeated runs are idempotent;
+- that raw logs can be deleted only by a recorded purge, that the API's database role can neither
+  delete them nor mark them purged, and that verification flags an unrecorded purge
+  (`tests/integration/test_purge_integrity.py`, migration `0005`);
 - removal of expired sign-in records, with live sessions untouched;
 - anonymisation, including that typed notes and review text are removed and that the account
   cannot sign in or be reactivated;

@@ -1,0 +1,9 @@
+2026-10-17T10:22:59Z start: 30 VU for 8 h; max_active_sessions=30; image 2f1d9cee7379
+2026-10-17T14:20:43Z docker_unresponsive
+2026-10-17T14:21:02Z k6 finished
+2026-10-17T14:21:50Z docker_unresponsive
+2026-10-17T14:22:09Z docker_unresponsive
+2026-10-17T14:22:09Z k6 finished
+2026-10-17T14:22:09Z idle sample taken
+2026-10-17T14:23:16Z docker_unresponsive
+2026-10-17T14:23:17Z idle sample taken

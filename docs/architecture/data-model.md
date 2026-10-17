@@ -35,3 +35,10 @@ Retention is set by an administrator policy (migration `0002`): raw `session_eve
 some days after completion (`training_sessions.events_purged_at` records it; scores and digests are
 kept), expired `auth_sessions` and `mfa_challenges` are deleted, and deactivated accounts can be
 anonymised. `audit_events` are never deleted. Details: `docs/security/data-retention.md`.
+
+Since migration `0005`, raw logs are deleted only by the owner-defined functions
+`drikr_purge_session_events` (retention) and `drikr_purge_user_event_logs` (anonymisation). Each
+purge is recorded in **`event_log_purges`** (one row per session: `reason ∈ {retention,
+anonymisation, legacy}`, the retention run for `retention`, time, events deleted). The table is
+append-only; `events_purged_at` can be set once and only when a purge record exists; the API's
+database role can only read it (security finding F-09).

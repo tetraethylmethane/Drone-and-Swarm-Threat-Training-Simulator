@@ -30,6 +30,13 @@ export function AarPage() {
     [sessionId],
   );
   const isTrainee = user?.role === "trainee";
+  const [tab, setTab] = useState("summary");
+  // An evidence link asks the timeline to show one event; `n` makes a repeated click re-focus it.
+  const [focus, setFocus] = useState<{ seq: number; n: number } | null>(null);
+  const showEvent = (seq: number) => {
+    setFocus((f) => ({ seq, n: (f?.n ?? 0) + 1 }));
+    setTab("timeline");
+  };
 
   if (session.loading || result.loading) return <LoadingState rows={8} label="Loading after-action review" />;
   if (session.error || !session.data) return <ErrorState error={session.error} onRetry={session.reload} />;
@@ -81,7 +88,7 @@ export function AarPage() {
         title={`After-action review: ${s.scenario.name}`}
         description={`${s.trainee.display_name} · attempt ${s.attempt_number} · completed ${formatDateTime(s.completed_at)}`}
       />
-      <Tabs defaultValue="summary">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList aria-label="After-action review sections" className="mb-4">
           <TabsTrigger value="summary">Summary</TabsTrigger>
           {detailed ? <TabsTrigger value="tracks">Track decisions</TabsTrigger> : null}
@@ -102,11 +109,16 @@ export function AarPage() {
         </TabsContent>
         {detailed ? (
           <TabsContent value="tracks">
-            <TrackDecisionsSection result={r} />
+            <TrackDecisionsSection result={r} onShowEvent={showEvent} />
           </TabsContent>
         ) : null}
         <TabsContent value="timeline">
-          <TimelineSection sessionId={s.id} trackIds={trackIds} allowGroundTruth={detailed || !isTrainee} />
+          <TimelineSection
+            sessionId={s.id}
+            trackIds={trackIds}
+            allowGroundTruth={detailed || !isTrainee}
+            focus={focus}
+          />
         </TabsContent>
         {detailed ? (
           <TabsContent value="errors">

@@ -73,8 +73,9 @@ The figures above suggest a modest footprint (under 300 MiB of memory for the th
 idle). Requirements should be set after measuring the intended deployment hardware and a realistic
 number of concurrent trainees. A load test on the same laptop (Sprint 10,
 `docs/testing/load-resilience-report.md`) found 30 concurrent trainees within the latency criteria
-in 4 of 5 runs, with little headroom, and 60 without errors but slower. API memory rose to about
-0.9 GiB under load and was not returned when idle. These are development measurements, not
+in 4 of 5 runs, with little headroom, and 60 without errors but slower. API memory peaks at about
+0.75 GiB when a class starts and settles at about 0.3 GiB within 3 hours of continuous use (no leak
+seen over 4 hours). These are development measurements, not
 requirements for deployment hardware.
 
 ## How to validate the position

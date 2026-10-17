@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select
@@ -101,23 +101,27 @@ def create(
     db: Session = Depends(get_db),
     ctx: AppContext = Depends(get_ctx),
 ) -> dict[str, Any]:
-    assignment = None
-    scenario_row = None
-    if body.assignment_id:
-        assignment = db.scalar(select(Assignment).where(Assignment.id == body.assignment_id).with_for_update())
-        if assignment is None:
-            raise not_found("Assignment")
-    else:
-        scenario_row = db.get(Scenario, body.scenario_id)
-    s = session_service.create_session(
-        db,
-        principal.user,
-        assignment=assignment,
-        scenario_row=scenario_row,
-        selection=body.selection,
-        self_guided_enabled=settings_service.self_guided_enabled(db),
-    )
-    db.commit()
+    limit = ctx.settings.max_active_sessions
+    with session_service.creation_slot(db, limit):
+        assignment = None
+        scenario_row = None
+        if body.assignment_id:
+            assignment = db.scalar(select(Assignment).where(Assignment.id == body.assignment_id).with_for_update())
+            if assignment is None:
+                raise not_found("Assignment")
+        else:
+            scenario_row = db.get(Scenario, body.scenario_id)
+        s = session_service.create_session(
+            db,
+            principal.user,
+            assignment=assignment,
+            scenario_row=scenario_row,
+            selection=body.selection,
+            self_guided_enabled=settings_service.self_guided_enabled(db),
+        )
+        db.flush()
+        session_service.enforce_capacity(db, limit)
+        db.commit()
     db.refresh(s)
     return {**_state(s, ctx), "briefing": briefing(s.effective_definition)}
 
@@ -131,6 +135,7 @@ def list_sessions(
     date_from: datetime | None = None,
     date_to: datetime | None = None,
     needs_review: bool | None = None,
+    sort: Literal["newest", "score_asc", "score_desc"] = "newest",
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     principal: Principal = READ,
@@ -141,7 +146,14 @@ def list_sessions(
         principal, trainee_id, scenario_key, status, assignment_id, date_from, date_to, needs_review
     )
     total = db.scalar(select(func.count()).select_from(stmt.subquery())) or 0
-    rows = db.scalars(stmt.order_by(TrainingSession.created_at.desc()).limit(limit).offset(offset)).all()
+    # Sorted before paging, so "lowest score first" is correct across every page (backlog B-07).
+    # Sessions without a score come last; ties are newest first.
+    order: list[Any] = [TrainingSession.created_at.desc()]
+    if sort != "newest":
+        stmt = stmt.outerjoin(ScoreResult, ScoreResult.session_id == TrainingSession.id)
+        by_score = ScoreResult.overall.asc() if sort == "score_asc" else ScoreResult.overall.desc()
+        order = [by_score.nulls_last(), *order]
+    rows = db.scalars(stmt.order_by(*order).limit(limit).offset(offset)).all()
     now = utcnow()
     return page([_state(s, ctx, now) for s in rows], total, limit, offset)
 
@@ -207,6 +219,8 @@ def _transition(db: Session, ctx: AppContext, principal: Principal, session_id: 
             session_service.pause(db, s, now, grace)
     elif op == "resume":
         session_service.resume(db, s, now)
+        db.flush()
+        session_service.enforce_capacity(db, ctx.settings.max_active_sessions)
     elif op == "complete":
         session_service.complete(db, s, now, grace, "trainee_submitted")
     db.commit()
@@ -350,6 +364,7 @@ def timeline(
     track_id: str | None = Query(default=None, pattern=r"^TRK-\d{3}$"),
     limit: int = Query(default=500, ge=1, le=2000),
     offset: int = Query(default=0, ge=0),
+    around_seq: int | None = Query(default=None, ge=0, description="Return the page holding this event"),
     principal: Principal = READ,
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
@@ -368,6 +383,15 @@ def timeline(
     if track_id:
         stmt = stmt.where(SessionEvent.payload["track_id"].astext == track_id)
     total = db.scalar(select(func.count()).select_from(stmt.subquery())) or 0
+    if around_seq is not None:
+        # Open the page that holds this event under the current filters (AAR evidence links, B-06).
+        target = db.scalar(stmt.where(SessionEvent.seq == around_seq).with_only_columns(SessionEvent.t_ms))
+        if target is not None:
+            before = stmt.where(
+                (SessionEvent.t_ms < target) | ((SessionEvent.t_ms == target) & (SessionEvent.seq < around_seq))
+            )
+            position = db.scalar(select(func.count()).select_from(before.subquery())) or 0
+            offset = (position // limit) * limit
     rows = db.scalars(stmt.order_by(SessionEvent.t_ms, SessionEvent.seq).limit(limit).offset(offset)).all()
     out = page([r.as_event() for r in rows], total, limit, offset)
     out["events_purged_at"] = s.events_purged_at.isoformat() if s.events_purged_at else None

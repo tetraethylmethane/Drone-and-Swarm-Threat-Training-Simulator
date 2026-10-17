@@ -1,0 +1,1 @@
+request returned Internal Server Error for API route and version http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.47/containers/drikr-soak-k6/json, check if the server supports the requested API version

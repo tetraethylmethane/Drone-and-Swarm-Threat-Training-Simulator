@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from drikr_api import cpu
-from drikr_api.models import ScoreResult, SessionEvent, TrainingSession
+from drikr_api.models import EventLogPurge, RetentionRun, ScoreResult, SessionEvent, TrainingSession, User
 from drikr_contracts.scenario import Scenario as ScenarioContract
 from drikr_scoring import SCORING_ENGINE_VERSION, score_session
 from drikr_scoring import Rubric as RubricContract
@@ -74,6 +74,29 @@ def assessment_summary(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _purge_record(db: Session, s: TrainingSession) -> dict[str, Any]:
+    """How the session's raw log was purged (migration 0005): by a recorded, non-dry retention run;
+    by anonymisation of an account that is anonymised; or before purges were recorded (legacy).
+    Anything else is not a legitimate purge (security finding F-09)."""
+    rec = db.scalar(select(EventLogPurge).where(EventLogPurge.session_id == s.id))
+    if rec is None:
+        return {"recorded": False, "reason": None}
+    out: dict[str, Any] = {
+        "reason": rec.reason,
+        "purged_at": rec.purged_at.isoformat(),
+        "events_deleted": rec.events_deleted,
+    }
+    if rec.reason == "retention":
+        run = db.get(RetentionRun, rec.retention_run_id) if rec.retention_run_id else None
+        out.update(recorded=run is not None and not run.dry_run, retention_run_id=str(rec.retention_run_id))
+    elif rec.reason == "anonymisation":
+        trainee = db.get(User, s.trainee_id)
+        out["recorded"] = trainee is not None and trainee.anonymised_at is not None
+    else:  # legacy: purged before purges were recorded
+        out["recorded"] = True
+    return out
+
+
 def verify(db: Session, s: TrainingSession) -> dict[str, Any]:
     """Re-derive the timeline and the score from stored inputs and compare digests."""
     scenario = ScenarioContract.model_validate(s.effective_definition)
@@ -94,14 +117,20 @@ def verify(db: Session, s: TrainingSession) -> dict[str, Any]:
     }
     if s.events_purged_at is not None:
         # The raw log was removed under the retention policy: the timeline can still be regenerated
-        # from the stored configuration and seed, but the stored log can no longer be re-scored.
+        # from the stored configuration and seed, but the stored log can no longer be re-scored. The
+        # purge must have been recorded by a real retention run (security finding F-09).
+        purge = _purge_record(db, s)
         report.update(
             stored_log_digest=None,
             stored_log_intact=None,
+            purge_recorded=purge["recorded"],
+            purge=purge,
             score_note=(
                 "The event log was deleted under the data-retention policy; the stored score is retained unchanged."
+                if purge["recorded"]
+                else "The event log is marked as purged, but no retention run recorded the purge."
             ),
-            reproducible=report["timeline_reproduced"],
+            reproducible=bool(report["timeline_reproduced"] and purge["recorded"]),
         )
         return report
     result = db.scalar(select(ScoreResult).where(ScoreResult.session_id == s.id))

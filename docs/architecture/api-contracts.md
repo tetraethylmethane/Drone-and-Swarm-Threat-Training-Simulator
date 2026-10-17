@@ -30,13 +30,13 @@ actions: `packages/contracts/schemas/*.json`.
 | `POST /rubrics/validate`, `POST /rubrics`, `POST /rubrics/key/{key}/versions` | instructor | Rubric versions |
 | `GET/POST /assignments`, `GET /assignments/{id}`, `POST /assignments/{id}/cancel` | instructor; trainees read own | Assignments with progress |
 | `POST /sessions` | trainee | Create an attempt (`assignment_id` or self-guided `scenario_id`, plus `selection`) |
-| `GET /sessions`, `GET /sessions/{id}` | trainee own; instructor, administrator all | Session state |
+| `GET /sessions?…&sort=newest\|score_asc\|score_desc`, `GET /sessions/{id}` | trainee own; instructor, administrator all | Session state. `sort` is applied before paging; unscored sessions come last |
 | `POST /sessions/{id}/start\|pause\|resume\|complete` | owning trainee | Lifecycle (see transitions below) |
 | `GET /sessions/{id}/feed?since_ms=` | owning trainee | Trainee-visible events + state; acts as heartbeat |
 | `POST /sessions/{id}/actions` | owning trainee | Idempotent decision submission |
 | `POST /sessions/{id}/abort` | instructor, administrator | Abort with reason (not scored) |
 | `GET /sessions/{id}/result` | owner (filtered by feedback level), staff | Score result |
-| `GET /sessions/{id}/timeline?category=&track_id=&limit=&offset=` | owner after completion, staff | AAR event log |
+| `GET /sessions/{id}/timeline?category=&track_id=&limit=&offset=&around_seq=` | owner after completion, staff | AAR event log. `around_seq` returns the page holding that event under the same filters (ignored if the event is not visible to the caller) |
 | `POST /sessions/{id}/verify` | instructor, administrator | Reproducibility check |
 | `GET/PUT /sessions/{id}/review` | instructor writes; trainee reads if shared (no private notes) | Instructor review |
 | `GET /analytics/progress\|filters\|difficulty` | staff all; trainee own | Persisted-results analytics |
@@ -56,6 +56,11 @@ actions: `packages/contracts/schemas/*.json`.
 When a signed-in user's role requires MFA and they have not enrolled, every endpoint except
 `/auth/*` returns `403 mfa_enrollment_required`. `GET /sessions/{id}/timeline` adds
 `events_purged_at` when the event log was removed by the retention policy.
+
+**Admission control.** When `DRIKR_MAX_ACTIVE_SESSIONS` is set and that many exercises are active,
+`POST /sessions` and `POST /sessions/{id}/resume` return `503 capacity_reached` with a
+`Retry-After: 30` header and a message for the trainee; nothing is stored. `GET /admin/system`
+reports `capacity: {active_sessions, max_active_sessions}`.
 
 ## Simulation adapter protocol (browser adapter and future Unity client)
 

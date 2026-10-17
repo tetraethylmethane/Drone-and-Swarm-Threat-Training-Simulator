@@ -17,7 +17,7 @@ from drikr_api.models import AuditEvent, RetentionRun, Scenario, SessionEvent, T
 from drikr_api.schemas import RetentionRunBody, SettingsBody
 from drikr_api.security.rbac import Permission
 from drikr_api.serializers import page
-from drikr_api.services import reproducibility_service, retention_service, settings_service
+from drikr_api.services import reproducibility_service, retention_service, session_service, settings_service
 from drikr_contracts import CONTRACTS_VERSION
 from drikr_scoring import SCORING_ENGINE_VERSION
 from drikr_simcore import ENGINE_VERSION
@@ -170,6 +170,10 @@ def system(
             "engine": "drikr_simcore (deterministic Python logical simulation, server-authoritative)",
             "visual_clients": "Unity 6 desktop client (Windows, Linux, macOS) and browser adapter "
             "(React Three Fiber), both presentation-only",
+        },
+        "capacity": {
+            "active_sessions": session_service.active_session_count(db),
+            "max_active_sessions": ctx.settings.max_active_sessions or None,
         },
         "network": {"external_runtime_dependencies": [], "telemetry": "none"},
         "performance": ctx.metrics.summary(),

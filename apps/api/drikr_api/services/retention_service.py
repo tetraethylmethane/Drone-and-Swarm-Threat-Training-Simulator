@@ -22,7 +22,7 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Any
 
-from sqlalchemy import delete, func, or_, select, update
+from sqlalchemy import delete, func, or_, select, text, update
 from sqlalchemy.orm import Session
 
 from drikr_api.audit import append_audit
@@ -111,12 +111,31 @@ def preview(db: Session, policy: RetentionPolicy | None = None, now: datetime | 
     return out
 
 
-def _purge_events(db: Session, session_ids: list[uuid.UUID], now: datetime) -> int:
+def _purge_events(db: Session, run: RetentionRun, session_ids: list[uuid.UUID]) -> tuple[int, int]:
+    """Delete raw event logs through the owner-defined database function (migration 0005).
+
+    The function re-checks eligibility with the database clock, records each purge in the
+    append-only ``event_log_purges`` table and sets ``events_purged_at``; the API role cannot
+    delete events or set that flag itself (security finding F-09). Returns (sessions, events).
+    """
     if not session_ids:
-        return 0
-    deleted = db.execute(delete(SessionEvent).where(SessionEvent.session_id.in_(session_ids))).rowcount or 0
-    db.execute(update(TrainingSession).where(TrainingSession.id.in_(session_ids)).values(events_purged_at=now))
-    return int(deleted)
+        return 0, 0
+    db.flush()  # the function looks up this run in the same transaction
+    row = db.execute(
+        text("SELECT sessions_purged, events_deleted FROM drikr_purge_session_events(:run, :ids)"),
+        {"run": run.id, "ids": session_ids},
+    ).one()
+    return int(row.sessions_purged), int(row.events_deleted)
+
+
+def _purge_user_events(db: Session, user: User) -> int:
+    """Delete the raw event logs of a deactivated trainee's finished sessions for anonymisation,
+    through the owner-defined database function that records each purge (migration 0005)."""
+    db.flush()  # the function checks the deactivated state in this transaction
+    row = db.execute(
+        text("SELECT sessions_purged, events_deleted FROM drikr_purge_user_event_logs(:user)"), {"user": user.id}
+    ).one()
+    return int(row.events_deleted)
 
 
 def anonymise_user(
@@ -151,7 +170,7 @@ def anonymise_user(
     )
     if len(finished) != len(session_ids):
         raise conflict("sessions_in_progress", "The account has unfinished exercise sessions; abort them first")
-    events = _purge_events(db, finished, now)
+    events = _purge_user_events(db, user)
     if session_ids:
         db.execute(
             update(InstructorReview)
@@ -200,7 +219,8 @@ def run(db: Session, actor: User | None, *, dry_run: bool, trigger: str, ip: str
         summary: dict[str, Any] = {}
         cutoff = _event_cutoff(policy, now)
         ids = _sessions_due(db, cutoff) if cutoff else []
-        summary["session_event_logs"] = {"sessions": len(ids), "events_deleted": _purge_events(db, ids, now)}
+        purged, events_deleted = _purge_events(db, record, ids)
+        summary["session_event_logs"] = {"sessions": purged, "events_deleted": events_deleted}
         auth_cutoff = now - timedelta(days=policy.auth_record_days)
         summary["auth_records"] = {
             "sessions_deleted": db.execute(delete(AuthSession).where(_auth_filter(auth_cutoff))).rowcount or 0,

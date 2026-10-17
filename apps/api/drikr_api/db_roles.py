@@ -5,10 +5,10 @@ read and write rows but cannot change the schema, disable triggers, truncate tab
 triggers with `session_replication_role` (all of which need ownership or superuser rights).
 On top of the triggers, privileges are withheld so that, at the database level:
 
-* `audit_events` can only be inserted and read;
-* `score_results` can only be inserted and read;
-* `session_events` can be inserted, read and deleted (the retention policy deletes old event
-  logs) but never updated.
+* `audit_events`, `score_results` and `session_events` can only be inserted and read. Raw event
+  logs are deleted only through `drikr_purge_session_events`, an owner-defined function that
+  checks the retention policy and records every purge (migration 0005, security finding F-09);
+* `event_log_purges` can only be read.
 
 `provision()` is idempotent and runs at every API start, after migrations, so new tables and
 restored databases (restores drop grants) are always covered.
@@ -23,9 +23,11 @@ from sqlalchemy import text
 from sqlalchemy.engine import Connection, make_url
 
 #: Tables whose rows the application never updates or deletes.
-INSERT_ONLY = ("audit_events", "score_results")
-#: Tables whose rows the application never updates (deletion is allowed for retention).
-NO_UPDATE = ("session_events",)
+INSERT_ONLY = ("audit_events", "score_results", "session_events")
+#: Tables the application may only read (written by owner-defined functions).
+READ_ONLY = ("event_log_purges",)
+#: Owner-defined functions the application may call.
+FUNCTIONS = ("drikr_purge_session_events(uuid, uuid[])", "drikr_purge_user_event_logs(uuid)")
 
 _IDENT = re.compile(r"^[a-z_][a-z0-9_]{0,62}$")
 
@@ -71,11 +73,18 @@ def provision(conn: Connection, role: str, password: str) -> dict[str, Any]:
         f"GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {role}",
         f"REVOKE INSERT, UPDATE, DELETE ON alembic_version FROM {role}",
         *(f"REVOKE UPDATE, DELETE ON {t} FROM {role}" for t in INSERT_ONLY),
-        *(f"REVOKE UPDATE ON {t} FROM {role}" for t in NO_UPDATE),
+        *(f"REVOKE INSERT, UPDATE, DELETE ON {t} FROM {role}" for t in READ_ONLY),
+        *(f"GRANT EXECUTE ON FUNCTION {f} TO {role}" for f in FUNCTIONS),
     ]
     for sql in statements:
         conn.execute(text(sql))
-    return {"role": role, "created": not exists, "insert_only": list(INSERT_ONLY), "no_update": list(NO_UPDATE)}
+    return {
+        "role": role,
+        "created": not exists,
+        "insert_only": list(INSERT_ONLY),
+        "read_only": list(READ_ONLY),
+        "functions": list(FUNCTIONS),
+    }
 
 
 def describe_current_role(conn: Connection) -> dict[str, Any]:

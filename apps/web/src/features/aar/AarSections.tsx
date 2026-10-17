@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { axisStyle, EChart } from "@/components/charts/EChart";
 import { Button } from "@/components/ui/button";
@@ -184,7 +184,14 @@ function pathText(item: ResultItem): string {
     .join(" → ");
 }
 
-export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
+export function TrackDecisionsSection({
+  result,
+  onShowEvent,
+}: {
+  result: ScoreResult;
+  /** Opens the event in the Event timeline (backlog B-06). */
+  onShowEvent?: (seq: number) => void;
+}) {
   const items = result.items ?? [];
   const credits = useMemo(() => {
     const m = new Map<string, Record<string, { credit: number; reason: string }>>();
@@ -203,7 +210,7 @@ export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
     <Panel>
       <PanelHeader
         title="Track decisions and scoring outcomes"
-        description="Ground truth is shown after the exercise. Rubric path shows how the expected response was derived. Evidence lists the recorded events each assessment is based on; find them by ID in the Event timeline."
+        description="Ground truth is shown after the exercise. Rubric path shows how the expected response was derived. Evidence lists the recorded events each assessment is based on; select one to open it in the Event timeline."
       />
       <Table>
         <THead>
@@ -287,8 +294,19 @@ export function TrackDecisionsSection({ result }: { result: ScoreResult }) {
                     <ul className="space-y-0.5">
                       {it.evidence_events.map((ev) => (
                         <li key={ev.seq}>
-                          <span className="font-medium text-ink">{ev.event_id || `#${ev.seq}`}</span> at{" "}
-                          {formatClock((ev.t_s ?? 0) * 1000)}:{" "}
+                          {onShowEvent ? (
+                            <button
+                              type="button"
+                              className="font-medium text-brand underline-offset-2 hover:underline focus-visible:underline"
+                              aria-label={`Show event ${ev.event_id || `#${ev.seq}`} in the event timeline`}
+                              onClick={() => onShowEvent(ev.seq)}
+                            >
+                              {ev.event_id || `#${ev.seq}`}
+                            </button>
+                          ) : (
+                            <span className="font-medium text-ink">{ev.event_id || `#${ev.seq}`}</span>
+                          )}{" "}
+                          at {formatClock((ev.t_s ?? 0) * 1000)}:{" "}
                           {ev.kind === "classification"
                             ? `classified ${label(CLASSIFICATION_LABELS, ev.value)}${ev.confidence ? ` (${label(CONFIDENCE_LABELS, ev.confidence)})` : ""}`
                             : ev.kind === "response"
@@ -351,22 +369,41 @@ export function TimelineSection({
   sessionId,
   trackIds,
   allowGroundTruth,
+  focus,
 }: {
   sessionId: string;
   trackIds: string[];
   allowGroundTruth: boolean;
+  /** An evidence event to show: the server returns the page that holds it (backlog B-06). */
+  focus?: { seq: number; n: number } | null;
 }) {
   const [category, setCategory] = useState("decisions");
   const [track, setTrack] = useState("");
   const [offset, setOffset] = useState(0);
+  const [aroundSeq, setAroundSeq] = useState<number | null>(null);
+  useEffect(() => {
+    if (!focus) return;
+    setCategory("decisions"); // evidence events are decisions and confirmations
+    setTrack("");
+    setAroundSeq(focus.seq);
+  }, [focus]);
   const st = useAsync(
     (sig) =>
       api.get<Page<SimEvent> & { events_purged_at?: string | null }>(
-        `/sessions/${sessionId}/timeline${qs({ category, track_id: track, limit: PAGE, offset })}`,
+        `/sessions/${sessionId}/timeline${qs({ category, track_id: track, limit: PAGE, offset, around_seq: aroundSeq ?? "" })}`,
         sig,
       ),
-    [sessionId, category, track, offset],
+    [sessionId, category, track, offset, aroundSeq, focus?.n],
   );
+  const shownOffset = st.data?.offset ?? offset;
+  const focusedRow = useRef<HTMLTableRowElement | null>(null);
+  useEffect(() => {
+    focusedRow.current?.scrollIntoView?.({ block: "center" });
+  }, [st.data]);
+  const browse = (next: number) => {
+    setAroundSeq(null);
+    setOffset(Math.max(0, next));
+  };
   return (
     <Panel>
       <PanelHeader
@@ -379,7 +416,7 @@ export function TimelineSection({
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
-                  setOffset(0);
+                  browse(0);
                 }}
               >
                 <option value="decisions">Decisions and confirmations</option>
@@ -394,7 +431,7 @@ export function TimelineSection({
                 value={track}
                 onChange={(e) => {
                   setTrack(e.target.value);
-                  setOffset(0);
+                  browse(0);
                 }}
               >
                 <option value="">All tracks</option>
@@ -433,7 +470,12 @@ export function TimelineSection({
             </THead>
             <TBody>
               {st.data.items.map((e) => (
-                <TR key={e.event_id}>
+                <TR
+                  key={e.event_id}
+                  ref={e.seq === aroundSeq ? focusedRow : undefined}
+                  aria-current={e.seq === aroundSeq ? "true" : undefined}
+                  className={e.seq === aroundSeq ? "bg-brand/10" : undefined}
+                >
                   <TD className="tabular whitespace-nowrap text-xs">
                     {formatClock(e.t_ms)}.{String(Math.floor((e.t_ms % 1000) / 100))}
                   </TD>
@@ -451,22 +493,22 @@ export function TimelineSection({
           </Table>
           <div className="flex items-center justify-between border-t border-border px-4 py-2 text-xs text-ink-muted">
             <span>
-              {offset + 1}–{Math.min(offset + PAGE, st.data.total)} of {st.data.total}
+              {shownOffset + 1}–{Math.min(shownOffset + PAGE, st.data.total)} of {st.data.total}
             </span>
             <div className="flex gap-2">
               <Button
                 size="sm"
                 variant="secondary"
-                disabled={offset === 0}
-                onClick={() => setOffset((o) => Math.max(0, o - PAGE))}
+                disabled={shownOffset === 0}
+                onClick={() => browse(shownOffset - PAGE)}
               >
                 Previous
               </Button>
               <Button
                 size="sm"
                 variant="secondary"
-                disabled={offset + PAGE >= st.data.total}
-                onClick={() => setOffset((o) => o + PAGE)}
+                disabled={shownOffset + PAGE >= st.data.total}
+                onClick={() => browse(shownOffset + PAGE)}
               >
                 Next
               </Button>

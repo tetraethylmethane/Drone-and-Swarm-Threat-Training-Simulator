@@ -80,6 +80,12 @@ hash from each backup in separate storage.
 Versions of every component, database latency and size, record counts, audit-chain status, and a
 confirmation that the system has no external runtime dependencies or telemetry.
 
+* **Capacity**: exercises active now and the configured maximum (`DRIKR_MAX_ACTIVE_SESSIONS` in
+  `.env`; restart the API to change it). Above the maximum, trainees see "The training server is
+  running its maximum of N exercises. Try again in a minute." Set it **below** the number of
+  trainees that met every criterion in a load test on this server
+  (docs/operations/operational-readiness.md §3); 0 means no limit.
+
 * **Measured performance**: request counts and server-side median, 95th-percentile and slowest
   times per endpoint, measured by the running API since it last started. Only route templates are
   kept, never IDs or content.

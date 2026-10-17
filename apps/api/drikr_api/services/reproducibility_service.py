@@ -19,6 +19,8 @@ from drikr_api.services import scoring_service
 
 
 def _reason(r: dict[str, Any]) -> str:
+    if r.get("events_purged_at") and not r.get("purge_recorded"):
+        return "purge_unrecorded"
     if not r["timeline_reproduced"]:
         return "timeline_differs"
     if r.get("stored_log_intact") is False:

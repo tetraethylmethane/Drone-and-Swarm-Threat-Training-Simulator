@@ -159,7 +159,13 @@ const PAGE = 25;
 
 export function SessionsPage() {
   const filters = useAsync((sig) => api.get<Filters>("/analytics/filters", sig), []);
-  const [f, setF] = useState({ trainee_id: "", scenario_key: "", status: "", needs_review: "" });
+  const [f, setF] = useState({
+    trainee_id: "",
+    scenario_key: "",
+    status: "",
+    needs_review: "",
+    sort: "newest",
+  });
   const [offset, setOffset] = useState(0);
   const query = qs({ ...f, limit: PAGE, offset });
   const st = useAsync((sig) => api.get<Page<SessionState>>(`/sessions${query}`, sig), [query]);
@@ -197,7 +203,7 @@ export function SessionsPage() {
         </Alert>
       ) : null}
       <Panel>
-        <div className="grid gap-3 border-b border-border px-4 py-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 border-b border-border px-4 py-3 sm:grid-cols-2 lg:grid-cols-5">
           <Field label="Trainee">
             <Select value={f.trainee_id} onChange={(e) => set("trainee_id", e.target.value)}>
               <option value="">All trainees</option>
@@ -233,6 +239,14 @@ export function SessionsPage() {
               <option value="">Any</option>
               <option value="true">Awaiting review</option>
               <option value="false">Reviewed</option>
+            </Select>
+          </Field>
+          <Field label="Sort">
+            {/* Sorted by the server before paging, so the order holds across pages. */}
+            <Select value={f.sort} onChange={(e) => set("sort", e.target.value)}>
+              <option value="newest">Newest first</option>
+              <option value="score_asc">Lowest score first</option>
+              <option value="score_desc">Highest score first</option>
             </Select>
           </Field>
         </div>

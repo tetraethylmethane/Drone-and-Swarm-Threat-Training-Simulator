@@ -35,6 +35,7 @@ services:
       DRIKR_LOG_LEVEL: ${LT_LOG_LEVEL:-WARNING}
       DRIKR_DEMO_PASSWORD: ${LT_USER_PASSWORD:?run tests/load/run.sh}
       DRIKR_CPU_WORKERS: ${LT_CPU_WORKERS:-2}
+      DRIKR_MAX_ACTIVE_SESSIONS: ${LT_MAX_ACTIVE_SESSIONS:-0}
     depends_on:
       db: {condition: service_healthy}
     networks: [backend]

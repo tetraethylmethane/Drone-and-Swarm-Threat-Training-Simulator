@@ -18,8 +18,8 @@ Nothing here is a certification, accreditation or "military-grade" claim.
 |---|---|---|---|
 | D1 | The *Perimeter basics* defect is fixed and regression-tested | **Accepted** (synthetic evidence) | perimeter-basics-report.md: ICC 0.846–0.871 for v2 against 0.721–0.785 for v1 (5 samples); the repeated-run test (8 runs, 4 interrupted) passes |
 | D2 | The authoritative simulation's reproducibility guarantees are documented and tested | **Accepted** | ADR-001 (re-verified 2026-10-16); reproducibility-report.md; tests in the reproducibility suite pass; stored-data reports reproduce 100% (section 3) |
-| D3 | Load and recovery behaviour measured against explicit criteria | **Partially verified** | load-resilience-report.md: criteria fixed before the runs. On one laptop: latency criteria met in 4 of 5 design-load runs (little headroom); A3, A5, A6 and A8 met (955 of 955 sessions reproduce; API kill, database outage and an unplanned host restart recovered); **A7 memory not met** (levels off at about 0.9 GiB, not returned when idle). Not measured on deployment hardware (B-10) |
-| D4 | Security findings triaged; no unresolved critical issue concealed | **Accepted** | security-findings.md: F-01 (High) and F-02, F-03, F-04 (Medium) fixed with tests; F-09 (Low) open with remediation; no Critical findings; residual risks R1–R9 recorded. Internal review only (R8) |
+| D3 | Load and recovery behaviour measured against explicit criteria | **Partially verified** | load-resilience-report.md: criteria fixed before the runs. On one laptop: latency criteria met in 4 of 5 design-load runs (little headroom); A3, A5, A6, A8 met (955 of 955 sessions reproduce; recovery from API kill, database outage, unplanned host restart). Admission control (B-01) exact; protects in-exercise latency only with headroom (5.8). Soak: no memory leak over 4 h (5.9); 8 h and post-soak record checks not completed (Docker failure, B-18). Not measured on deployment hardware (B-10) |
+| D4 | Security findings triaged; no unresolved critical issue concealed | **Accepted** | security-findings.md: F-01 (High) and F-02 to F-04, F-09 fixed with tests; no Critical findings; residual risks R1–R9 recorded. Internal review only (R8) |
 | D5 | Instructor usability evaluated honestly; outstanding work recorded | **Blocked** (participants and approval) | instructor-usability-protocol.md: protocol complete; developer walkthrough only; U-01 fixed with tests; no participant data |
 | D6 | Adaptive difficulty evaluated honestly | **Partially verified** | adaptive-difficulty.md: criteria fixed in advance; C1–C3 met; **C4 and C5 not met by any candidate**; tests pass |
 | D7 | Human training study completed or marked pending with a protocol | **Blocked**, marked pending | training-effectiveness-study-protocol.md §10: no participants; ethics approval not sought |
@@ -30,14 +30,14 @@ Nothing here is a certification, accreditation or "military-grade" claim.
 
 | Suite | Result | Notes |
 |---|---|---|
-| Python unit, reproducibility, integration (`pytest`, PostgreSQL 17.5) | **328 passed, 0 failed, 0 skipped** (2026-10-17, 361 s, final code) | Plus `test_dev_scripts.py` (D-01), added after that run: 1 passed |
+| Python unit, reproducibility, integration (`pytest`, PostgreSQL 17.5) | **344 passed, 0 failed, 0 skipped** (2026-10-17 15:12 UTC, final code) | Includes the post-sprint tests: purge integrity (6), admission control (6), sorting (1), evidence links (2), dev script (1) |
 | Ruff lint and format; mypy strict (67 files) | Clean | 2026-10-16, final code |
-| Web: ESLint, Prettier, `tsc`, Vitest, production build | **Clean; 40 passed** (7 files), 2026-10-17 | |
-| E2E (Playwright 1.63, Chromium, dev stack) | **24 passed, 1 skipped** (opt-in screenshot capture), 2026-10-17 | The first run failed one test (stale v1 label, fixed); the counts are from the complete re-run |
-| Unity EditMode (6000.3.26f1, batch mode) | **18 passed, 0 failed, 1 skipped**, 2026-10-17 | The live protocol test ran against the isolated load-test stack (final image). The skipped test, `LiveHttpsWithPinnedCa`, would create a session in the operator's main deployment, so it was not enabled; the offline certificate-pinning tests passed |
-| Load acceptance (30 ×2, 60, resilience) | A1–A6, A8 met | load-resilience-report.md section 5 |
-| Dependency audits; gitleaks | Clean (gitleaks re-run 2026-10-17 over all 169 uncommitted files) | security-findings.md 3.1 |
-| Trivy image scan (0.66.0) | **0** fixable HIGH/CRITICAL in the API and web images that were load-tested | postgres image not scanned (O12) |
+| Web: ESLint, Prettier, `tsc`, Vitest, production build | **Clean; 43 passed** (9 files), 2026-10-17, final code | |
+| E2E (Playwright 1.63, Chromium, dev stack) | **24 passed, 1 skipped** (opt-in screenshots), 2026-10-17 20:48 IST, final code | A run 20 minutes earlier was **discarded**: dev servers left over from the morning were still holding the ports, so it tested a stale API. The servers were stopped by process id, restarted, and checked to be running current code before the counted run |
+| Unity EditMode (6000.3.26f1, batch mode) | **18 passed, 0 failed, 1 skipped**, 2026-10-17 morning | Not re-run after the post-sprint changes: its live test needs the Docker load-test stack (Docker unavailable, B-18). The protocol is unchanged except that creation and resume may now return `503 capacity_reached`, which the client already shows as a message |
+| Load acceptance (30 ×2, 60, resilience; admission control; soak) | A1–A6, A8 met; B-01 partly met; soak 4 h of 8 | load-resilience-report.md sections 5, 5.8, 5.9 |
+| Dependency audits; gitleaks | Clean (2026-10-17 morning, gitleaks over all 169 uncommitted files) | **Not re-run on the post-sprint changes**: the gitleaks image needs Docker (B-18). The new files contain only test-database placeholder passwords |
+| Trivy image scan (0.66.0) | **0** fixable HIGH/CRITICAL in the morning images | **Not re-run on the final image** (`2f1d9cee7379`; Docker unavailable). Base images and dependencies are unchanged since the scan |
 | Backup → verify → restore with the least-privilege role | **Verified** 2026-10-17 | security-findings.md 3.3 |
 
 ## 3. Data integrity

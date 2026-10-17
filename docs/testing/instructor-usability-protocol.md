@@ -79,11 +79,12 @@ heuristics and the documented instructor workflows. Findings:
 | ID | Task | Finding | Severity (estimate) | Status |
 |---|---|---|---|---|
 | U-01 | T9 | Instructors could not see why an adaptive assignment's level changed, because the adjustment history was shown only to the trainee, and they could not override the level from the interface (the override existed only in the API) | 4 (the task was impossible in the UI) | **Fixed**: a *Difficulty* page per adaptive assignment, linked from **Assignments**, with history, reason, confidence, the triggering session and a one-step override that requires a reason. Regression tests: `apps/web/src/features/instructor/AssignmentDifficulty.test.tsx` and `tests/integration/test_adaptive_override.py` |
-| U-02 | T6 | The evidence column shows event ids; matching them to the timeline needs the Event timeline tab and a search by id | 2 | Open (backlog B-06) |
-| U-03 | T5 | No sort by score on the sessions list; finding the lowest score needs Analytics or a CSV export | 2 | Open (backlog B-07) |
+| U-02 | T6 | The evidence column shows event ids; matching them to the timeline needs the Event timeline tab and a search by id | 2 | **Fixed** 2026-10-17 (B-06): evidence ids open the event in the timeline. Participant sessions will test the fixed version |
+| U-03 | T5 | No sort by score on the sessions list; finding the lowest score needs Analytics or a CSV export | 2 | **Fixed** 2026-10-17 (B-07): sort by score. Participant sessions will test the fixed version |
 
-Only U-01 was a defect with a clear expected behaviour, so only U-01 was changed. U-02 and U-03 are
-hypotheses for the participant sessions to confirm or reject.
+U-01 was a defect with a clear expected behaviour and was fixed first. U-02 and U-03 were then
+fixed as low-risk improvements (2026-10-17). Whether any of these mattered to instructors is for
+the participant sessions to show; they are not evidence of usability.
 
 ## 7. Status
 

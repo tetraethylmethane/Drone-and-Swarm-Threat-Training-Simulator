@@ -35,6 +35,9 @@ const completed = new Counter("drikr_sessions_completed");
 const scored = new Counter("drikr_sessions_scored");
 const resumed = new Counter("drikr_sessions_resumed");
 const inconsistent = new Counter("drikr_inconsistent_results");
+// Admission control (B-01): a refusal is the server protecting admitted trainees, not an error.
+const refused = new Counter("drikr_refused_at_capacity");
+const refusedMs = new Trend("drikr_refused_ms", true);
 
 let token = null;
 let scenarioId = null;
@@ -45,8 +48,13 @@ function headers() {
 
 function req(method, path, body, trend) {
   const r = http.request(method, `${BASE}${path}`, body === undefined ? null : JSON.stringify(body), headers());
-  failed.add(r.status === 0 || r.status >= 500);
-  if (trend) trend.add(r.timings.duration);
+  const atCapacity = r.status === 503 && String(r.body).includes('"capacity_reached"');
+  if (atCapacity) {
+    refused.add(1);
+    refusedMs.add(r.timings.duration);
+  }
+  failed.add(r.status === 0 || (r.status >= 500 && !atCapacity));
+  if (trend && !atCapacity) trend.add(r.timings.duration);
   return r;
 }
 
@@ -91,6 +99,10 @@ export default function () {
     finishOpenSessions();
     return;
   }
+  if (created.status === 503) {
+    sleep(10); // at capacity: wait as a trainee would, then try again
+    return;
+  }
   if (!check(created, { "session created": (r) => r.status === 201 })) {
     sleep(2);
     return;
@@ -109,7 +121,7 @@ export default function () {
     since = body.state.sim_time_ms;
     if (body.state.status === "paused") {
       resumed.add(1);
-      req("POST", `/sessions/${sid}/resume`);
+      if (req("POST", `/sessions/${sid}/resume`).status === 503) sleep(5);
       continue;
     }
     for (const e of body.events) {

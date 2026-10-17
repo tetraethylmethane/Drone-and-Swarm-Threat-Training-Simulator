@@ -43,13 +43,19 @@ described as certified, accredited or military-grade. See *Evidence required for
   transactions with row locks (`SELECT … FOR UPDATE`) on sessions.
 * Immutable, digested scenario and rubric versions; digests on timelines, score inputs and results.
 * Database triggers (migration `0004`) make `session_events` append-only (no UPDATE) and
-  `score_results` immutable (no UPDATE or DELETE) for every role. Deleting raw event logs is still
-  possible, because the retention policy purges them.
+  `score_results` immutable (no UPDATE or DELETE) for every role.
+* **Recorded purges (migration `0005`).** Raw event logs are deleted only by the owner-defined
+  functions `drikr_purge_session_events` (retention: finished sessions older than a real retention
+  run's cutoff, minimum 30 days, database clock) and `drikr_purge_user_event_logs` (anonymisation of
+  a deactivated account). Every purge is recorded in the append-only `event_log_purges` table;
+  `events_purged_at` can be set once and only with a record; verification accepts a purge only with
+  a matching record.
 * **Least-privilege database role (Sprint 10).** The API connects as `drikr_app`, which is created
   and re-granted on every start by `drikr-api provision-app-role` using the owner connection
   (`DRIKR_MIGRATION_DATABASE_URL`). It has LOGIN only: no superuser, CREATEDB, CREATEROLE,
   REPLICATION or BYPASSRLS. It has no rights on the schema or `alembic_version`; only INSERT and
-  SELECT on `audit_events` and `score_results`; and no UPDATE on `session_events`. **System
+  SELECT on `audit_events`, `score_results` and `session_events`; only SELECT on `event_log_purges`;
+  and EXECUTE on the two purge functions. **System
   health** shows the connected role and whether it is least-privilege. Setting `DRIKR_DATABASE_URL`
   to the owner URL keeps the old behaviour, and System health then reports it.
 * Tamper-evident audit chain (ADR-008) with append-only trigger.
@@ -93,8 +99,10 @@ events go to the audit table. Passwords, tokens, cookies and request bodies are 
   generation runs in worker processes (`cpu_workers`, default 2).
 * Measured on one development laptop (docs/testing/load-resilience-report.md): 30 concurrent
   trainees met the latency criteria in 4 of 5 runs (little headroom); 60 ran without errors but
-  slower. These are not deployment guarantees. There is **no admission control**, so more trainees than the host can serve
-  slows everyone down.
+  slower. These are not deployment guarantees.
+* **Admission control** (`DRIKR_MAX_ACTIVE_SESSIONS`): above the limit, new and resumed exercises are
+  refused at once with `503 capacity_reached` and `Retry-After: 30`. Set it **below** the capacity
+  measured on the deployment host (load report 5.8).
 * An exercise whose client stops polling for 15 s is paused, not lost. After an API restart,
   sessions continue from the database.
 

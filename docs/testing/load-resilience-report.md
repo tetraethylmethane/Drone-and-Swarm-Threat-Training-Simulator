@@ -11,7 +11,7 @@ made before any criteria existed and are not judged against them.
 | A3 server-caused pauses | Met (0 in every acceptance run) |
 | A5 errors | Met (0 at 30 and at 60) |
 | A6 consistency and reproducibility | Met (955 of 955 sessions reproduce; 0 mismatches) |
-| A7 memory | **Not met** (+21% from run 1 to run 2; levels off at about 0.9 GiB; below 2 GiB) |
+| A7 memory | **Not met as defined** (+21% between 5-minute runs). The soak (5.9) shows why: the class-start peak (742 MiB) is released over about 3 h and memory then holds at about 295 MiB. **No leak over the 4 h observed**; 8 h not completed |
 | A8 recovery | Met (API kill, database outage, unplanned host restart) |
 
 **All results here are local development results** on one laptop (section 3). They are not a
@@ -305,6 +305,104 @@ host restart), the whole database was checked:
 This covers every session from the acceptance, stress, resilience and memory runs, the two outages
 and the host restart.
 
+### 5.8 Admission control (backlog B-01), criteria fixed 2026-10-17 15:00 IST before the run
+
+Configuration: `DRIKR_MAX_ACTIVE_SESSIONS=30` (the design load); 60 trainees for 5 min; image with
+migration `0005` and admission control. A refused trainee waits 10 s and tries again, as the web
+and Unity clients let a trainee do.
+
+| ID | Criterion | Threshold |
+|---|---|---|
+| B1-1 | Admitted trainees: feed, decision p95 | ≤ 1,000 ms each (A1, A2) |
+| B1-2 | Admitted trainees: create session and finish p95 | ≤ 10 s (A4) |
+| B1-3 | Errors and timeouts (refusals excluded) | 0 |
+| B1-4 | Refusals: `503 capacity_reached` p95 | ≤ 1,000 ms |
+| B1-5 | Active sessions never above the limit | API role connections and session counts consistent; every session completed and reproducible; audit chain valid |
+| B1-6 | Server-caused pauses among admitted trainees | 0 |
+
+**Run 1 (`load-60vu-admission`, image `406ecb756978`): failed, defect L-05.**
+
+| Criterion | Measured | |
+|---|---|---|
+| B1-1 feed / decision p95 | 2,620 / 2,875 ms | ❌ |
+| B1-2 create / finish p95 | 11.9 / 11.4 s | ❌ |
+| B1-3 errors | 0 of 4,627 | ✅ |
+| B1-4 refusal p95 | 11.7 s (592 refusals) | ❌ |
+| B1-5 limit held | max 30 active in 220 samples; 90 created, completed and scored; 0 open; reproducible; audit valid | ✅ |
+| B1-6 server-caused pauses | 0 | ✅ |
+
+The limit held, but it did not protect the admitted trainees: API CPU averaged 237% against about
+100% in the uncapped 30-trainee runs. See L-05.
+
+**Runs 2 and 3 (after the first and second fix for L-05) and an additional configuration with
+headroom.** Same 60 trainees for 5 min each. Images are from the working tree at each step (hashes
+of `session_service.py` checked inside each image).
+
+| Criterion | Run 2: cap 30, pre-check | Run 3: cap 30, in-progress slots | Additional: **cap 20**, in-progress slots |
+|---|---|---|---|
+| B1-1 feed / decision p95 (≤ 1,000 ms) | 1,367 / 1,559 ❌ | 1,794 / 2,092 ❌ | **818 / 732 ✅** |
+| Feed / decision median | 225 / 553 | 624 / 1,057 | 98 / 131 |
+| B1-2 create / finish p95 (≤ 10 s) | 12.2 / 13.0 s ❌ | 15.3 / 6.2 s ❌ | **11.5 ❌ / 5.2 s ✅** |
+| B1-3 errors | 0 of 7,280 ✅ | 0 of 6,179 ✅ | 0 of 6,703 ✅ |
+| B1-4 refusal p95 (≤ 1,000 ms), median | 7,750 ❌, 219 | 2,412 ❌, 753 | **1,481 ❌, 162** |
+| Refusals | 751 | 787 | 1,131 |
+| B1-5 limit held; records | max 30 (221 samples); 90 of 90 scored; 0 open; 500 of 500 reproducible; audit valid ✅ | max 30 (263 samples); same ✅ | max **20** (243 samples); 67 of 67; 500 of 500; ✅ |
+| B1-6 server-caused pauses | 0 ✅ | 0 ✅ | 0 ✅ |
+| API CPU mean | 131% | 136% | 90% |
+
+**Verdict on B-01: implemented; criteria partly met.**
+
+- The limit is **exact**: active sessions never exceeded the limit in any run, no error occurred,
+  and every record stayed consistent and reproducible.
+- With the limit at the measured capacity (30 on this laptop), admitted trainees were **not**
+  protected: their latency failed B1-1 and B1-2 in all three runs. The 30-trainee runs without a
+  limit (section 5.1, 5.3) showed that 30 trainees alone sit at the edge of capacity here, with feed
+  p95 from 498 to 1,977 ms between identical runs. The extra 30 clients, each signing in (Argon2 is
+  costly by design) and retrying every 10 s, are enough to push past it. This variation between runs
+  is as large as the effect, so the three cap-30 runs cannot be ranked against each other.
+- With **headroom** (limit 20), the in-exercise latency that affects scoring met the criteria
+  (feed p95 818 ms, decisions 732 ms). The one-off waits at a synchronised start still did not:
+  session creation p95 11.5 s and refusal p95 1.5 s. Both occur in the opening burst, when 60
+  sign-ins and 20 generations coincide; medians were 4.0 s and 162 ms.
+- **Operational rule:** set `DRIKR_MAX_ACTIVE_SESSIONS` **below** the largest load that met all
+  criteria on the deployment host (operational-readiness.md §3), not equal to it.
+- Remaining: the synchronised-start burst (B-17: stagger starts in class, more generation workers,
+  or queueing sign-ins).
+
+### 5.9 Soak test (backlog B-03), 2026-10-17
+
+`bash tests/load/soak.sh 8 30 300`: 30 trainees continuously, with the operational configuration
+(`DRIKR_MAX_ACTIVE_SESSIONS=30`, image `2f1d9cee7379`), sampling every Python process's resident
+memory in the API container every 5 min (`tests/load/results/2026-10-17/soak-30vu-8h-rss.csv`). A
+first start at 10:22 UTC was stopped after 1 minute because the sampler wrote no rows (a `grep`
+binary-mode bug, fixed); its files are in `discarded/`.
+
+**Outcome: 3 h 58 min of the planned 8 h.** The Docker daemon stopped responding at 14:20 UTC,
+the third such failure during a sustained run on this laptop (L-04). Afterwards the WSL virtual
+machine could not be shut down without administrator rights, so the post-run record checks
+(session states, full reproducibility, audit chain) **could not be run**. The sessions remain in the
+load-test volume and can be checked after the host is restarted. The memory series up to 14:16 UTC
+is complete: 92 samples, no gaps.
+
+| Time (UTC) | API process | Generation workers |
+|---|---|---|
+| 10:23 class start | 678 MiB | 47, 47 MiB |
+| 10:42 peak | **742 MiB** | 47, 47 |
+| 11:23 | 632 | |
+| 12:04 | 496 | |
+| 12:44 | 401 | |
+| 13:25 | 311 | |
+| 13:46–14:16 (last 30 min) | **292–295 MiB** | 43, 43 |
+
+**Verdict on B-03 for the period observed: no leak.** Under unchanged load the API process
+returned 450 MiB of the class-start peak over about three hours and then held steady at about
+295 MiB. The rise reported in section 5.3 was this peak: those runs lasted 5 minutes and ended before
+the memory was released, so A7 as defined (run-to-run peak growth over short runs) measured the
+start burst, not a leak. The peak comes from concurrent session creation (each generated timeline
+of about 3,700 events passes through the API process) and is now bounded by admission control.
+Not covered: the second half of a training day; several class starts in one day; hosts with less
+memory.
+
 ## 6. Defects found
 
 ### L-01 Connection-pool exhaustion at 10 concurrent trainees (fixed)
@@ -361,12 +459,37 @@ and the host restart.
 - **Fix:** only `200` responses count as accepted, and any inconsistency now logs the session id
   and track ids for tracing. Acceptance runs: 0.
 
-### L-04 The resource sampler and runs stalled during a Docker CLI hang (environment)
+### L-04 Docker Desktop failures during sustained runs (environment)
 
-The Docker daemon stopped responding during the afternoon of 2026-10-16. Two runs were affected and
+The Docker daemon stopped responding three times, each during a sustained load run on this laptop:
+on 2026-10-16 (afternoon and evening; the host also restarted overnight) and on 2026-10-17 at 14:20
+UTC, 4 hours into the soak, after which the WSL virtual machine could not be shut down without
+administrator rights. It is not known whether the cause is the laptop (Docker Desktop on WSL 2,
+7.6 GiB for containers), the load generator running on the same host, or the system under test.
+The target deployment host should be checked with the soak test (operational-readiness.md §3). On
+2026-10-16, two runs were affected and
 are excluded (section 4.1). Docker Desktop was restarted. The harness cannot detect this itself.
 The report treats any run with a sampling gap, or a run that outlasts its configured duration, as
 invalid.
+
+### L-05 Refused sessions did the full generation work before being refused (fixed)
+
+- **Found by:** the admission-control acceptance run (5.8, run 1).
+- **Root cause:** to keep timeline generation outside the capacity lock, the check ran after the
+  session had been generated and its about 3,700 events written, and then the transaction was rolled
+  back. Each of the 592 refusals cost as much as an admitted session.
+- **First fix (insufficient):** a database count before generation. Run 2 improved (API CPU 131%)
+  but still failed B1-1, B1-2 and B1-4: at a synchronised start all 60 requests counted zero
+  *committed* sessions, so all 60 still generated timelines and 30 were refused afterwards.
+- **Fix:** `session_service.creation_slot` holds a place for each creation in progress, from before
+  generation until commit, and refuses when committed plus in-progress sessions reach the limit.
+  The supported deployment is one API process, so this in-process count is exact. The locked
+  database check (`enforce_capacity`) remains the guarantee across processes.
+- **Regression tests** (`tests/integration/test_admission_control.py`):
+  `test_a_refused_request_does_no_generation_work` (failed before: three refusals, three
+  generations) and `test_a_simultaneous_burst_generates_only_what_can_be_admitted` (failed before:
+  two simultaneous requests, two generations). `test_concurrent_requests_cannot_both_take_the_last_place`
+  bypasses the in-process slot and fails with `[201, 201]` when the database lock is removed.
 
 ### Observations for the backlog (not defects in this sprint)
 
@@ -376,7 +499,7 @@ invalid.
   an overloaded server it is not. Candidate remedies are to record the client's receive and send
   times as untrusted evidence for the AAR, or to have the API refuse new sessions above a measured
   capacity.
-- **O-L2 No admission control.** Nothing stops a 100th trainee from degrading the other 99
+- **O-L2 No admission control** (addressed after Sprint 10 by B-01, section 5.8). Nothing stopped a 100th trainee from degrading the other 99
   (section 4, 100 VU). A configurable cap on concurrent running sessions would make overload
   explicit instead of slow.
 - **O-L3 Capacity is per host and per process.** The supported deployment is one API process (rate

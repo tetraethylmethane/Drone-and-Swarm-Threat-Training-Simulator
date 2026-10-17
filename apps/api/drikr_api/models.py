@@ -468,3 +468,30 @@ class RetentionRun(Base):
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     __table_args__ = (CheckConstraint("trigger IN ('admin', 'cli')", name="trigger_valid"),)
+
+
+class EventLogPurge(Base):
+    """Append-only record of a raw event log deleted under the retention policy (migration 0005).
+
+    Written only by the database functions ``drikr_purge_session_events`` (reason ``retention``,
+    with the run) and ``drikr_purge_user_event_logs`` (``anonymisation``); ``legacy`` marks sessions
+    purged before the record existed. The API role can only read it.
+    """
+
+    __tablename__ = "event_log_purges"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True), ForeignKey("training_sessions.id", ondelete="RESTRICT"), primary_key=True
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    retention_run_id: Mapped[uuid.UUID | None] = mapped_column(
+        PGUUID(as_uuid=True), ForeignKey("retention_runs.id", ondelete="RESTRICT")
+    )
+    purged_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    events_deleted: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    __table_args__ = (
+        CheckConstraint("events_deleted >= 0", name="events_deleted_nonnegative"),
+        CheckConstraint("reason IN ('retention', 'anonymisation', 'legacy')", name="reason_valid"),
+        CheckConstraint("(reason = 'retention') = (retention_run_id IS NOT NULL)", name="run_matches_reason"),
+    )

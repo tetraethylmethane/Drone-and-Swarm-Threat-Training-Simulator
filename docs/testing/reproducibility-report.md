@@ -32,6 +32,7 @@ outcomes and error counts (ADR-001, "Limits of deterministic replay").
 | **Transactions and rollback**: a partly invalid action writes nothing; a failure midway through a request rolls back | `test_integrity.py::test_partially_invalid_action_writes_nothing`, `…::test_failure_midway_through_a_request_rolls_back` | Pass |
 | **Restart recovery**: a new API process continues a running session from the database, completes and verifies it | `test_integrity.py::test_session_continues_after_the_api_restarts`; the container restart in the resilience run (docs/testing/load-resilience-report.md) | Pass |
 | Least-privilege database role can still run the whole workflow, including verification | `tests/integration/test_db_role.py::test_full_workflow_runs_as_the_app_role` | Pass |
+| **Purged event logs** count as reproducible only with a recorded purge from a real retention run or an anonymisation; the API role cannot delete events or mark a session purged (migration `0005`, F-09) | `tests/integration/test_purge_integrity.py` (6 tests) | Pass (2026-10-17) |
 
 ## 3. Stored-data reports (`drikr-api reproducibility-report`)
 
@@ -66,4 +67,5 @@ classified in the stored log, for every scored result (333 of 333; SQL in the lo
 - A database superuser can still rewrite records consistently (residual risk R2). Verification
   then detects edits only to events, not a consistent rewrite of definitions, events and results.
 - Sessions whose raw event logs were purged under the retention policy keep their scores and
-  digests but can no longer be re-scored (`event_log_purged`).
+  digests but can no longer be re-scored (`event_log_purged`). Since migration `0005` every purge
+  must have a record, and an unrecorded one is reported as `purge_unrecorded`.
