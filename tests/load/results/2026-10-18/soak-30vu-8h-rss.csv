@@ -1,0 +1,838 @@
+ts,pid,process,rss_kib
+09:50:04,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,674224
+09:50:04,      [ -r /proc/$p/status ] || continue
+09:50:04,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+09:50:04,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+09:50:04,    done ,904
+09:55:07,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,786268
+09:55:07,      [ -r /proc/$p/status ] || continue
+09:55:07,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+09:55:07,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+09:55:07,    done ,1716
+09:55:07,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+09:55:07,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53152
+09:55:07,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51220
+10:00:09,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,792296
+10:00:09,      [ -r /proc/$p/status ] || continue
+10:00:09,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:00:09,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:00:09,    done ,928
+10:00:09,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:00:09,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53256
+10:00:09,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52732
+10:05:12,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,793676
+10:05:12,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:05:12,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52136
+10:05:12,      [ -r /proc/$p/status ] || continue
+10:05:12,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:05:12,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:05:12,    done ,1628
+10:05:12,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53408
+10:10:14,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,794536
+10:10:14,      [ -r /proc/$p/status ] || continue
+10:10:14,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:10:14,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:10:14,    done ,924
+10:10:14,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:10:14,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53204
+10:10:14,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51760
+10:15:16,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,794844
+10:15:16,      [ -r /proc/$p/status ] || continue
+10:15:16,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:15:16,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:15:16,    done ,880
+10:15:16,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:15:16,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52512
+10:15:16,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52760
+10:20:18,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,798084
+10:20:18,      [ -r /proc/$p/status ] || continue
+10:20:18,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:20:18,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:20:18,    done ,924
+10:20:18,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:20:18,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53632
+10:20:18,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52116
+10:25:21,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,796212
+10:25:21,      [ -r /proc/$p/status ] || continue
+10:25:21,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:25:21,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:25:21,    done ,948
+10:25:21,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:25:21,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53676
+10:25:21,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52392
+10:30:23,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,797128
+10:30:23,      [ -r /proc/$p/status ] || continue
+10:30:23,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:30:23,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:30:23,    done ,900
+10:30:23,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:30:23,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52756
+10:30:23,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53052
+10:35:25,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,797820
+10:35:25,      [ -r /proc/$p/status ] || continue
+10:35:25,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:35:25,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:35:25,    done ,924
+10:35:25,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:35:25,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54576
+10:35:25,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54240
+10:40:27,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,798016
+10:40:27,      [ -r /proc/$p/status ] || continue
+10:40:27,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:40:27,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:40:27,    done ,912
+10:40:27,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17012
+10:40:27,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53380
+10:40:27,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54220
+10:45:29,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,798032
+10:45:29,      [ -r /proc/$p/status ] || continue
+10:45:29,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:45:29,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:45:29,    done ,908
+10:45:29,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17044
+10:45:29,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53624
+10:45:29,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54220
+10:50:31,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,796360
+10:50:31,      [ -r /proc/$p/status ] || continue
+10:50:31,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:50:31,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:50:31,    done ,956
+10:50:31,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,17004
+10:50:31,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53856
+10:50:31,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53712
+10:55:33,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,795496
+10:55:33,      [ -r /proc/$p/status ] || continue
+10:55:33,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+10:55:33,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+10:55:33,    done ,920
+10:55:33,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,16992
+10:55:33,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53828
+10:55:33,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53660
+11:00:35,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,741272
+11:00:35,      [ -r /proc/$p/status ] || continue
+11:00:35,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:00:35,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:00:35,    done ,920
+11:00:35,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,16840
+11:00:35,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54612
+11:00:35,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53976
+11:05:37,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,736188
+11:05:37,      [ -r /proc/$p/status ] || continue
+11:05:37,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:05:37,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:05:37,    done ,900
+11:05:37,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,16836
+11:05:37,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54532
+11:05:37,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53772
+11:10:39,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,732720
+11:10:39,      [ -r /proc/$p/status ] || continue
+11:10:39,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:10:39,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:10:39,    done ,916
+11:10:39,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,16784
+11:10:39,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53604
+11:10:39,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54532
+11:15:41,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,723748
+11:15:41,      [ -r /proc/$p/status ] || continue
+11:15:41,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:15:41,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:15:41,    done ,920
+11:15:41,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,16684
+11:15:41,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53584
+11:15:41,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54216
+11:20:44,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,721844
+11:20:44,      [ -r /proc/$p/status ] || continue
+11:20:44,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:20:44,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:20:44,    done ,920
+11:20:44,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,14804
+11:20:44,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54404
+11:20:44,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53344
+11:25:46,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,713044
+11:25:46,      [ -r /proc/$p/status ] || continue
+11:25:46,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:25:46,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:25:46,    done ,892
+11:25:46,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,14100
+11:25:46,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53236
+11:25:46,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,54556
+11:30:48,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,709968
+11:30:48,      [ -r /proc/$p/status ] || continue
+11:30:48,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:30:48,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:30:48,    done ,916
+11:30:48,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13336
+11:30:48,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52252
+11:30:48,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,53336
+11:35:50,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,697280
+11:35:50,      [ -r /proc/$p/status ] || continue
+11:35:50,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:35:50,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:35:50,    done ,948
+11:35:50,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13288
+11:35:50,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52212
+11:35:50,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52548
+11:40:52,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,682888
+11:40:52,      [ -r /proc/$p/status ] || continue
+11:40:52,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:40:52,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:40:52,    done ,940
+11:40:52,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13288
+11:40:52,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52224
+11:40:52,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52312
+11:45:54,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,679760
+11:45:54,      [ -r /proc/$p/status ] || continue
+11:45:54,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:45:54,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:45:54,    done ,928
+11:45:54,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13272
+11:45:54,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52084
+11:45:54,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51404
+11:50:56,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,668140
+11:50:56,      [ -r /proc/$p/status ] || continue
+11:50:56,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:50:56,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:50:56,    done ,912
+11:50:56,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13272
+11:50:56,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51288
+11:50:56,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52164
+11:55:58,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,655236
+11:55:58,      [ -r /proc/$p/status ] || continue
+11:55:58,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+11:55:58,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+11:55:58,    done ,924
+11:55:58,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13272
+11:55:58,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52160
+11:55:58,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50756
+12:01:00,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,651660
+12:01:00,      [ -r /proc/$p/status ] || continue
+12:01:00,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:01:00,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:01:00,    done ,912
+12:01:00,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13272
+12:01:00,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51820
+12:01:00,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51992
+12:06:02,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,644076
+12:06:02,      [ -r /proc/$p/status ] || continue
+12:06:02,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:06:02,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:06:02,    done ,948
+12:06:02,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13272
+12:06:02,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52040
+12:06:02,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52136
+12:11:04,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,621700
+12:11:04,      [ -r /proc/$p/status ] || continue
+12:11:04,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:11:04,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:11:04,    done ,908
+12:11:04,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13260
+12:11:04,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51920
+12:11:04,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51632
+12:16:06,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,613688
+12:16:06,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13244
+12:16:06,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51500
+12:16:06,      [ -r /proc/$p/status ] || continue
+12:16:06,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:16:06,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:16:06,    done ,1716
+12:16:06,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51728
+12:21:08,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,613596
+12:21:08,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13244
+12:21:08,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51488
+12:21:08,      [ -r /proc/$p/status ] || continue
+12:21:08,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:21:08,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:21:08,    done ,1632
+12:21:08,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51720
+12:26:10,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,599732
+12:26:10,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13244
+12:26:10,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51428
+12:26:10,      [ -r /proc/$p/status ] || continue
+12:26:10,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:26:10,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:26:10,    done ,1668
+12:26:10,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52496
+12:31:12,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,590680
+12:31:12,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13240
+12:31:12,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51732
+12:31:12,      [ -r /proc/$p/status ] || continue
+12:31:12,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:31:12,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:31:12,    done ,1720
+12:31:12,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51512
+12:36:14,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,534556
+12:36:14,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13232
+12:36:14,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52112
+12:36:14,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52752
+12:36:14,      [ -r /proc/$p/status ] || continue
+12:36:14,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:36:14,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:36:14,    done ,1668
+12:41:16,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,528584
+12:41:16,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13232
+12:41:16,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51700
+12:41:16,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52080
+12:41:16,      [ -r /proc/$p/status ] || continue
+12:41:16,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:41:16,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:41:16,    done ,1568
+12:46:17,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,519388
+12:46:17,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13232
+12:46:17,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51580
+12:46:17,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52732
+12:46:17,      [ -r /proc/$p/status ] || continue
+12:46:17,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:46:17,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:46:17,    done ,1720
+12:51:19,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,512212
+12:51:19,      [ -r /proc/$p/status ] || continue
+12:51:19,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:51:19,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:51:19,    done ,956
+12:51:19,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13232
+12:51:19,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50796
+12:51:19,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52932
+12:56:21,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,507664
+12:56:21,      [ -r /proc/$p/status ] || continue
+12:56:21,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+12:56:21,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+12:56:21,    done ,916
+12:56:21,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13232
+12:56:21,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52064
+12:56:21,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51920
+13:01:23,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,499896
+13:01:23,      [ -r /proc/$p/status ] || continue
+13:01:23,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:01:23,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:01:23,    done ,892
+13:01:23,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13228
+13:01:23,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52516
+13:01:23,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52196
+13:06:25,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,495992
+13:06:25,      [ -r /proc/$p/status ] || continue
+13:06:25,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:06:25,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:06:25,    done ,932
+13:06:25,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13224
+13:06:25,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51496
+13:06:25,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52772
+13:11:27,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,488400
+13:11:27,      [ -r /proc/$p/status ] || continue
+13:11:27,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:11:27,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:11:27,    done ,908
+13:11:27,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13224
+13:11:27,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52024
+13:11:27,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51912
+13:16:29,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,481396
+13:16:29,      [ -r /proc/$p/status ] || continue
+13:16:29,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:16:29,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:16:29,    done ,952
+13:16:29,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13224
+13:16:29,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51708
+13:16:29,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51908
+13:21:31,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,473664
+13:21:31,      [ -r /proc/$p/status ] || continue
+13:21:31,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:21:31,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:21:31,    done ,916
+13:21:31,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13224
+13:21:31,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50696
+13:21:31,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51940
+13:26:33,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,470784
+13:26:33,      [ -r /proc/$p/status ] || continue
+13:26:33,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:26:33,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:26:33,    done ,908
+13:26:33,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13220
+13:26:33,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51752
+13:26:33,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52284
+13:31:35,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,465044
+13:31:35,      [ -r /proc/$p/status ] || continue
+13:31:35,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:31:35,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:31:35,    done ,928
+13:31:35,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13220
+13:31:35,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52484
+13:31:35,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51888
+13:36:37,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,458756
+13:36:37,      [ -r /proc/$p/status ] || continue
+13:36:37,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:36:37,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:36:37,    done ,932
+13:36:37,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13212
+13:36:37,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52552
+13:36:37,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52664
+13:41:39,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,451564
+13:41:39,      [ -r /proc/$p/status ] || continue
+13:41:39,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:41:39,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:41:39,    done ,904
+13:41:39,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13204
+13:41:39,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51224
+13:41:39,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51192
+13:46:47,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,450792
+13:46:47,      [ -r /proc/$p/status ] || continue
+13:46:47,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:46:47,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:46:47,    done ,948
+13:46:47,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,13204
+13:46:47,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51668
+13:46:47,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52772
+13:51:48,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,450552
+13:51:48,      [ -r /proc/$p/status ] || continue
+13:51:48,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:51:48,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:51:48,    done ,904
+13:51:48,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,12988
+13:51:48,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51328
+13:51:48,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51772
+13:56:50,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,451628
+13:56:50,      [ -r /proc/$p/status ] || continue
+13:56:50,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+13:56:50,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+13:56:50,    done ,880
+13:56:50,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6788
+13:56:50,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51120
+13:56:50,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52372
+14:01:52,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,452624
+14:01:52,      [ -r /proc/$p/status ] || continue
+14:01:52,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:01:52,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:01:52,    done ,940
+14:01:52,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6700
+14:01:52,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51328
+14:01:52,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51392
+14:06:54,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,455088
+14:06:54,      [ -r /proc/$p/status ] || continue
+14:06:54,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:06:54,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:06:54,    done ,952
+14:06:54,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6680
+14:06:54,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52156
+14:06:54,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51388
+14:11:56,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,455948
+14:11:56,      [ -r /proc/$p/status ] || continue
+14:11:56,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:11:56,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:11:56,    done ,904
+14:11:56,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6668
+14:11:56,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51204
+14:11:56,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52192
+14:16:59,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,457540
+14:16:59,      [ -r /proc/$p/status ] || continue
+14:16:59,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:16:59,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:16:59,    done ,936
+14:16:59,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6640
+14:16:59,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52104
+14:16:59,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52148
+14:22:00,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,458996
+14:22:00,      [ -r /proc/$p/status ] || continue
+14:22:00,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:22:00,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:22:00,    done ,928
+14:22:00,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6624
+14:22:00,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51636
+14:22:00,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,52140
+14:27:02,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,459044
+14:27:02,      [ -r /proc/$p/status ] || continue
+14:27:02,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:27:02,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:27:02,    done ,876
+14:27:02,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:27:02,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51068
+14:27:02,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51920
+14:32:04,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,457992
+14:32:04,      [ -r /proc/$p/status ] || continue
+14:32:04,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:32:04,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:32:04,    done ,924
+14:32:04,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:32:04,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51900
+14:32:04,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51488
+14:37:06,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,460872
+14:37:06,      [ -r /proc/$p/status ] || continue
+14:37:06,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:37:06,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:37:06,    done ,952
+14:37:06,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:37:06,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51876
+14:37:06,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51016
+14:42:08,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,461852
+14:42:08,      [ -r /proc/$p/status ] || continue
+14:42:08,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:42:08,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:42:08,    done ,948
+14:42:08,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:42:08,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50964
+14:42:08,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50756
+14:47:10,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,463732
+14:47:10,      [ -r /proc/$p/status ] || continue
+14:47:10,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:47:10,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:47:10,    done ,900
+14:47:10,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:47:10,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51560
+14:47:10,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50944
+14:52:12,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,464784
+14:52:12,      [ -r /proc/$p/status ] || continue
+14:52:12,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:52:12,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:52:12,    done ,940
+14:52:12,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:52:12,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50976
+14:52:12,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50724
+14:57:15,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,466832
+14:57:15,      [ -r /proc/$p/status ] || continue
+14:57:15,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+14:57:15,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+14:57:15,    done ,916
+14:57:15,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+14:57:15,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50872
+14:57:15,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50724
+15:02:17,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,471076
+15:02:17,      [ -r /proc/$p/status ] || continue
+15:02:17,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:02:17,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:02:17,    done ,932
+15:02:17,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:02:17,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51272
+15:02:17,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51580
+15:07:18,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,472904
+15:07:18,      [ -r /proc/$p/status ] || continue
+15:07:18,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:07:18,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:07:18,    done ,916
+15:07:18,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:07:18,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51184
+15:07:18,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50820
+15:12:20,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,475232
+15:12:20,      [ -r /proc/$p/status ] || continue
+15:12:20,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:12:20,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:12:20,    done ,924
+15:12:20,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:12:20,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50924
+15:12:20,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51608
+15:17:22,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,476924
+15:17:22,      [ -r /proc/$p/status ] || continue
+15:17:22,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:17:22,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:17:22,    done ,1800
+15:17:22,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:17:22,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51724
+15:17:22,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51608
+15:22:26,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,478668
+15:22:26,      [ -r /proc/$p/status ] || continue
+15:22:26,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:22:26,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:22:26,    done ,1796
+15:22:26,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:22:26,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50936
+15:22:26,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49936
+15:27:31,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,486976
+15:27:31,      [ -r /proc/$p/status ] || continue
+15:27:31,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:27:31,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:27:31,    done ,1572
+15:27:31,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:27:31,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51088
+15:27:31,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51332
+15:32:35,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,488328
+15:32:35,      [ -r /proc/$p/status ] || continue
+15:32:35,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:32:35,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:32:35,    done ,1712
+15:32:35,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:32:35,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51416
+15:32:35,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51592
+15:37:39,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,502184
+15:37:39,      [ -r /proc/$p/status ] || continue
+15:37:39,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:37:39,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:37:39,    done ,1716
+15:37:39,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:37:39,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50896
+15:37:39,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50792
+15:42:44,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,497868
+15:42:44,      [ -r /proc/$p/status ] || continue
+15:42:44,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:42:44,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:42:44,    done ,1720
+15:42:44,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:42:44,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49888
+15:42:44,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51760
+15:47:46,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,503768
+15:47:46,      [ -r /proc/$p/status ] || continue
+15:47:46,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:47:46,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:47:46,    done ,1720
+15:47:46,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:47:46,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50844
+15:47:46,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51612
+15:52:51,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,511148
+15:52:51,      [ -r /proc/$p/status ] || continue
+15:52:51,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:52:51,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:52:51,    done ,1688
+15:52:51,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:52:51,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50844
+15:52:51,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49756
+15:57:55,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,510728
+15:57:55,      [ -r /proc/$p/status ] || continue
+15:57:55,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+15:57:55,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+15:57:55,    done ,1800
+15:57:55,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+15:57:55,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50628
+15:57:55,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51568
+16:02:59,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,513208
+16:02:59,      [ -r /proc/$p/status ] || continue
+16:02:59,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:02:59,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:02:59,    done ,1664
+16:02:59,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:02:59,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51552
+16:02:59,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51460
+16:08:04,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,514516
+16:08:04,      [ -r /proc/$p/status ] || continue
+16:08:04,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:08:04,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:08:04,    done ,1716
+16:08:04,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:08:04,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50740
+16:08:04,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51616
+16:13:09,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,516900
+16:13:09,      [ -r /proc/$p/status ] || continue
+16:13:09,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:13:09,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:13:09,    done ,1720
+16:13:09,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:13:09,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50744
+16:13:09,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50560
+16:18:11,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,519980
+16:18:11,      [ -r /proc/$p/status ] || continue
+16:18:11,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:18:11,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:18:11,    done ,1660
+16:18:11,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:18:11,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50672
+16:18:11,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50264
+16:23:13,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,522232
+16:23:13,      [ -r /proc/$p/status ] || continue
+16:23:13,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:23:13,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:23:13,    done ,1716
+16:23:13,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:23:13,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50736
+16:23:13,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50416
+16:28:15,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,523284
+16:28:15,      [ -r /proc/$p/status ] || continue
+16:28:15,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:28:15,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:28:15,    done ,1796
+16:28:15,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:28:15,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49784
+16:28:15,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51152
+16:33:17,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,528828
+16:33:17,      [ -r /proc/$p/status ] || continue
+16:33:17,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:33:17,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:33:17,    done ,1716
+16:33:17,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:33:17,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50256
+16:33:17,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51140
+16:38:19,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,531116
+16:38:19,      [ -r /proc/$p/status ] || continue
+16:38:19,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:38:19,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:38:19,    done ,1796
+16:38:19,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:38:19,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49640
+16:38:19,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50588
+16:43:21,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,533420
+16:43:21,      [ -r /proc/$p/status ] || continue
+16:43:21,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:43:21,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:43:21,    done ,1712
+16:43:21,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:43:21,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50304
+16:43:21,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51080
+16:48:23,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,536128
+16:48:23,      [ -r /proc/$p/status ] || continue
+16:48:23,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:48:23,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:48:23,    done ,1720
+16:48:23,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6540
+16:48:23,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51328
+16:48:23,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51036
+16:53:26,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,522436
+16:53:26,      [ -r /proc/$p/status ] || continue
+16:53:26,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:53:26,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:53:26,    done ,1664
+16:53:26,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+16:53:26,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50320
+16:53:26,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50924
+16:58:31,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,541732
+16:58:31,      [ -r /proc/$p/status ] || continue
+16:58:31,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+16:58:31,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+16:58:31,    done ,1636
+16:58:31,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+16:58:31,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49340
+16:58:31,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50152
+17:03:35,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,550824
+17:03:35,      [ -r /proc/$p/status ] || continue
+17:03:35,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:03:35,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:03:35,    done ,1796
+17:03:35,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:03:35,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51248
+17:03:35,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50940
+17:08:40,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,548644
+17:08:40,      [ -r /proc/$p/status ] || continue
+17:08:40,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:08:40,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:08:40,    done ,1800
+17:08:40,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:08:40,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50100
+17:08:40,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50152
+17:13:45,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,544616
+17:13:45,      [ -r /proc/$p/status ] || continue
+17:13:45,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:13:45,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:13:45,    done ,1680
+17:13:45,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:13:45,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50324
+17:13:45,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51024
+17:18:49,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,552900
+17:18:49,      [ -r /proc/$p/status ] || continue
+17:18:49,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:18:49,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:18:49,    done ,1632
+17:18:49,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:18:49,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50100
+17:18:49,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50148
+17:23:54,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,553900
+17:23:54,      [ -r /proc/$p/status ] || continue
+17:23:54,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:23:54,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:23:54,    done ,1716
+17:23:54,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:23:54,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51184
+17:23:54,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50148
+17:28:58,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,556488
+17:28:58,      [ -r /proc/$p/status ] || continue
+17:28:58,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:28:58,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:28:58,    done ,1644
+17:28:58,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:28:58,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50356
+17:28:58,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50140
+17:34:03,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557276
+17:34:03,      [ -r /proc/$p/status ] || continue
+17:34:03,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:34:03,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:34:03,    done ,1796
+17:34:03,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:34:03,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50356
+17:34:03,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49260
+17:39:09,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,560376
+17:39:09,      [ -r /proc/$p/status ] || continue
+17:39:09,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:39:09,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:39:09,    done ,1672
+17:39:09,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:39:09,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50264
+17:39:09,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50192
+17:44:14,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,561480
+17:44:14,      [ -r /proc/$p/status ] || continue
+17:44:14,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:44:14,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:44:14,    done ,1568
+17:44:14,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:44:14,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50352
+17:44:14,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,50904
+17:49:18,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557504
+17:49:18,      [ -r /proc/$p/status ] || continue
+17:49:18,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:49:18,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:49:18,    done ,1800
+17:49:18,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:49:18,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+17:49:18,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49392
+17:54:23,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557764
+17:54:23,      [ -r /proc/$p/status ] || continue
+17:54:23,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:54:23,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:54:23,    done ,1716
+17:54:23,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:54:23,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+17:54:23,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+17:59:27,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557624
+17:59:27,      [ -r /proc/$p/status ] || continue
+17:59:27,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+17:59:27,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+17:59:27,    done ,1568
+17:59:27,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+17:59:27,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+17:59:27,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:04:32,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557640
+18:04:32,      [ -r /proc/$p/status ] || continue
+18:04:32,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:04:32,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:04:32,    done ,1676
+18:04:32,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:04:32,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+18:04:32,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:09:36,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557640
+18:09:36,      [ -r /proc/$p/status ] || continue
+18:09:36,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:09:36,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:09:36,    done ,1672
+18:09:36,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:09:36,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+18:09:36,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:14:39,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557636
+18:14:39,      [ -r /proc/$p/status ] || continue
+18:14:39,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:14:39,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:14:39,    done ,1668
+18:14:39,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:14:39,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+18:14:39,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:19:41,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557636
+18:19:41,      [ -r /proc/$p/status ] || continue
+18:19:41,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:19:41,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:19:41,    done ,1796
+18:19:41,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:19:41,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+18:19:41,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:24:43,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557620
+18:24:43,      [ -r /proc/$p/status ] || continue
+18:24:43,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:24:43,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:24:43,    done ,1680
+18:24:43,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:24:43,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51136
+18:24:43,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49652
+18:29:45,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557464
+18:29:45,      [ -r /proc/$p/status ] || continue
+18:29:45,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:29:45,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:29:45,    done ,1568
+18:29:45,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:29:45,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51200
+18:29:45,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49684
+18:30:48,1,/usr/local/bin/python3.12 /usr/local/bin/uvicorn --factory d,557464
+18:30:48,      [ -r /proc/$p/status ] || continue
+18:30:48,      c=$(tr "" " " </proc/$p/cmdline | cut -c1-60); r=$(a
+18:30:48,      case "$c" in *python3*) echo "$p,$c,$r";; esac
+18:30:48,    done ,1664
+18:30:48,77,/usr/local/bin/python3.12 -B -c from multiprocessing.resourc,6524
+18:30:48,78,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,51200
+18:30:48,89,/usr/local/bin/python3.12 -B -c from multiprocessing.spawn i,49684

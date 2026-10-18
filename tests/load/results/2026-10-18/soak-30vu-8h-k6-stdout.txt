@@ -1,0 +1,50 @@
+time="2026-10-18T09:58:55Z" level=warning msg="The test has generated metrics with 100006 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T10:07:12Z" level=warning msg="The test has generated metrics with 200041 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T10:23:19Z" level=warning msg="The test has generated metrics with 400012 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T10:55:37Z" level=warning msg="The test has generated metrics with 800017 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T11:59:00Z" level=warning msg="The test has generated metrics with 1600027 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T14:04:04Z" level=warning msg="The test has generated metrics with 3200002 unique time series, which is higher than the suggested limit of 100000 and could cause high memory usage. Consider not using high-cardinality values like unique IDs as metric tags or, if you need them in the URL, use the name metric tag or URL grouping. See https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/ for details." component=metrics-engine-ingester
+time="2026-10-18T17:09:22Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/be89edfe-d36c-4c76-8d9d-539b7c67f97d/complete\": request timeout"
+time="2026-10-18T17:09:26Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/a3621472-11d3-4ffa-9aad-f9ab1b50e1ef/complete\": request timeout"
+time="2026-10-18T17:34:49Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/8e6eeb1d-5b9c-4f4f-9792-431ac7275b0d/complete\": request timeout"
+time="2026-10-18T17:35:03Z" level=warning msg="Request Failed" error="Post \"http://web:8080/api/v1/sessions/fa662423-0f2a-464a-9f21-27115f66c6ad/complete\": request timeout"
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 40327  1.296175/s
+    checks_succeeded...: 21.92% 8841 out of 40327
+    checks_failed......: 78.07% 31486 out of 40327
+
+    ✗ session created
+      ↳  21% — ✓ 8841 / ✗ 31486
+
+    CUSTOM
+    drikr_action_ms................: min=418.94µs med=143.56ms avg=360.87ms p(90)=940.12ms p(95)=1.43s    p(99)=2.9s   max=8.6s   count=44234 
+    drikr_complete_ms..............: min=6.82ms   med=3.49s    avg=4.15s    p(90)=8.89s    p(95)=12.03s   p(99)=18.42s max=32.29s count=8841  
+    drikr_create_session_ms........: min=3.42ms   med=16.28ms  avg=381.67ms p(90)=1.53s    p(95)=2.11s    p(99)=4.2s   max=12.64s count=40356 
+    drikr_failed_requests..........: 0.00%  4 out of 675479
+    drikr_feed_ms..................: min=136.6µs  med=107.22ms avg=310.28ms p(90)=886.99ms p(95)=1.31s    p(99)=2.54s  max=9.05s  count=564206
+    drikr_refused_at_capacity......: 42     0.00135/s
+    drikr_refused_ms...............: min=23.09ms  med=333.97ms avg=483.87ms p(90)=879.16ms p(95)=933.84ms p(99)=2.87s  max=3.78s  count=42    
+    drikr_sessions_completed.......: 8813   0.283264/s
+    drikr_sessions_scored..........: 8812   0.283232/s
+
+    HTTP
+    http_req_duration..............: min=136.6µs  med=107.8ms  avg=372.2ms  p(90)=982.07ms p(95)=1.51s    p(99)=3.6s   max=32.29s count=675479
+      { expected_response:true }...: min=136.6µs  med=121.61ms avg=389.74ms p(90)=1.01s    p(95)=1.55s    p(99)=3.67s  max=29.91s count=643008
+    http_req_failed................: 4.80%  32471 out of 675479
+    http_reqs......................: 675479 21.710985/s
+
+    EXECUTION
+    iteration_duration.............: min=2s       med=2.01s    avg=21.38s   p(90)=1m29s    p(95)=1m32s    p(99)=1m41s  max=2m3s   count=40398 
+    iterations.....................: 40398  1.298457/s
+    vus............................: 13     min=13              max=30
+    vus_max........................: 30     min=30              max=30
+
+    NETWORK
+    data_received..................: 2.0 GB 63 kB/s
+    data_sent......................: 168 MB 5.4 kB/s
+
+
+

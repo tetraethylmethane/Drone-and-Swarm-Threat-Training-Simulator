@@ -457,6 +457,37 @@ earlier attempts were invalid because of defects in the new test script (no sess
   coincided. Feed p99 also rose (1.3–1.7 s against about 1.0 s); p95 was unaffected.
 - Variation between runs of the same setting is large (on-3 against on-1), as in earlier sections.
 
+### 5.11 Second soak attempt (B-03), 2026-10-18: invalid after 3 h 50 min
+
+`bash tests/load/soak.sh 8 30 300`, image `drikr-api:rc-a30c00c` (commit `a30c00c`), started
+09:50 UTC on mains power; 87 memory samples with no gap. **From 13:41 UTC the laptop repeatedly
+entered Windows Modern Standby** (display off; Kernel-Power events 506/507), for up to 45 minutes at a
+time, and it ran on battery from 16:49 UTC. The "never sleep" setting on mains power does not
+prevent Modern Standby. Session throughput was steady at about 1,130 per hour until then and fell
+afterwards. k6 ended 40 minutes late (18:29 UTC), because the suspended periods do not count towards
+its duration. **Only the first 3 h 50 min are a valid measurement.**
+
+| Period | API process memory |
+|---|---|
+| 09:50 start | 658 MiB |
+| 10:30 peak | **778 MiB** |
+| 11:50 / 12:31 / 13:11 | 652 / 577 / 477 |
+| 13:51 (end of the valid period) | **440 MiB**, still falling |
+| 13:51–17:28 (standby periods) | rose to about 545 MiB |
+| 17:28–18:30 (last hour, under load) | **flat at 543–548 MiB** |
+
+Records after the run: 8,841 sessions, 8,817 completed and scored, 24 open; 22 sessions paused for a
+lost connection, **all at 17:50 UTC, inside the longest standby period** (17:22–18:07 UTC); 5,000
+of 5,000 checked reproducible with exact score matches; audit chain valid (1,258 entries). The k6
+latency summary covers the whole run including standby (feed p95 1,312 ms, finish p95 12 s, 4
+failed requests of 675,479), so it cannot be judged against the criteria.
+
+**Verdict:** the valid period repeats the first soak (peak released steadily, no growth), and the
+records stayed consistent. The rise after 13:51 began with the standby periods and levelled off;
+it is not evidence of a leak, but it is not explained either. A clean 8-hour day has still **not**
+been measured. A repeat must keep the machine awake (for example a keep-awake request for the
+duration) and on mains power.
+
 ## 6. Defects found
 
 ### L-01 Connection-pool exhaustion at 10 concurrent trainees (fixed)

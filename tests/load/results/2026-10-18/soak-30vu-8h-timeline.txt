@@ -1,0 +1,4 @@
+2026-10-18T09:50:03Z start: 30 VU for 8 h; max_active_sessions=30; image b2af5f676261
+2026-10-18T18:29:47Z k6 finished
+2026-10-18T18:30:49Z idle sample taken
+2026-10-18T19:16:48Z done
