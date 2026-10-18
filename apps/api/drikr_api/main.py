@@ -13,7 +13,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import run_in_threadpool
 
-from drikr_api import __version__, cpu
+from drikr_api import __version__, cpu, timeline_cache
 from drikr_api.config import Settings, get_settings
 from drikr_api.db import Database
 from drikr_api.deps import AppContext
@@ -66,6 +66,7 @@ def create_app(settings: Settings | None = None, database: Database | None = Non
     @contextlib.asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
         cpu.configure(settings.cpu_workers)
+        timeline_cache.configure(settings.timeline_cache_mb)
         task = asyncio.create_task(_sweeper(ctx)) if settings.sweeper_interval_s > 0 else None
         log.info("startup", extra={"version": __version__, "environment": settings.environment})
         yield
@@ -73,6 +74,7 @@ def create_app(settings: Settings | None = None, database: Database | None = Non
             task.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await task
+        timeline_cache.shutdown()
         cpu.shutdown()
         database.dispose()
 

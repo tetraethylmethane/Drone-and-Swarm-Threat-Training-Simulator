@@ -255,3 +255,13 @@ def test_generation_needs_no_network(monkeypatch: pytest.MonkeyPatch) -> None:
     for key in DEMOS:
         assert validate_definition(demo(key)).valid
     generate_scenario_definition(5)
+
+
+def test_digest_treats_negative_zero_as_zero() -> None:
+    """Regression for D-03: PostgreSQL JSONB cannot store -0.0, so a stored event log came back with
+    0.0 and failed verification although nothing had changed (about 1 seed in 15)."""
+    from drikr_simcore.canonical import canonical_json, digest
+
+    assert digest({"x_m": -0.0, "v": [1.5, -0.0]}) == digest({"x_m": 0.0, "v": [1.5, 0.0]})
+    assert digest({"x_m": -0.1}) != digest({"x_m": 0.1})  # only zero's sign is ignored
+    assert canonical_json(-0.0) == "-0.0"  # audit hashing (canonical_json) is unchanged

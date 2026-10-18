@@ -253,7 +253,8 @@ into separately loaded chunks.
 Random numbers come from a documented SplitMix64 generator with SHA-256-derived named streams
 (`drikr_simcore.rng`), not Python's `random`, so a C# port can reproduce them (reference outputs are
 in `tests/unit/test_simcore.py`). Outputs are rounded (0.1 m, 0.01 quality) before hashing to absorb
-last-bit floating-point differences in `math.sin/cos`. A golden digest test pins the timeline of a
+last-bit floating-point differences in `math.sin/cos`. Digests treat `-0.0` as `0.0`, because
+PostgreSQL JSONB cannot store negative zero (defect D-03, 2026-10-18). A golden digest test pins the timeline of a
 demo scenario. **Limitation:** bit-identical reproduction is verified on Windows (CPython 3.12.4) and
 in the Linux API container (see `docs/SPRINT_STATUS.md` for the evidence); other platforms are
 expected but not verified. Any intentional change to generation logic must bump `ENGINE_VERSION`.
@@ -314,10 +315,11 @@ only, and its control panel is IMGUI, which does not render inside a headset.
 * **Sand table:** the whole 4 km picture is scaled to a 1 m-radius table at waist height in front
   of the trainee (`VrControls.TableScale`), with a floor-level tracking origin. This keeps tracks
   readable and avoids moving through kilometres of space.
-* **Controls (right hand):** point at a track and pull the trigger to select it; A/X changes the
-  classification and B/Y submits it. A text panel above the table shows what is selected and what
-  was recorded. Responses other than classification remain on the desktop panel, which is mirrored
-  on the monitor for an instructor.
+* **Controls:** right hand: point at a track and pull the trigger to select it; A changes the
+  classification and B submits it. Left hand: the trigger chooses the training response (continue
+  monitoring, request sensor confirmation, report to exercise control, log as cleared) and X sends
+  it to the selected tracks. A text panel above the table shows the selection, both choices and
+  what was recorded. The desktop panel stays mirrored on the monitor for an instructor.
 * **Server authority is unchanged (ADR-001):** VR adds input and presentation only. Every decision
   is the same API call as from the desktop panel.
 
@@ -330,6 +332,5 @@ loader removed and restores it afterwards (`XrSetup.ForBuild`). It also switches
 build target before each build, because OpenXR's checks read the active target. Without a runtime
 installed, the OpenXR plugin logs `XR_ERROR_RUNTIME_UNAVAILABLE` lines at
 startup while it queries extensions; it never creates an instance or session unless `-drikrVr` is
-given. **Not done:** testing on any headset; training responses other than classification in VR;
-VR in the Linux and macOS players.
+given. **Not done:** testing on any headset; VR in the Linux and macOS players.
 

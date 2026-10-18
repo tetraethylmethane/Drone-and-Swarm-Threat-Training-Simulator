@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
-from drikr_api import __version__, db_roles
+from drikr_api import __version__, db_roles, timeline_cache
 from drikr_api.audit import append_audit, verify_chain
 from drikr_api.deps import AppContext, Principal, get_ctx, get_db, require
 from drikr_api.errors import ApiError
@@ -174,6 +174,7 @@ def system(
         "capacity": {
             "active_sessions": session_service.active_session_count(db),
             "max_active_sessions": ctx.settings.max_active_sessions or None,
+            "pregenerated_timelines": timeline_cache.stats(),
         },
         "network": {"external_runtime_dependencies": [], "telemetry": "none"},
         "performance": ctx.metrics.summary(),

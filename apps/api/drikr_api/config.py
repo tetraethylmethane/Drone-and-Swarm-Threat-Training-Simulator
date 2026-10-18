@@ -43,6 +43,8 @@ class Settings(BaseSettings):
     #: server; set it from a load test on the deployment host (docs/testing/load-resilience-report.md).
     #: 0 disables the limit.
     max_active_sessions: int = Field(default=0, ge=0, le=10_000)
+    #: Memory for pre-generated timelines (backlog B-17; about 0.3 MB each); 0 turns pre-generation off.
+    timeline_cache_mb: int = Field(default=64, ge=0, le=4096)
     #: Worker processes for timeline generation (drikr_api/cpu.py); 0 runs it inside the API process.
     cpu_workers: int = Field(default=2, ge=0, le=16)
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"

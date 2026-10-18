@@ -27,7 +27,7 @@ from drikr_api.models import (
 from drikr_api.schemas import AssignmentCreate
 from drikr_api.security.rbac import Permission
 from drikr_api.serializers import assignment_out, page
-from drikr_api.services import adaptive_service
+from drikr_api.services import adaptive_service, session_service
 from drikr_contracts.scenario import Scenario as ScenarioContract
 
 router = APIRouter(prefix="/assignments", tags=["assignments"])
@@ -175,6 +175,9 @@ def create_assignments(
         )
         created.append(a)
     db.commit()
+    # Pre-generate each first attempt in the background, so a class can start at once (B-17).
+    for a in created:
+        session_service.prewarm_first_attempt(db, a)
     return {"items": [assignment_out(a, progress(db, a)) for a in created]}
 
 

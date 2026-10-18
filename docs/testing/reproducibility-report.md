@@ -48,11 +48,22 @@ the stored log, and re-scored.
 Under load, the server's count of classified tracks also equals the number of distinct tracks
 classified in the stored log, for every scored result (333 of 333; SQL in the load report).
 
+### Correction (2026-10-18): seed coverage and defect D-03
+
+The stored-data checks above (including 955 of 955 on the load-test database) were made when every
+session of a scenario used the scenario's seed (defect D-02), so they effectively covered **one seed
+per scenario**. Once attempts varied (ADR-012), about 1 seed in 15 produced a valid session that
+verification reported as not reproducible: rounding can produce `-0.0`, which PostgreSQL JSONB
+stores as `0.0`, so the stored log's digest differed (defect D-03). `digest()` now treats `-0.0` as
+`0.0`. After the fix, 40 of 40 sessions with random per-attempt seeds verified. The golden digests
+are unchanged. Sessions recorded before the fix whose log contained `-0.0` still fail the
+stored-log check; none are known outside test databases.
+
 ## 4. Known nondeterminism and tolerances
 
 | Source | Treatment | Tolerance |
 |---|---|---|
-| Floating-point positions and qualities | Rounded before hashing (0.1 m, 0.01) | Logical equivalence; byte-level float output is not compared |
+| Floating-point positions and qualities | Rounded before hashing (0.1 m, 0.01); `-0.0` treated as `0.0` (D-03) | Logical equivalence; byte-level float output is not compared |
 | Wall-clock time of trainee actions | Quantised to the server's 100 ms tick; the client clock is ignored | Within one tick |
 | `recorded_at` timestamps, row ids, UUIDs of sessions | Not part of any digest | Not reproduced, by design |
 | Rendering, camera and frame timing (web and Unity) | Client-only; never recorded | Not reproduced |

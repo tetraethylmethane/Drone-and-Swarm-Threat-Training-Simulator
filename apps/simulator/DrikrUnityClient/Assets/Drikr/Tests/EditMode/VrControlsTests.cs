@@ -43,12 +43,31 @@ namespace Drikr.Tests
         }
 
         [Test]
+        public void TheLeftHandChoosesAndSendsTrainingResponses()
+        {
+            var c = new VrControls(Vocabulary.Classifications);
+            Assert.That(c.Response, Is.EqualTo(Vocabulary.Responses[0]));
+            Assert.That(c.LeftEdges(true, false), Is.EqualTo((true, false)));
+            Assert.That(c.LeftEdges(true, false), Is.EqualTo((false, false))); // held
+            for (var i = 0; i < Vocabulary.Responses.Length; i++) c.NextResponse();
+            Assert.That(c.Response, Is.EqualTo(Vocabulary.Responses[0])); // wraps
+            c.NextResponse();
+            c.NextResponse();
+            Assert.That(c.Response, Is.EqualTo("report_to_exercise_control"));
+            Assert.That(c.LeftEdges(false, true), Is.EqualTo((false, true)));
+            // Left and right hands are independent.
+            Assert.That(c.Edges(true, false, false), Is.EqualTo((true, false, false)));
+        }
+
+        [Test]
         public void StatusTellsTheTraineeWhatIsSelectedAndHowToAct()
         {
             var c = new VrControls(Vocabulary.Classifications);
             var none = c.Status(new string[0], Vocabulary.Label, null, null);
             StringAssert.Contains("No track selected", none);
-            StringAssert.Contains("B/Y: submit", none);
+            StringAssert.Contains("B: submit", none);
+            StringAssert.Contains("Response: Continue monitoring", none);
+            StringAssert.Contains("Left X: send response", none);
             var some = c.Status(new[] { "TRK-002", "TRK-001" }, Vocabulary.Label, "TRK-003", "Decision recorded.");
             StringAssert.StartsWith("Pointing at TRK-003", some);
             StringAssert.Contains("Selected: TRK-001, TRK-002", some);

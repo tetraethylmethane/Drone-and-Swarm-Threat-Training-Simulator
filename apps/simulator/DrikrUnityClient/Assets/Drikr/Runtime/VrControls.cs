@@ -2,9 +2,10 @@
 //
 // In VR the tactical picture is shown as a sand table: the whole 4 km area shrunk to a table in
 // front of the trainee, so tracks stay readable and nobody moves through kilometres of space. The
-// right controller points at tracks; the trigger selects, the primary button (A/X) chooses the
-// classification and the secondary button (B/Y) submits it. Every decision goes to the server
-// exactly as from the desktop panel: VR adds input and presentation only (ADR-001).
+// right controller points at tracks; the trigger selects, the primary button (A) chooses the
+// classification and the secondary button (B) submits it. The left controller sends training
+// responses: the trigger chooses the response and the primary button (X) sends it. Every decision
+// goes to the server exactly as from the desktop panel: VR adds input and presentation only (ADR-001).
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,19 +22,33 @@ namespace Drikr
             areaRadiusWorldUnits > 0 ? TableRadiusM / areaRadiusWorldUnits : 1f;
 
         public int ClassIndex { get; private set; }
+        public int ResponseIndex { get; private set; }
 
         readonly string[] _classes;
-        bool _trigger, _primary, _secondary;
+        readonly string[] _responses;
+        bool _trigger, _primary, _secondary, _leftTrigger, _leftPrimary;
 
-        public VrControls(string[] classes)
+        public VrControls(string[] classes, string[] responses = null)
         {
             if (classes == null || classes.Length == 0) throw new ArgumentException("no classifications");
             _classes = classes;
+            _responses = responses ?? Vocabulary.Responses;
         }
 
         public string Classification => _classes[ClassIndex];
+        public string Response => _responses[ResponseIndex];
 
         public void NextClassification() => ClassIndex = (ClassIndex + 1) % _classes.Length;
+        public void NextResponse() => ResponseIndex = (ResponseIndex + 1) % _responses.Length;
+
+        /// <summary>Left-hand presses this frame: choose the next response, send it.</summary>
+        public (bool nextResponse, bool sendResponse) LeftEdges(bool trigger, bool primary)
+        {
+            var result = (trigger && !_leftTrigger, primary && !_leftPrimary);
+            _leftTrigger = trigger;
+            _leftPrimary = primary;
+            return result;
+        }
 
         /// <summary>Button presses this frame (true once per press, not while held).</summary>
         public (bool select, bool next, bool submit) Edges(bool trigger, bool primary, bool secondary)
@@ -53,7 +68,9 @@ namespace Drikr
             {
                 sel.Count == 0 ? "No track selected" : "Selected: " + string.Join(", ", sel),
                 "Classification: " + label(Classification),
-                "Trigger: select   A/X: change   B/Y: submit",
+                "Response: " + label(Response),
+                "Right trigger: select   A: change   B: submit",
+                "Left trigger: change response   Left X: send response",
             };
             if (!string.IsNullOrEmpty(pointedAt)) lines.Insert(0, "Pointing at " + pointedAt);
             if (!string.IsNullOrEmpty(notice)) lines.Add(notice);

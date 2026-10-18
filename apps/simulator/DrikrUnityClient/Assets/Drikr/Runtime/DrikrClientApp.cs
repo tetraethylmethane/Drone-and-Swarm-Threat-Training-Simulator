@@ -430,9 +430,18 @@ namespace Drikr
             var (select, next, submit) = _vrc.Edges(trigger, primary, secondary);
             if (select && _vrPointed != null) Toggle(_vrPointed, additive: true);
             if (next) _vrc.NextClassification();
-            if (submit && !_busy && _state != null && _state.Status == "running" && _selected.Count > 0)
+            var canAct = !_busy && _state != null && _state.Status == "running" && _selected.Count > 0;
+            if (submit && canAct)
             {
                 var action = TraineeAction.Classify(_selected, _vrc.Classification, Vocabulary.Confidences[_confIndex]);
+                Run(() => SubmitAction(action));
+            }
+            var (leftTrigger, leftPrimary, _) = VrSession.Buttons(XRNode.LeftHand);
+            var (nextResponse, sendResponse) = _vrc.LeftEdges(leftTrigger, leftPrimary);
+            if (nextResponse) _vrc.NextResponse();
+            if (sendResponse && canAct)
+            {
+                var action = TraineeAction.Respond(_selected, _vrc.Response);
                 Run(() => SubmitAction(action));
             }
             _vrText.text = _vrc.Status(_selected, Vocabulary.Label, _vrPointed, _error ?? _notice);

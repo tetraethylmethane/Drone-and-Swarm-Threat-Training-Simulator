@@ -1,0 +1,2850 @@
+{
+ "adversary_engine": "adversary-1.0.0",
+ "agents_per_type": 40,
+ "history_sessions": 5,
+ "level": 2,
+ "sessions_played": 1680,
+ "seconds": 460.9,
+ "machine": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.4",
+  "cpus": 12
+ },
+ "summary": {
+  "bird_low@demo-perimeter-basics": {
+   "agents": 40,
+   "adapted_share": 0.775,
+   "tactic_counts": {
+    "low_and_slow": 31
+   },
+   "matching_tactic": "low_and_slow",
+   "matching_share": 0.775,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 0.4,
+   "metric_diff_mean": 0.113,
+   "metric_diff_ci95": [
+    0.025,
+    0.212
+   ],
+   "overall_diff_mean": -1.55,
+   "H1_met": false,
+   "H3_met": true
+  },
+  "slow@demo-perimeter-basics": {
+   "agents": 40,
+   "adapted_share": 1.0,
+   "tactic_counts": {
+    "fast_run_in": 40
+   },
+   "matching_tactic": "fast_run_in",
+   "matching_share": 1.0,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 1.0,
+   "metric_diff_mean": 0.0,
+   "metric_diff_ci95": [
+    0.0,
+    0.0
+   ],
+   "overall_diff_mean": -0.05,
+   "H1_met": true,
+   "H3_met": false
+  },
+  "crowd@demo-swarm-recognition": {
+   "agents": 40,
+   "adapted_share": 1.0,
+   "tactic_counts": {
+    "larger_swarm": 40,
+    "saturation": 4
+   },
+   "matching_tactic": "saturation",
+   "matching_share": 0.1,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 0.728,
+   "metric_diff_mean": -0.002,
+   "metric_diff_ci95": [
+    -0.026,
+    0.028
+   ],
+   "overall_diff_mean": -0.42,
+   "H1_met": false,
+   "H3_met": false
+  },
+  "swarm_blind@demo-swarm-recognition": {
+   "agents": 40,
+   "adapted_share": 1.0,
+   "tactic_counts": {
+    "larger_swarm": 40,
+    "saturation": 3
+   },
+   "matching_tactic": "larger_swarm",
+   "matching_share": 1.0,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 0.831,
+   "metric_diff_mean": -0.006,
+   "metric_diff_ci95": [
+    -0.018,
+    0.006
+   ],
+   "overall_diff_mean": -0.08,
+   "H1_met": true,
+   "H3_met": false
+  },
+  "control@demo-perimeter-basics": {
+   "agents": 40,
+   "adapted_share": 0.0,
+   "tactic_counts": {},
+   "matching_tactic": null,
+   "matching_share": null,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 0.062,
+   "metric_diff_mean": 0.0,
+   "metric_diff_ci95": [
+    0.0,
+    0.0
+   ],
+   "overall_diff_mean": 0.0,
+   "H2_met": true
+  },
+  "control@demo-swarm-recognition": {
+   "agents": 40,
+   "adapted_share": 0.15,
+   "tactic_counts": {
+    "larger_swarm": 6
+   },
+   "matching_tactic": null,
+   "matching_share": null,
+   "metric_pairs": 40,
+   "metric_baseline_mean": 0.1,
+   "metric_diff_mean": 0.0,
+   "metric_diff_ci95": [
+    0.0,
+    0.0
+   ],
+   "overall_diff_mean": 0.03,
+   "H2_met": true
+  }
+ },
+ "rows": [
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 0,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 53.0,
+   "overall_baseline": 53.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 1,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 2,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 3,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.2,
+   "overall_baseline": 69.2
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 4,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 51.1,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 5,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 60.7,
+   "overall_baseline": 60.7
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 6,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.5,
+   "overall_adapted": 56.3,
+   "overall_baseline": 52.2
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 7,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 65.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 8,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 56.3,
+   "overall_baseline": 56.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 9,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.0,
+   "overall_baseline": 56.7
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 10,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 50.2,
+   "overall_baseline": 50.2
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 11,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 65.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 12,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 65.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 13,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 63.6,
+   "overall_baseline": 63.6
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 14,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 56.7,
+   "overall_baseline": 56.7
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 15,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 65.9,
+   "overall_baseline": 65.9
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 16,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 49.3,
+   "overall_baseline": 49.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 17,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 58.3,
+   "overall_baseline": 58.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 18,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 19,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 20,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 57.8,
+   "overall_baseline": 57.8
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 21,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 63.0,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 22,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 55.3,
+   "overall_baseline": 55.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 23,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 55.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 24,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 63.0,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 25,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 69.2
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 26,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 63.0,
+   "overall_baseline": 63.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 27,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 28,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 53.0,
+   "overall_baseline": 53.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 29,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 0.5,
+   "overall_adapted": 55.3,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 30,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 31,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 61.7,
+   "overall_baseline": 58.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 32,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.6,
+   "overall_baseline": 69.6
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 33,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.5,
+   "overall_baseline": 58.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 34,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 35,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.0,
+   "overall_adapted": 59.9,
+   "overall_baseline": 64.0
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 36,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 54.0,
+   "overall_baseline": 49.7
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 37,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 1.0,
+   "overall_adapted": 59.4,
+   "overall_baseline": 55.3
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 38,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 61.1,
+   "overall_baseline": 58.6
+  },
+  {
+   "kind": "bird_low",
+   "scenario": "demo-perimeter-basics",
+   "agent": 39,
+   "tactics": [
+    "low_and_slow"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 0,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 56.6,
+   "overall_baseline": 56.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 1,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 52.2,
+   "overall_baseline": 52.2
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 2,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.3,
+   "overall_baseline": 54.3
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 3,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 53.2,
+   "overall_baseline": 54.0
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 4,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 51.7,
+   "overall_baseline": 52.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 5,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 56.3,
+   "overall_baseline": 56.3
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 6,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 68.6,
+   "overall_baseline": 67.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 7,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 59.5,
+   "overall_baseline": 59.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 8,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 47.3,
+   "overall_baseline": 47.3
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 9,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 57.4,
+   "overall_baseline": 57.4
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 10,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 67.7,
+   "overall_baseline": 67.7
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 11,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 58.8,
+   "overall_baseline": 58.8
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 12,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 49.7,
+   "overall_baseline": 49.7
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 13,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 63.1,
+   "overall_baseline": 62.8
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 14,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.6,
+   "overall_baseline": 54.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 15,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 58.2,
+   "overall_baseline": 58.2
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 16,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 50.6,
+   "overall_baseline": 50.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 17,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 61.7,
+   "overall_baseline": 61.7
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 18,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 67.7,
+   "overall_baseline": 67.7
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 19,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 64.4,
+   "overall_baseline": 64.4
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 20,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.8,
+   "overall_baseline": 55.4
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 21,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 47.5,
+   "overall_baseline": 47.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 22,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 53.5,
+   "overall_baseline": 53.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 23,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.5,
+   "overall_baseline": 54.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 24,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 32.7,
+   "overall_baseline": 32.7
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 25,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 56.5,
+   "overall_baseline": 56.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 26,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 66.6,
+   "overall_baseline": 66.6
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 27,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 63.8,
+   "overall_baseline": 63.8
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 28,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.9,
+   "overall_baseline": 54.9
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 29,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 64.4,
+   "overall_baseline": 64.4
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 30,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 59.3,
+   "overall_baseline": 59.3
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 31,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.6,
+   "overall_baseline": 55.2
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 32,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 61.0,
+   "overall_baseline": 61.0
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 33,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.5,
+   "overall_baseline": 54.5
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 34,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 64.0,
+   "overall_baseline": 64.0
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 35,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 64.7,
+   "overall_baseline": 64.2
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 36,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 61.0,
+   "overall_baseline": 60.9
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 37,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 51.0,
+   "overall_baseline": 52.0
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 38,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 49.2,
+   "overall_baseline": 49.2
+  },
+  {
+   "kind": "slow",
+   "scenario": "demo-perimeter-basics",
+   "agent": 39,
+   "tactics": [
+    "fast_run_in"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 54.6,
+   "overall_baseline": 54.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 0,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 42.1,
+   "overall_baseline": 43.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 1,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 42.6,
+   "overall_baseline": 41.4
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 2,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 44.2,
+   "overall_baseline": 42.5
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 3,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 46.2,
+   "overall_baseline": 47.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 4,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 37.9,
+   "overall_baseline": 37.9
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 5,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.6666666666666666,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 41.6,
+   "overall_baseline": 41.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 6,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 35.2,
+   "overall_baseline": 35.2
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 7,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5555555555555556,
+   "metric_baseline": 0.5555555555555556,
+   "overall_adapted": 41.3,
+   "overall_baseline": 41.3
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 8,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7777777777777778,
+   "metric_baseline": 0.7777777777777778,
+   "overall_adapted": 29.7,
+   "overall_baseline": 29.7
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 9,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 44.1,
+   "overall_baseline": 44.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 10,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 38.3,
+   "overall_baseline": 38.3
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 11,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 47.6,
+   "overall_baseline": 45.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 12,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 34.6,
+   "overall_baseline": 36.7
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 13,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.6666666666666666,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 40.9,
+   "overall_baseline": 40.9
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 14,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 48.9,
+   "overall_baseline": 48.9
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 15,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 43.2,
+   "overall_baseline": 41.7
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 16,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.6666666666666666,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 45.5,
+   "overall_baseline": 45.5
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 17,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 49.4,
+   "overall_baseline": 49.4
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 18,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7777777777777778,
+   "metric_baseline": 0.7777777777777778,
+   "overall_adapted": 37.2,
+   "overall_baseline": 37.2
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 19,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 34.7,
+   "overall_baseline": 35.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 20,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 42.4,
+   "overall_baseline": 45.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 21,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.6666666666666666,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 38.6,
+   "overall_baseline": 38.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 22,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 43.2,
+   "overall_baseline": 41.7
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 23,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 41.4,
+   "overall_baseline": 40.4
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 24,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 42.3,
+   "overall_baseline": 42.3
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 25,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 46.7,
+   "overall_baseline": 48.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 26,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 0.5555555555555556,
+   "metric_baseline": 0.5,
+   "overall_adapted": 42.2,
+   "overall_baseline": 45.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 27,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 47.9,
+   "overall_baseline": 47.9
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 28,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 47.5,
+   "overall_baseline": 46.2
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 29,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.5714285714285714,
+   "overall_adapted": 45.2,
+   "overall_baseline": 43.8
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 30,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8888888888888888,
+   "metric_baseline": 0.8888888888888888,
+   "overall_adapted": 27.9,
+   "overall_baseline": 27.9
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 31,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 0.5555555555555556,
+   "overall_adapted": 32.6,
+   "overall_baseline": 43.5
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 32,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5714285714285714,
+   "overall_adapted": 50.9,
+   "overall_baseline": 52.6
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 33,
+   "tactics": [
+    "saturation",
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8888888888888888,
+   "metric_baseline": 1.0,
+   "overall_adapted": 36.4,
+   "overall_baseline": 40.4
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 34,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8888888888888888,
+   "metric_baseline": 0.8888888888888888,
+   "overall_adapted": 40.2,
+   "overall_baseline": 40.2
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 35,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 42.2,
+   "overall_baseline": 42.2
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 36,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 39.4,
+   "overall_baseline": 37.5
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 37,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 35.5,
+   "overall_baseline": 36.7
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 38,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7777777777777778,
+   "metric_baseline": 0.7777777777777778,
+   "overall_adapted": 36.1,
+   "overall_baseline": 36.1
+  },
+  {
+   "kind": "crowd",
+   "scenario": "demo-swarm-recognition",
+   "agent": 39,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8888888888888888,
+   "metric_baseline": 0.8888888888888888,
+   "overall_adapted": 35.8,
+   "overall_baseline": 35.8
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 0,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 49.1,
+   "overall_baseline": 49.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 1,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.875,
+   "overall_adapted": 46.0,
+   "overall_baseline": 46.0
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 2,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 39.3,
+   "overall_baseline": 39.3
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 3,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 49.4,
+   "overall_baseline": 49.4
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 4,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 46.1,
+   "overall_baseline": 46.7
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 5,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 40.0,
+   "overall_baseline": 40.0
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 6,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 46.1,
+   "overall_baseline": 46.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 7,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 51.7,
+   "overall_baseline": 51.7
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 8,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 36.5,
+   "overall_baseline": 36.5
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 9,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7142857142857143,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 50.0,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 10,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5714285714285714,
+   "overall_adapted": 55.9,
+   "overall_baseline": 53.3
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 11,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 42.8,
+   "overall_baseline": 42.8
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 12,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 51.5,
+   "overall_baseline": 51.5
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 13,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.7142857142857143,
+   "overall_adapted": 47.2,
+   "overall_baseline": 47.9
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 14,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 45.6,
+   "overall_baseline": 46.2
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 15,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 44.5,
+   "overall_baseline": 44.5
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 16,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 0.5714285714285714,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 45.3,
+   "overall_baseline": 46.8
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 17,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 1.0,
+   "overall_adapted": 47.6,
+   "overall_baseline": 48.6
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 18,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 49.9,
+   "overall_baseline": 49.9
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 19,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7142857142857143,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 49.3,
+   "overall_baseline": 48.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 20,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.5714285714285714,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 51.7,
+   "overall_baseline": 49.3
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 21,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 47.6,
+   "overall_baseline": 47.6
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 22,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 38.2,
+   "overall_baseline": 38.2
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 23,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 33.9,
+   "overall_baseline": 43.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 24,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8333333333333334,
+   "overall_adapted": 50.0,
+   "overall_baseline": 50.0
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 25,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 46.6,
+   "overall_baseline": 47.2
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 26,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.7142857142857143,
+   "metric_baseline": 0.6666666666666666,
+   "overall_adapted": 49.5,
+   "overall_baseline": 50.2
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 27,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.875,
+   "overall_adapted": 47.1,
+   "overall_baseline": 47.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 28,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 49.0,
+   "overall_baseline": 46.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 29,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.625,
+   "overall_adapted": 47.6,
+   "overall_baseline": 47.6
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 30,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 46.1,
+   "overall_baseline": 46.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 31,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 49.7,
+   "overall_baseline": 49.7
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 32,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8333333333333334,
+   "overall_adapted": 48.1,
+   "overall_baseline": 49.0
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 33,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.75,
+   "metric_baseline": 0.75,
+   "overall_adapted": 49.4,
+   "overall_baseline": 49.4
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 34,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8333333333333334,
+   "overall_adapted": 50.9,
+   "overall_baseline": 50.0
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 35,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.875,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 50.8,
+   "overall_baseline": 51.7
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 36,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8571428571428571,
+   "overall_adapted": 51.1,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 37,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.8571428571428571,
+   "metric_baseline": 0.8333333333333334,
+   "overall_adapted": 47.8,
+   "overall_baseline": 48.9
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 38,
+   "tactics": [
+    "larger_swarm",
+    "saturation"
+   ],
+   "metric_adapted": 0.625,
+   "metric_baseline": 0.75,
+   "overall_adapted": 47.9,
+   "overall_baseline": 41.8
+  },
+  {
+   "kind": "swarm_blind",
+   "scenario": "demo-swarm-recognition",
+   "agent": 39,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 34.4,
+   "overall_baseline": 34.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 0,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 70.0,
+   "overall_baseline": 70.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 1,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 55.7,
+   "overall_baseline": 55.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 2,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.6,
+   "overall_baseline": 69.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 3,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 45.6,
+   "overall_baseline": 45.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 4,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 56.7,
+   "overall_baseline": 56.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 5,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.8,
+   "overall_baseline": 54.8
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 6,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.2,
+   "overall_baseline": 69.2
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 7,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 65.9,
+   "overall_baseline": 65.9
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 8,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 51.1,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 9,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 61.1,
+   "overall_baseline": 61.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 10,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 54.4,
+   "overall_baseline": 54.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 11,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 48.0,
+   "overall_baseline": 48.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 12,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 13,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 14,
+   "tactics": [],
+   "metric_adapted": 0.5,
+   "metric_baseline": 0.5,
+   "overall_adapted": 53.0,
+   "overall_baseline": 53.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 15,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 56.7,
+   "overall_baseline": 56.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 16,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 64.4,
+   "overall_baseline": 64.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 17,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 45.6,
+   "overall_baseline": 45.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 18,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 19,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 65.9,
+   "overall_baseline": 65.9
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 20,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 21,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 73.3,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 22,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 55.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 23,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.6,
+   "overall_baseline": 69.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 24,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.0,
+   "overall_baseline": 53.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 25,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 44.1,
+   "overall_baseline": 44.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 26,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 64.0,
+   "overall_baseline": 64.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 27,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 62.2,
+   "overall_baseline": 62.2
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 28,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.5,
+   "overall_baseline": 53.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 29,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.7,
+   "overall_baseline": 55.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 30,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 73.3,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 31,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 58.3,
+   "overall_baseline": 58.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 32,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.4,
+   "overall_baseline": 60.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 33,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 69.6,
+   "overall_baseline": 69.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 34,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 73.3,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 35,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 68.6,
+   "overall_baseline": 68.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 36,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.0,
+   "overall_baseline": 53.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 37,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 73.3,
+   "overall_baseline": 73.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 38,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 63.6,
+   "overall_baseline": 63.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-perimeter-basics",
+   "agent": 39,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 65.0,
+   "overall_baseline": 65.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 0,
+   "tactics": [],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 63.9,
+   "overall_baseline": 63.9
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 1,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 40.0,
+   "overall_baseline": 40.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 2,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 41.1,
+   "overall_baseline": 41.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 3,
+   "tactics": [],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 57.5,
+   "overall_baseline": 57.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 4,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 64.7,
+   "overall_baseline": 64.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 5,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 62.4,
+   "overall_baseline": 62.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 6,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.5,
+   "overall_baseline": 54.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 7,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 52.7,
+   "overall_baseline": 52.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 8,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.7,
+   "overall_baseline": 55.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 9,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 42.3,
+   "overall_baseline": 42.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 10,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 59.4,
+   "overall_baseline": 59.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 11,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 61.1,
+   "overall_baseline": 61.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 12,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 52.0,
+   "overall_baseline": 52.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 13,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.3,
+   "overall_baseline": 53.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 14,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 62.6,
+   "overall_baseline": 62.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 15,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.6,
+   "overall_baseline": 60.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 16,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 60.1,
+   "overall_baseline": 60.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 17,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 63.0,
+   "overall_baseline": 63.0
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 18,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 56.7,
+   "overall_baseline": 56.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 19,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 62.2,
+   "overall_baseline": 62.2
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 20,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.8,
+   "overall_baseline": 54.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 21,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 51.1,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 22,
+   "tactics": [],
+   "metric_adapted": 1.0,
+   "metric_baseline": 1.0,
+   "overall_adapted": 62.2,
+   "overall_baseline": 62.2
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 23,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 47.4,
+   "overall_baseline": 47.4
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 24,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 64.7,
+   "overall_baseline": 64.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 25,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 50.9,
+   "overall_baseline": 50.9
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 26,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 61.5,
+   "overall_baseline": 61.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 27,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.5,
+   "overall_baseline": 54.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 28,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 51.8,
+   "overall_baseline": 51.8
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 29,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.5,
+   "overall_baseline": 54.5
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 30,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 51.7,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 31,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.9,
+   "overall_baseline": 53.9
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 32,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 54.6,
+   "overall_baseline": 54.6
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 33,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 55.3,
+   "overall_baseline": 55.3
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 34,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 51.1,
+   "overall_baseline": 51.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 35,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 57.1,
+   "overall_baseline": 57.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 36,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.8,
+   "overall_baseline": 53.8
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 37,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 50.1,
+   "overall_baseline": 50.1
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 38,
+   "tactics": [],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 64.7,
+   "overall_baseline": 64.7
+  },
+  {
+   "kind": "control",
+   "scenario": "demo-swarm-recognition",
+   "agent": 39,
+   "tactics": [
+    "larger_swarm"
+   ],
+   "metric_adapted": 0.0,
+   "metric_baseline": 0.0,
+   "overall_adapted": 53.3,
+   "overall_baseline": 53.3
+  }
+ ]
+}

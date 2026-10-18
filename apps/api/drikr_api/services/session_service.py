@@ -33,7 +33,7 @@ from psycopg.types.json import Jsonb
 from sqlalchemy import func, or_, select, text
 from sqlalchemy.orm import Session
 
-from drikr_api import cpu
+from drikr_api import timeline_cache
 from drikr_api.errors import ApiError, conflict
 from drikr_api.models import (
     Assignment,
@@ -53,9 +53,10 @@ from drikr_contracts.enums import ActionKind, TrainingResponse
 from drikr_contracts.events import TICK_MS, EventOrigin, EventType, EventVisibility
 from drikr_contracts.scenario import Scenario as ScenarioContract
 from drikr_contracts.scenario import TraineeOptions, TraineeSelection
-from drikr_simcore import ENGINE_VERSION, GroundTruthIndex, generate_timeline, sensor_confirmation_event
+from drikr_simcore import ENGINE_VERSION, GroundTruthIndex, sensor_confirmation_event
 from drikr_simcore.adversary import plan_adversary
 from drikr_simcore.canonical import digest
+from drikr_simcore.packed import unpack_events
 
 S = SessionStatus
 ACTIVE_STATUSES = (S.CREATED, S.RUNNING, S.PAUSED)
@@ -229,6 +230,46 @@ def recent_results(db: Session, trainee_id: uuid.UUID, limit: int = ADVERSARY_HI
     return list(rows)
 
 
+def exercise_inputs(
+    db: Session,
+    trainee: User,
+    assignment: Assignment | None,
+    scn_row: Scenario,
+    options: TraineeOptions,
+    selection: TraineeSelection,
+    attempt: int,
+) -> tuple[ScenarioContract, int, dict[str, Any] | None]:
+    """The effective scenario, seed and adversary plan of an attempt (session creation and
+    pre-generation use this one function, so their cache keys agree). Raises ValueError for a
+    selection the exercise does not permit."""
+    effective = ScenarioContract.model_validate(scn_row.definition).apply_selection(options, selection)
+    # A different exercise on every attempt (SIH26247: randomisation against rote learning), unless
+    # the trainee chose a seed, the scenario fixes its seed, or the instructor wants identical attempts.
+    vary = assignment.vary_seed if assignment is not None else True
+    if selection.seed is None and vary and effective.randomization.allow_seed_override:
+        context = f"assignment:{assignment.id}" if assignment is not None else f"practice:{scn_row.key}"
+        effective.randomization.seed = attempt_seed(effective.randomization.seed, trainee.id, context, attempt)
+    seed = effective.randomization.seed
+    plan: dict[str, Any] | None = None
+    if assignment is not None and assignment.adaptive_adversary:
+        effective, plan = plan_adversary(effective, recent_results(db, trainee.id), seed)
+    return effective, seed, plan
+
+
+def prewarm_first_attempt(db: Session, assignment: Assignment) -> bool:
+    """Pre-generate an assignment's first attempt in the background (backlog B-17). Not possible
+    with the adaptive adversary, whose plan depends on the history at the moment the attempt starts."""
+    if assignment.adaptive_adversary:
+        return False
+    options = TraineeOptions.model_validate(assignment.trainee_options)
+    level = adaptive_service.next_level_for_assignment(db, assignment)
+    effective, seed, _ = exercise_inputs(
+        db, assignment.trainee, assignment, assignment.scenario, options, TraineeSelection(), attempt=1
+    )
+    eff_json = effective.model_dump(mode="json")
+    return timeline_cache.prewarm(config_digest(eff_json, seed, level), eff_json, seed, level)
+
+
 def create_session(
     db: Session,
     trainee: User,
@@ -294,23 +335,13 @@ def create_session(
             ).all()
         )
 
-    base = ScenarioContract.model_validate(scn_row.definition)
     try:
-        effective = base.apply_selection(options, selection)
+        effective, seed, plan = exercise_inputs(db, trainee, assignment, scn_row, options, selection, attempt)
     except ValueError as exc:
         raise ApiError(422, "selection_not_permitted", str(exc).splitlines()[0]) from exc
-    # A different exercise on every attempt (SIH26247: randomisation against rote learning), unless
-    # the trainee chose a seed, the scenario fixes its seed, or the instructor wants identical attempts.
-    vary = assignment.vary_seed if assignment is not None else True
-    if selection.seed is None and vary and effective.randomization.allow_seed_override:
-        context = f"assignment:{assignment.id}" if assignment is not None else f"practice:{scn_row.key}"
-        effective.randomization.seed = attempt_seed(effective.randomization.seed, trainee.id, context, attempt)
-    seed = effective.randomization.seed
-    plan: dict[str, Any] | None = None
-    if assignment is not None and assignment.adaptive_adversary:
-        effective, plan = plan_adversary(effective, recent_results(db, trainee.id), seed)
-    timeline = cpu.run(generate_timeline, effective, seed=seed, difficulty_level=level)
     eff_json = effective.model_dump(mode="json")
+    packed = timeline_cache.timeline(config_digest(eff_json, seed, level), eff_json, seed, level)
+    events = unpack_events(packed)
 
     s = TrainingSession(
         trainee_id=trainee.id,
@@ -325,17 +356,17 @@ def create_session(
         effective_definition=eff_json,
         adversary_plan=plan,
         config_digest=config_digest(eff_json, seed, level),
-        timeline_digest=timeline.digest,
-        engine_version=timeline.engine_version,
-        generated_event_count=len(timeline.events),
-        next_seq=len(timeline.events),
+        timeline_digest=packed.digest,
+        engine_version=packed.engine_version,
+        generated_event_count=len(events),
+        next_seq=len(events),
         status=S.CREATED,
-        duration_ms=timeline.duration_ms,
+        duration_ms=effective.time_limits.duration_s * 1000,  # as in generate_timeline
         allow_pause=effective.time_limits.allow_pause,
     )
     db.add(s)
     db.flush()
-    _copy_events(db, s.id, timeline.events)
+    _copy_events(db, s.id, events)
     return s
 
 

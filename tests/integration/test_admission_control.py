@@ -10,6 +10,7 @@ from typing import Any
 
 import pytest
 
+from drikr_api import timeline_cache
 from drikr_api.services import session_service
 from tests.integration.conftest import Api, FakeClock, World, make_settings, scenario_id
 
@@ -41,7 +42,7 @@ def test_the_next_trainee_is_refused_until_a_place_is_free(
     assert trainee.post(f"/sessions/{sid}/complete").status_code == 200
     assert practice(trainee2).status_code == 201  # the place is free again
     capacity = admin.get("/admin/system").json()["capacity"]
-    assert capacity == {"active_sessions": 1, "max_active_sessions": 1}
+    assert (capacity["active_sessions"], capacity["max_active_sessions"]) == (1, 1)
 
 
 def test_resuming_counts_against_the_limit(capped: None, trainee: Api, trainee2: Api, clock: FakeClock) -> None:
@@ -105,13 +106,13 @@ def test_a_refused_request_does_no_generation_work(
     # being rolled back, which slowed the admitted trainees the limit is meant to protect.
     assert practice(trainee).status_code == 201
     calls: list[object] = []
-    real = session_service.cpu.run
+    real = timeline_cache.cpu.run
 
     def counting(fn: Any, *args: Any, **kwargs: Any) -> Any:
         calls.append(fn)
         return real(fn, *args, **kwargs)
 
-    monkeypatch.setattr(session_service.cpu, "run", counting)
+    monkeypatch.setattr(timeline_cache.cpu, "run", counting)
     for _ in range(3):
         assert practice(trainee2).status_code == 503
     assert calls == []
@@ -124,14 +125,14 @@ def test_a_simultaneous_burst_generates_only_what_can_be_admitted(
     # sessions, so all of them generated a timeline and the surplus was refused only afterwards.
     # Creations in progress now hold a place, so the surplus is refused before any work.
     generated: list[object] = []
-    real = session_service.cpu.run
+    real = timeline_cache.cpu.run
 
     def slow_generation(fn: Any, *args: Any, **kwargs: Any) -> Any:
         generated.append(fn)
         time.sleep(0.5)  # a realistic generation time keeps the creations overlapping
         return real(fn, *args, **kwargs)
 
-    monkeypatch.setattr(session_service.cpu, "run", slow_generation)
+    monkeypatch.setattr(timeline_cache.cpu, "run", slow_generation)
     apis = [world.login("trainee1"), world.login("trainee2")]
     assert _simultaneous_creations(apis, scenario_id(apis[0], "demo-perimeter-basics")) == [201, 503]
     assert len(generated) == 1
