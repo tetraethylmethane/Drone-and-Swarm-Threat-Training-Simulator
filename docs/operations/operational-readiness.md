@@ -83,8 +83,8 @@ the largest class that will train at once.
    ```
 3. Judge the results against the criteria in `docs/testing/load-resilience-report.md` §2.3 (they
    were fixed before any measurement). Record the hardware and software versions.
-4. Set `DRIKR_MAX_ACTIVE_SESSIONS` in the deployment's `.env` to the largest load that met the
-   criteria, and confirm that admission control refuses above it (`load-resilience-report.md` §5.8).
+4. Set `DRIKR_MAX_ACTIVE_SESSIONS` in the deployment's `.env` **below** the largest load that met the
+   criteria (with the limit at measured capacity, admitted trainees were not protected), and confirm that admission control refuses above it (`load-resilience-report.md` §5.8).
 5. Write the minimum and recommended hardware into `docs/product/positioning.md`.
 
 ## 4. Independent security assessment

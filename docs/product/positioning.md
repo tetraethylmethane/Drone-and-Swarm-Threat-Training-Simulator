@@ -78,6 +78,21 @@ in 4 of 5 runs, with little headroom, and 60 without errors but slower. API memo
 seen over 4 hours). These are development measurements, not
 requirements for deployment hardware.
 
+### Guidance for running a class on this laptop (2026-10-18)
+
+For the measured laptop only (Intel Core i7-1355U, 16 GB, Docker with 7.6 GiB). Other hardware
+must be measured (`docs/operations/operational-readiness.md` §3).
+
+| Topic | Guidance | Evidence |
+|---|---|---|
+| Class size | **Up to 20 trainees at once**, with `DRIKR_MAX_ACTIVE_SESSIONS=20`. 30 is at the edge of capacity (latency criteria met in 4 of 5 runs) and should not be planned for | load report 5.1, 5.8 |
+| Starting a class | Create the assignment **at least 1 minute before** trainees start, so first attempts are pre-generated. Then 30 simultaneous starts took at most 7.1 s (p95) | load report 5.10 |
+| Power | **Mains power** with the Balanced or a higher-performance plan. On battery the processor is throttled; no measurement was made on battery | load report §3 |
+| Other work | No builds, Unity editor or other heavy programs on the laptop during a class | L-04 (Docker stopped during sustained load) |
+| Disk | Keep **at least 20 GB free** on the drive holding Docker's disk image (here moved to D:). A full C: drive stopped PostgreSQL and Docker on 2026-10-17/18 | backlog, operations notes |
+| Memory | The API peaks at about 0.75 GiB when a class starts and settles near 0.3 GiB; 16 GB is ample | load report 5.9 |
+| Desktop client on the same laptop | Not measured. Run trainee clients on other computers | — |
+
 ## How to validate the position
 
 1. **Demonstrations and interviews with instructors** (5 to 8): do they value reproducibility,

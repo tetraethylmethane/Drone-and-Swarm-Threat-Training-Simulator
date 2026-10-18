@@ -1,0 +1,261 @@
+{
+    "root_group": {
+        "checks": {
+            "session created": {
+                "fails": 0,
+                "name": "session created",
+                "path": "::session created",
+                "id": "fe128c16ddba45c98ab17e9ba70507fd",
+                "passes": 30
+            }
+        },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {}
+    },
+    "metrics": {
+        "drikr_action_ms": {
+            "med": 97.847804,
+            "avg": 127.45570422068975,
+            "p(90)": 267.30274319999995,
+            "p(95)": 343.5098169999997,
+            "p(99)": 423.8192606,
+            "max": 478.233857,
+            "count": 145,
+            "min": 17.345207
+        },
+        "http_req_blocked": {
+            "avg": 0.019772868001634688,
+            "p(90)": 0.014616,
+            "p(95)": 0.018321799999999965,
+            "p(99)": 0.17239405999999996,
+            "max": 4.784039,
+            "count": 2447,
+            "min": 0.001712,
+            "med": 0.009092
+        },
+        "http_req_tls_handshaking": {
+            "p(95)": 0,
+            "p(99)": 0,
+            "max": 0,
+            "count": 2447,
+            "min": 0,
+            "med": 0,
+            "avg": 0,
+            "p(90)": 0
+        },
+        "http_req_receiving": {
+            "count": 2447,
+            "min": 0.019957,
+            "med": 0.183453,
+            "avg": 0.19933732161830808,
+            "p(90)": 0.312809,
+            "p(95)": 0.3654781999999995,
+            "p(99)": 0.47155965999999994,
+            "max": 2.400815
+        },
+        "iteration_duration": {
+            "avg": 119447.625081,
+            "p(90)": 121591.8468303,
+            "p(95)": 121599.51045885,
+            "p(99)": 121610.14317293001,
+            "max": 121612.429354,
+            "count": 30,
+            "min": 115316.542174,
+            "med": 119430.257644
+        },
+        "iterations": {
+            "count": 30,
+            "rate": 0.22260864833742194
+        },
+        "http_req_waiting": {
+            "p(99)": 2902.846378619991,
+            "max": 7374.138161,
+            "count": 2447,
+            "min": 15.384039,
+            "med": 87.687823,
+            "avg": 220.60383104617927,
+            "p(90)": 374.07600240000005,
+            "p(95)": 613.5776569999992
+        },
+        "http_req_connecting": {
+            "p(95)": 0,
+            "p(99)": 0.10247731999999968,
+            "max": 1.426114,
+            "count": 2447,
+            "min": 0,
+            "med": 0,
+            "avg": 0.004160863506334288,
+            "p(90)": 0
+        },
+        "data_sent": {
+            "count": 600799,
+            "rate": 4458.101777082492
+        },
+        "vus": {
+            "value": 6,
+            "min": 0,
+            "max": 30
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(95)": 613.7732220999992,
+            "p(99)": 2902.999076419991,
+            "max": 7374.523741,
+            "count": 2447,
+            "min": 15.619946,
+            "med": 87.948064,
+            "avg": 220.86702905394398,
+            "p(90)": 374.2279548
+        },
+        "checks": {
+            "passes": 30,
+            "fails": 0,
+            "value": 1
+        },
+        "drikr_feed_ms": {
+            "min": 15.619946,
+            "med": 83.625217,
+            "avg": 149.6412285788738,
+            "p(90)": 342.7232318,
+            "p(95)": 417.61233339999984,
+            "p(99)": 938.9445237199998,
+            "max": 1637.087646,
+            "count": 2149
+        },
+        "vus_max": {
+            "value": 30,
+            "min": 30,
+            "max": 30
+        },
+        "drikr_complete_ms": {
+            "max": 1849.416475,
+            "count": 30,
+            "min": 484.58715,
+            "med": 1136.554456,
+            "avg": 1152.1154537333334,
+            "p(90)": 1737.1584778000001,
+            "p(95)": 1768.25157315,
+            "p(99)": 1825.8888707
+        },
+        "http_req_sending": {
+            "p(90)": 0.1148248,
+            "p(95)": 0.1367872999999999,
+            "p(99)": 0.1942955599999998,
+            "max": 3.604506,
+            "count": 2447,
+            "min": 0.005183,
+            "med": 0.051285,
+            "avg": 0.06386068614630157
+        },
+        "http_reqs": {
+            "count": 2447,
+            "rate": 18.157445416055715
+        },
+        "drikr_create_session_ms": {
+            "p(95)": 7296.4263234499995,
+            "p(99)": 7360.13137392,
+            "max": 7374.523741,
+            "count": 30,
+            "min": 2215.679979,
+            "med": 4785.891979,
+            "avg": 4860.984843933333,
+            "p(90)": 7261.4968582
+        },
+        "drikr_sessions_scored": {
+            "count": 30,
+            "rate": 0.22260864833742194
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 2447,
+            "value": 0
+        },
+        "data_received": {
+            "count": 6959381,
+            "rate": 51640.61325583786
+        },
+        "http_req_duration": {
+            "min": 15.619946,
+            "med": 87.948064,
+            "avg": 220.86702905394398,
+            "p(90)": 374.2279548,
+            "p(95)": 613.7732220999992,
+            "p(99)": 2902.999076419991,
+            "max": 7374.523741,
+            "count": 2447
+        },
+        "drikr_failed_requests": {
+            "passes": 0,
+            "fails": 2416,
+            "value": 0
+        }
+    },
+    "setup_data": {
+        "assignments": [
+            "7e75601f-212d-4aac-bf8c-10a35920e8f5",
+            "ca80107a-f4ba-493f-bafd-fc8d0c260de6",
+            "cd3d2a94-d004-421b-8201-7b56b07c8204",
+            "d7c0b0b0-bd70-4c7b-820e-6c501beef123",
+            "d2bb5969-89b9-480e-a4e4-2fb22f1dc186",
+            "84c55f77-210b-416b-ba58-4e866970cc5b",
+            "c230aa38-4485-469c-bdfe-341ba10831d9",
+            "a7b358fa-7004-44aa-b65b-1b8db493823a",
+            "4ae5cd0d-677c-4c9a-a872-a36ed2fd823f",
+            "e2ed60c2-934b-4336-a2e2-442597c32dbc",
+            "260e9c8b-f25a-4d46-ac9f-547be50a0c2b",
+            "da43b8c9-b73d-4e1b-88c3-0feba54731cc",
+            "e7b34d10-84d9-44ae-94b1-e40ea0064a25",
+            "6eb7a068-17df-4cb2-b844-cb2dabf3b30d",
+            "9361cb63-b083-41bf-adbc-3ccee8bed3c6",
+            "28907e54-7011-4fda-8c93-deddb3684b43",
+            "9efe9250-3117-45cd-a9f3-f3d383899388",
+            "bdd1957d-f8b5-4842-965f-123504c925cc",
+            "29386b92-1e1e-4740-8ac4-ad2c0fe3a1b5",
+            "0212a2cc-d0b8-4c47-8fe2-de4542f56f89",
+            "a0582309-0133-4fb5-8e8a-0e61ff2a6edf",
+            "73907fcb-9bc5-4571-a54b-3b29348b52a4",
+            "950a7848-e39a-4302-a5e3-e840996b52f2",
+            "a28e05e0-bbd4-49a4-bfc7-b8be8ee118f0",
+            "091c7882-4f6d-4dbb-9651-2d0a9d5eeada",
+            "af200f0d-84ab-4743-9da7-f9143f2569ad",
+            "4d5fdf04-a19d-4b9f-a1ab-0fdca1dc8ce0",
+            "c1079a75-3365-47c5-afb9-5c971190e1a7",
+            "51288a09-1019-4d74-bdda-3abc21fdc8f2",
+            "22b4de3f-e412-4b7a-b875-8fb778dbd2c7"
+        ],
+        "startAt": 1792316104282,
+        "tokens": [
+            "u014R9UI2onoMUbdFaKj0r1fc7YEzVKMNd09Kjlg0yU",
+            "7QA1vx8C064mxOJZGISglwXKVWxnDnozgvn7kySdNIw",
+            "ssHGUYsaJgqtrBUrpgtL0j5AaF77CnxZrcv3R62J9nQ",
+            "mtScCMpGV2DF9WGdGi-YDh2ATSib5RL1oEIEPZ5N5kQ",
+            "nsrjAbCYPF4mzPOcqnoRep5HGrLzo_JHW8ccEHcbwUs",
+            "5R_25HGQ-gJezdkEtCeoxjZ_Gc0qh1Ldxg1ogSrZ1Oo",
+            "CLd5g4BS-fKF3lKuUXXFVvbDJ2dfJFILx4ABpmr3msU",
+            "vQ-_92hFTvy95csT7g1GSfE_cxdfQw1MiGccg-aaVHQ",
+            "o8KYnxmY8MaGp2YMQj2fGBF2GqBGcJPhUVJTwWmM6eQ",
+            "TbC-Rxi49dVFfn1tpw-v0nIRBZHzzEVOMfeiFbtkIXU",
+            "T_KKFaFurthSCqzqpt-ofrJP1S9p4vcplS-t6lxxSOw",
+            "SUteJbEJCPFYxF6vbmJIFBLFxUSb8x-4r7F8K7S7YAM",
+            "k7KV3fr_F6mzVXHqgvNG70JpA4F6PPCXTqT3gP7g1pY",
+            "qIhxdGTZP2_VLqs-v09ngAggwyZh7JRUzARZffphb3o",
+            "ZrSrNMj42FWeLSO7sOaJiqdD6ziJE5aDm6r007JMC44",
+            "0U6y25Nwh9U4r6UQBmay7uZBtmF6LxvBd3FssZQ-IKk",
+            "wPxcPPN3kvxiGVY9Q7sksfg7qcu3JeDDSDAoG2FxFeE",
+            "3J-YnsNW3SX0A_AHsPomnhioYRMOu6EL5lL5RYFke4U",
+            "C4pXGIZiTdkvrF_x4aGXYoAWgfUIRZJnwJ5b7TrXJug",
+            "IkttxPMBkaBnUDIO0Vd0P6hot5rq2bxgElCQTchGK08",
+            "R5SXmdWLyRJSdCLEk8__uLZDgb9hmmnPactMmXZvKaE",
+            "sCF6dhTjl2H5gqhFWBXrGJXvRDBAJMgftfGVdJaf12o",
+            "q5pnOuAy3hrl4wSw1RdE8ycIb1dx7S5EyBamemWeeM4",
+            "TqwPWgCnQPvLJep1IMJhD86htYGv8_RP1QiH5PTNp5Y",
+            "HbKCwGUn_zQ_f7EhvOs-3bWvDxYtZde_a5OuQYi-kWw",
+            "Rx8pHogEGHvACwcyPvoe9WxZIIdR7tZFwc7wDa4Vms0",
+            "sa8EhJVXhRGsLa3QjMB5IqyPI3S2FkH4kTftcFOuzGg",
+            "djCWadIEepqLD271_k7KKD8xGegAcXTUuWlt6E66vOU",
+            "ZD9QamqYFVdpGqLR2klJ1QTsRXqz6aX4LEhYKjcpMWQ",
+            "OuE4oVE84e5UBNuAsbgh3S1CRg9eDwAAVN6FuKHOBFc"
+        ]
+    }
+}

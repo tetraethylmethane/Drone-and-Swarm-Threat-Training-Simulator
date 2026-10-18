@@ -2,7 +2,7 @@
 
     docker compose -p drikrload exec -T -e LT_USERS=100 api python - < tests/load/create_users.py
 
-Accounts are named lt-001 ... lt-NNN, use LT_USER_PASSWORD (DRIKR_DEMO_PASSWORD in the container)
+Accounts are named lt-001 ... lt-NNN (trainees) and lt-instructor, use LT_USER_PASSWORD (DRIKR_DEMO_PASSWORD in the container)
 and do not need a password change. Idempotent.
 """
 
@@ -34,6 +34,19 @@ with db_handle.session_factory() as db:
                 password_hash=digest,
                 must_change_password=False,
                 unit=f"Load unit {1 + (i - 1) // 25}",
+            )
+        )
+        created += 1
+    # The instructor who assigns the class in tests/load/k6/class_start.js.
+    if not db.scalar(select(User.id).where(User.username == "lt-instructor")):
+        db.add(
+            User(
+                username="lt-instructor",
+                display_name="Load instructor",
+                role=Role.INSTRUCTOR,
+                password_hash=digest,
+                must_change_password=False,
+                unit="Load unit 1",
             )
         )
         created += 1

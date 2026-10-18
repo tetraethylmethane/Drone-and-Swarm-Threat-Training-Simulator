@@ -51,9 +51,11 @@ change). Host: Windows 11 10.0.26200; Docker Desktop 27.3.1.
 | Web dependencies, including dev tooling | `npm audit` in `apps/web` | **0 vulnerabilities** |
 | E2E tooling | `npm audit` in `tests/e2e` | **0 vulnerabilities** |
 | Secrets in history | `gitleaks` 8.30.1 (`zricethezav/gitleaks:v8.30.1`), `git` mode over the repository | 7 commits, **no leaks found** |
+| Secrets in history (2026-10-18) | Same image and mode | 11 commits (to `a30c00c`), **no leaks found** |
 | Secrets in uncommitted work | Same image, `dir` mode over a copy of every modified or untracked, non-ignored file (85 files; `git ls-files -mo --exclude-standard`), with `.gitleaksignore` | **No leaks found** |
 | Private keys and generated secrets kept out of git | `git check-ignore -v` on `deploy/tls/ca.key`, `server.key`, `ca.crt`, `deploy/loadtest/loadtest.env` | All ignored (`.gitignore` lines 26 and 51) |
 | Container images (Trivy, 2026-10-17) | `aquasec/trivy:0.66.0 image --severity HIGH,CRITICAL --ignore-unfixed` on the images that were load-tested: `drikr-api:1.0.0` (`288221e39d7c`, Debian 12.15 plus Python packages) and `drikr-web:1.0.0` (`13b56e554b5f`, Alpine 3.24.1) | **0** in both (JSON totals over every target). The `postgres` image was not scanned (O12) |
+| Container images (Trivy, 2026-10-18) | Same command (database updated 2026-10-18 07:12 UTC) on images built from commit `a30c00c`: `drikr-api:rc-a30c00c` (Debian 12.15) and `drikr-web:rc-a30c00c` (Alpine 3.24.1) | api **0**. web: **1 HIGH**, CVE-2026-77214 in `libexpat` 2.8.5 (published after the previous scan). The Dockerfile's `apk upgrade` had been served from Docker's build cache; rebuilt with `--no-cache` it installs 2.9.0-r0 and the scan is **0**. Release images must be built without the cache (`--no-cache --pull`). The running deployment's `drikr-web:1.0.0` still has 2.8.5 until it is rebuilt |
 
 ### 3.2 Logging (F-07), 2026-10-17
 

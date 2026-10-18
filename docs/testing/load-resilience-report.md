@@ -381,7 +381,11 @@ binary-mode bug, fixed); its files are in `discarded/`.
 the third such failure during a sustained run on this laptop (L-04). Afterwards the WSL virtual
 machine could not be shut down without administrator rights, so the post-run record checks
 (session states, full reproducibility, audit chain) **could not be run**. The sessions remain in the
-load-test volume and can be checked after the host is restarted. The memory series up to 14:16 UTC
+load-test volume and can be checked after the host is restarted. **Checked 2026-10-18 (B-18):** of
+4,457 sessions in the soak, 4,428 completed and scored, 29 were still open (in progress when Docker
+stopped; resumable) and none was paused for a lost connection; 5,000 of 5,000 sessions checked are
+reproducible with exact score matches (the report's maximum; 5,796 in the database); the audit
+chain is valid (603 entries). The memory series up to 14:16 UTC
 is complete: 92 samples, no gaps.
 
 | Time (UTC) | API process | Generation workers |
@@ -402,6 +406,56 @@ start burst, not a leak. The peak comes from concurrent session creation (each g
 of about 3,700 events passes through the API process) and is now bounded by admission control.
 Not covered: the second half of a training day; several class starts in one day; hosts with less
 memory.
+
+### 5.10 Synchronised class start with pre-generated first attempts (backlog B-17)
+
+Criteria fixed 2026-10-18 before the runs. `bash tests/load/class_start.sh 30 3`: an instructor
+assigns one exercise to every trainee (lt-041 onwards), the trainees sign in, and 30 s later all of
+them create and start their session at the same moment, then run one 90 s exercise. Sign-ins are
+before the start, so the burst measured is session creation and the first exercise. Runs alternate
+between pre-generation **off** (`DRIKR_TIMELINE_CACHE_MB=0`) and **on** (64 MiB), three of each,
+each from a freshly restarted API; no admission limit. Image built from commit `a30c00c`.
+
+| ID | Criterion | Threshold |
+|---|---|---|
+| C1 | Session creation at the start, pre-generation on: p95 | ≤ 10 s (A4) in each of the three runs |
+| C2 | Improvement | Creation p95 lower with pre-generation on than off in every pair; otherwise no improvement is claimed |
+| C3 | First exercise: feed and decision p95, pre-generation on | ≤ 1,000 ms (A1, A2), reported per run |
+| C4 | Errors and records | 0 errors (5xx, status 0); every session completed and scored; 0 server-caused pauses; all sessions reproducible; audit chain valid |
+
+**Results (2026-10-18, 09:35–10:00 UTC, image `drikr-api:rc-a30c00c`; on mains power).** Two
+earlier attempts were invalid because of defects in the new test script (no sessions ran; files in
+`results/2026-10-18/discarded/`).
+
+| Run (in order) | Creation p95 / median | Feed p95 / p99 | Decision p95 | Finish p95 | API CPU peak |
+|---|---|---|---|---|---|
+| off-1 | 10,508 / 7,980 ms | 488 / 976 | 570 | 2,536 | 336% |
+| **on-1** | **3,894 / 3,552** | 465 / 1,660 | 368 | 4,817 | 143% |
+| off-2 | 7,296 / 4,786 | 418 / 939 | 344 | 1,768 | 403% |
+| **on-2** | **4,579 / 4,011** | 423 / 1,380 | 429 | 5,780 | 179% |
+| off-3 | 7,956 / 5,020 | 479 / 1,027 | 441 | 1,846 | 312% |
+| **on-3** | **7,084 / 6,747** | 442 / 1,317 | 487 | 7,711 | 138% |
+
+| Criterion | Outcome |
+|---|---|
+| C1 creation p95 ≤ 10 s with pre-generation | 3.9, 4.6, 7.1 s ✅ |
+| C2 lower than without, in every pair | ✅ in all three pairs (by 6.6, 2.7 and 0.9 s); one run without it failed A4 (10.5 s) |
+| C3 feed and decision p95 ≤ 1,000 ms | ✅ (≤ 465 and ≤ 487 ms) |
+| C4 records | ✅ 0 errors; 180 of 180 sessions completed and scored; 0 paused; 180 of 180 reproducible; audit chain valid |
+
+**Verdict on B-17: criteria met, with a smaller gain than expected.**
+
+- Pre-generation removed the generation work from the start (API CPU peak 138–179% against
+  312–403%) and brought creation p95 within A4 in every run.
+- Creation still took 3.5 to 6.7 s at the median. A single start on the idle server took 165 ms from
+  a pre-generated timeline against 415 ms when generated, so 30 starts handled one after another
+  account for about 5 s. The remaining cost is per-session work in the API process, most likely
+  unpacking the timeline and storing its ~3,900 events; this was not profiled. It is the next
+  target (B-25).
+- **Finishing got slower** (p95 4.8–7.7 s against 1.8–2.5 s), still within A4. A likely reason,
+  not verified: with pre-generation the starts were closer together, so the 30 finishes also
+  coincided. Feed p99 also rose (1.3–1.7 s against about 1.0 s); p95 was unaffected.
+- Variation between runs of the same setting is large (on-3 against on-1), as in earlier sections.
 
 ## 6. Defects found
 

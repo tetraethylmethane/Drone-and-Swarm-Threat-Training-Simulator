@@ -1,0 +1,33 @@
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 30      0.830955/s
+    checks_succeeded...: 0.00%   0 out of 30
+    checks_failed......: 100.00% 30 out of 30
+
+    ✗ session created
+      ↳  0% — ✓ 0 / ✗ 30
+
+    CUSTOM
+    drikr_create_session_ms........: min=323.25ms med=657.99ms avg=620.5ms  p(90)=690.52ms p(95)=697.27ms p(99)=697.4ms  max=697.41ms count=30
+    drikr_failed_requests..........: 0.00%  0 out of 32
+
+    HTTP
+    http_req_duration..............: min=44.49ms  med=154.12ms avg=336.28ms p(90)=683.36ms p(95)=689.75ms p(99)=697.39ms max=697.41ms count=63
+      { expected_response:true }...: min=44.49ms  med=67.37ms  avg=77.89ms  p(90)=93.1ms   p(95)=133.01ms p(99)=263.27ms max=314.63ms count=33
+    http_req_failed................: 47.61% 30 out of 63
+    http_reqs......................: 63     1.745006/s
+
+    EXECUTION
+    iteration_duration.............: min=30.32s   med=30.65s   avg=30.62s   p(90)=30.69s   p(95)=30.69s   p(99)=30.69s   max=30.69s   count=30
+    iterations.....................: 30     0.830955/s
+    vus............................: 29     min=0        max=30
+    vus_max........................: 30     min=30       max=30
+
+    NETWORK
+    data_received..................: 119 kB 3.3 kB/s
+    data_sent......................: 15 kB  423 B/s
+
+
+

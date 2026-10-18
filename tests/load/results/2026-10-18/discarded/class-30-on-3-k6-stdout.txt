@@ -1,0 +1,24 @@
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    drikr_failed_requests..........: 0.00%  0 out of 2
+
+    HTTP
+    http_req_duration..............: min=45.39ms med=59.38ms avg=100.69ms p(90)=99.82ms p(95)=116.96ms p(99)=836.32ms max=1.17s    count=33
+      { expected_response:true }...: min=45.39ms med=59.32ms avg=67.21ms  p(90)=99.28ms p(95)=105.84ms p(99)=119.74ms max=122.71ms count=32
+    http_req_failed................: 3.03%  1 out of 33
+    http_reqs......................: 33     9.894931/s
+
+    EXECUTION
+    vus............................: 0      min=0       max=0 
+    vus_max........................: 30     min=30      max=30
+
+    NETWORK
+    data_received..................: 55 kB  17 kB/s
+    data_sent......................: 8.6 kB 2.6 kB/s
+
+
+
+time="2026-10-18T09:23:52Z" level=error msg="Error: assignment failed: 422 {\"error\":{\"code\":\"difficulty_out_of_bounds\",\"message\":\"Difficulty bounds must lie within the scenario's 1..4\",\"details\":null}}\n\tat setup (file:///scripts/class_start.js:73:31(101))\n" hint="script exception" source=stacktrace

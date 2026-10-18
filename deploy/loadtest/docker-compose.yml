@@ -1,5 +1,6 @@
 # Isolated stack for load and resilience tests (tests/load/README.md). Uses the same images as the
-# deployment, its own database volume and its own secrets, so tests never touch real records.
+# deployment (or LT_API_IMAGE / LT_WEB_IMAGE for a candidate build), its own database volume and
+# its own secrets, so tests never touch real records.
 # Only difference from production settings: the per-IP sign-in rate limit is raised, because every
 # simulated trainee signs in from the one load-generator address.
 #
@@ -23,7 +24,7 @@ services:
       retries: 30
 
   api:
-    image: drikr-api:1.0.0
+    image: ${LT_API_IMAGE:-drikr-api:1.0.0}
     environment:
       DRIKR_ENVIRONMENT: production
       DRIKR_MIGRATION_DATABASE_URL: postgresql+psycopg://drikr:${LT_DB_PASSWORD}@db:5432/drikr
@@ -36,6 +37,7 @@ services:
       DRIKR_DEMO_PASSWORD: ${LT_USER_PASSWORD:?run tests/load/run.sh}
       DRIKR_CPU_WORKERS: ${LT_CPU_WORKERS:-2}
       DRIKR_MAX_ACTIVE_SESSIONS: ${LT_MAX_ACTIVE_SESSIONS:-0}
+      DRIKR_TIMELINE_CACHE_MB: ${LT_TIMELINE_CACHE_MB:-64}
     depends_on:
       db: {condition: service_healthy}
     networks: [backend]
@@ -45,7 +47,7 @@ services:
     security_opt: ["no-new-privileges:true"]
 
   web:
-    image: drikr-web:1.0.0
+    image: ${LT_WEB_IMAGE:-drikr-web:1.0.0}
     depends_on:
       api: {condition: service_healthy}
     ports: ["127.0.0.1:9080:8080"]
