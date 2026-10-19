@@ -390,6 +390,7 @@ namespace Drikr
             else DesktopInput();
             _scenery?.Update();
             UpdateOptical();
+            RecordFrame();
 
             if (_screen == Screen.Exercise && !_polling && Time.realtimeSinceStartup >= _nextPoll)
                 _ = Poll();
@@ -1036,6 +1037,25 @@ namespace Drikr
             Heading("Exercise complete");
             Text(_resultText ?? "", _label);
             if (Button("Back to exercises")) Run(async () => { ClearViews(); await LoadHome(); });
+        }
+
+        // Test aid for demonstration videos: with DRIKR_RECORD_DIR set, the window is saved ten times a
+        // second as numbered PNGs (screen recorders cannot capture this GPU window on every machine).
+        string _recordDir;
+        bool _recordChecked;
+        float _nextFrame;
+        int _frameNo;
+
+        void RecordFrame()
+        {
+            if (!_recordChecked)
+            {
+                _recordDir = Environment.GetEnvironmentVariable("DRIKR_RECORD_DIR");
+                _recordChecked = true;
+            }
+            if (string.IsNullOrEmpty(_recordDir) || Time.realtimeSinceStartup < _nextFrame) return;
+            _nextFrame = Time.realtimeSinceStartup + 0.1f;
+            ScreenCapture.CaptureScreenshot(System.IO.Path.Combine(_recordDir, $"frame_{_frameNo++:D5}.png"));
         }
 
         /// <summary>Direction of travel from the last two trail points (level flight).</summary>
