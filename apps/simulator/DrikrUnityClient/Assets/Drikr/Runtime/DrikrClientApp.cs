@@ -56,7 +56,7 @@ namespace Drikr
         Camera _cam;
         Transform _world;
         readonly Dictionary<string, TrackView> _views = new Dictionary<string, TrackView>();
-        float _yaw, _pitch = 40f, _distance = 480f;
+        float _yaw, _pitch = 30f, _distance = 480f;
         Material _matGround, _matRing, _matSite, _matTrail;
         GUIStyle _label, _small, _heading, _tag;
 
@@ -65,7 +65,27 @@ namespace Drikr
             public GameObject Marker, Stalk, SelectRing;
             public LineRenderer Trail;
             public Material Mat;
+            // Symbol on the overview (shape from the trainee's classification) and the true-size
+            // model seen by the optical camera (shape from the optical sensor's hint).
+            public GameObject Symbol, Eo;
+            public string SymbolKind, EoKind;
+            public Material Body;
         }
+
+        Scenery _scenery;
+        OpticalView _optical;
+        Transform _eoQuad;
+        Material _eoQuadMat;
+        TextMesh _eoText;
+        string _eoCaption;
+
+        static readonly Dictionary<string, Color> EoColors = new Dictionary<string, Color>
+        {
+            { ContactModels.Multirotor, Hex("#2B2E2D") },
+            { ContactModels.FixedWing, Hex("#B9BDB8") },
+            { ContactModels.Bird, Hex("#5A4632") },
+            { ContactModels.Unknown, Hex("#4A4E4C") },
+        };
 
         static readonly Dictionary<string, Color> ClassColors = new Dictionary<string, Color>
         {
@@ -215,23 +235,14 @@ namespace Drikr
             _matTrail = LoadMat("Unlit", Hex("#7C817D"));
 
             _world = new GameObject("World").transform;
-            var r = WorldMapping.AreaRadiusM * WorldMapping.Scale * 1.15f;
-            var ground = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            ground.name = "Ground";
-            ground.transform.SetParent(_world);
-            ground.transform.localScale = new Vector3(r * 2, 0.05f, r * 2);
-            ground.GetComponent<Renderer>().sharedMaterial = _matGround;
-            Destroy(ground.GetComponent<Collider>());
+            // Terrain, sky, sun, the protected site and trees (Scenery); the optical sensor view.
+            _scenery = new Scenery(_world);
+            _optical = new OpticalView(_scenery);
+            _cam.cullingMask = ~(1 << OpticalView.Layer);
+            _scenery.Apply(null, _cam);
 
-            for (var km = 1; km <= 4; km++) MakeRing(km * 1000f * WorldMapping.Scale, 0.3f, _matRing, _world);
-
-            var site = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            site.name = "Protected virtual site";
-            site.transform.SetParent(_world);
-            site.transform.localPosition = new Vector3(0, 4, 0);
-            site.transform.localScale = new Vector3(14, 8, 14);
-            site.GetComponent<Renderer>().sharedMaterial = _matSite;
-            Destroy(site.GetComponent<Collider>());
+            for (var km = 1; km <= 4; km++)
+                MakeRing(km * 1000f * WorldMapping.Scale, 0.3f, _matRing, _world).gameObject.layer = OpticalView.SymbolLayer;
             UpdateCamera();
         }
 
@@ -259,17 +270,8 @@ namespace Drikr
             var env = _briefing?.Environment;
             if (env == null) return;
             var night = env.TimeOfDay == "night";
-            var dusk = env.TimeOfDay == "dusk";
-            _cam.backgroundColor = night ? Hex("#20262A") : dusk ? Hex("#E2DDD3") : Hex("#EEF0EE");
-            var g = env.Terrain switch
-            {
-                "urban" => Hex("#DEDCD6"),
-                "coastal" => Hex("#E2DDCB"),
-                "industrial" => Hex("#DDD9CF"),
-                _ => Hex("#DCE2D3"),
-            };
-            _matGround.color = night ? g * 0.28f : dusk ? g * 0.9f : g;
-            _matRing.color = night ? Hex("#56636B") : Hex("#7C817D");
+            _scenery.Apply(env, _cam);
+            _matRing.color = night ? Hex("#9FB0BA") : Hex("#4E5450");
             _matSite.color = night ? Hex("#C9D3CD") : Hex("#1F4D3A");
         }
 
@@ -281,19 +283,23 @@ namespace Drikr
             v.Marker.name = id; // raycast hit name identifies the track
             v.Marker.transform.SetParent(_world);
             v.Marker.transform.localScale = Vector3.one * 16f;
-            v.Marker.GetComponent<Renderer>().sharedMaterial = v.Mat;
+            v.Marker.GetComponent<Renderer>().enabled = false; // kept as the click and pointer target
+            v.Body = _scenery.Mat(ClassColors["unclassified"], 0.35f);
             v.Stalk = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             v.Stalk.transform.SetParent(_world);
             v.Stalk.GetComponent<Renderer>().sharedMaterial = v.Mat;
             Destroy(v.Stalk.GetComponent<Collider>());
+            v.Stalk.layer = OpticalView.SymbolLayer;
             // Line widths do not follow the transform's scale, so they are scaled with the world
             // (1 on the desktop, the sand-table scale in VR; defect D-06).
             var lineScale = _world.localScale.x;
             var selectRing = MakeRing(14f, 0.6f, _matSite, v.Marker.transform.parent);
             selectRing.widthMultiplier *= lineScale;
             v.SelectRing = selectRing.gameObject;
+            v.SelectRing.layer = OpticalView.SymbolLayer; // overview graphics stay out of the optical camera
             var trailGo = new GameObject(id + " trail");
             trailGo.transform.SetParent(_world, false);
+            trailGo.layer = OpticalView.SymbolLayer;
             v.Trail = trailGo.AddComponent<LineRenderer>();
             v.Trail.sharedMaterial = v.Mat;
             v.Trail.useWorldSpace = false; // positions are in world-map units, under the (scaled) world
@@ -312,9 +318,35 @@ namespace Drikr
                 var pos = WorldMapping.ToWorld(p.X, p.Y, p.Alt);
                 var c = ClassColors.TryGetValue(t.Classification ?? "unclassified", out var cc) ? cc : ClassColors["unclassified"];
                 v.Mat.color = t.Lost ? new Color(c.r, c.g, c.b) * 0.6f + Color.white * 0.4f : c;
+                v.Body.color = v.Mat.color;
                 v.Marker.transform.localPosition = pos;
                 v.Stalk.transform.localPosition = new Vector3(pos.x, pos.y / 2f, pos.z);
-                v.Stalk.transform.localScale = new Vector3(1f, pos.y / 2f, 1f);
+                v.Stalk.transform.localScale = new Vector3(0.35f, pos.y / 2f, 0.35f);
+                var heading = Heading(t);
+                var symbolKind = ContactModels.KindFor(t.Classification);
+                if (v.SymbolKind != symbolKind)
+                {
+                    if (v.Symbol != null) Destroy(v.Symbol);
+                    v.Symbol = ContactModels.Build(symbolKind, v.Body, v.Body, OpticalView.SymbolLayer, symbol: true);
+                    v.Symbol.transform.SetParent(_world, false);
+                    v.Symbol.transform.localScale =
+                        Vector3.one * (ContactModels.SymbolUnits(symbolKind) / ContactModels.SpanM(symbolKind));
+                    v.SymbolKind = symbolKind;
+                }
+                v.Symbol.transform.localPosition = pos;
+                v.Symbol.transform.localRotation = heading;
+                var eoKind = ContactModels.KindFor(t.ClassHint);
+                if (v.EoKind != eoKind)
+                {
+                    if (v.Eo != null) Destroy(v.Eo);
+                    var skin = _scenery.Mat(EoColors[eoKind], 0.4f);
+                    v.Eo = ContactModels.Build(eoKind, skin, _scenery.Mat(Hex("#1C1E1D"), 0.3f), OpticalView.Layer);
+                    v.Eo.transform.SetParent(_world, false);
+                    v.Eo.transform.localScale = Vector3.one * WorldMapping.Scale; // true size: metres to units
+                    v.EoKind = eoKind;
+                }
+                v.Eo.transform.localPosition = pos;
+                v.Eo.transform.localRotation = heading;
                 v.SelectRing.transform.localPosition = new Vector3(pos.x, 0f, pos.z);
                 v.SelectRing.SetActive(_selected.Contains(t.Id));
                 v.Trail.positionCount = t.Trail.Count;
@@ -331,6 +363,8 @@ namespace Drikr
                 Destroy(v.Stalk);
                 Destroy(v.SelectRing);
                 Destroy(v.Trail.gameObject);
+                if (v.Symbol != null) Destroy(v.Symbol);
+                if (v.Eo != null) Destroy(v.Eo);
             }
             _views.Clear();
         }
@@ -354,6 +388,8 @@ namespace Drikr
         {
             if (VrActive) VrUpdate();
             else DesktopInput();
+            _scenery?.Update();
+            UpdateOptical();
 
             if (_screen == Screen.Exercise && !_polling && Time.realtimeSinceStartup >= _nextPoll)
                 _ = Poll();
@@ -414,6 +450,25 @@ namespace Drikr
             _vrRay.widthMultiplier = 0.004f;
             _vrRay.positionCount = 2;
             _vrRay.enabled = false; // shown once a controller pose arrives
+            _scenery.UseTableMode();
+            // Optical sensor screen beside the table, facing the trainee.
+            _eoQuadMat = new Material(Resources.Load<Material>("DrikrMaterials/UnlitTexture")
+                ?? new Material(Shader.Find("Unlit/Texture")));
+            var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            Destroy(quad.GetComponent<Collider>());
+            quad.name = "Optical sensor screen";
+            quad.GetComponent<Renderer>().sharedMaterial = _eoQuadMat;
+            _eoQuad = quad.transform;
+            _eoQuad.position = new Vector3(0.95f, 1.02f, 1.5f);
+            _eoQuad.rotation = Quaternion.Euler(12f, 38f, 0f);
+            _eoQuad.localScale = new Vector3(0.56f, 0.315f, 1f);
+            _eoText = new GameObject("Optical sensor caption").AddComponent<TextMesh>();
+            _eoText.transform.SetPositionAndRotation(_eoQuad.position + _eoQuad.up * 0.21f, _eoQuad.rotation);
+            _eoText.characterSize = 0.0085f;
+            _eoText.fontSize = 48;
+            _eoText.anchor = TextAnchor.LowerCenter;
+            _eoText.color = Hex("#1F2421");
+            quad.SetActive(false);
             if (preview)
             {
                 // A seated operator's eyes, looking down at the table, as a headset would report them.
@@ -787,6 +842,7 @@ namespace Drikr
             GUILayout.EndScrollView();
             GUILayout.EndArea();
             if (_screen == Screen.Exercise) DrawTrackLabels(); // visual duplicates of the track list
+            if (_screen == Screen.Exercise) DrawOptical();
             if (Repainting) _a11y.EndFrame();
         }
 
@@ -980,6 +1036,67 @@ namespace Drikr
             Heading("Exercise complete");
             Text(_resultText ?? "", _label);
             if (Button("Back to exercises")) Run(async () => { ClearViews(); await LoadHome(); });
+        }
+
+        /// <summary>Direction of travel from the last two trail points (level flight).</summary>
+        static Quaternion Heading(Track t)
+        {
+            if (t.Trail.Count < 2) return Quaternion.identity;
+            var a = t.Trail[t.Trail.Count - 2];
+            var b = t.Trail[t.Trail.Count - 1];
+            var d = new Vector3(b.X - a.X, 0f, b.Y - a.Y);
+            return d.sqrMagnitude < 1e-4f ? Quaternion.identity : Quaternion.LookRotation(d);
+        }
+
+        /// <summary>The optical camera follows one selected track that the optical sensor sees.</summary>
+        void UpdateOptical()
+        {
+            if (_optical == null) return;
+            if (_screen != Screen.Exercise || _selected.Count != 1)
+            {
+                _optical.Hide();
+                _eoCaption = null;
+            }
+            else
+            {
+                var id = _selected.First();
+                var seen = _picture.Tracks.TryGetValue(id, out var t) && t.Position.HasValue
+                    && t.Sensors.Contains("electro_optical") && _views.ContainsKey(id);
+                if (!seen)
+                {
+                    _optical.Hide();
+                    _eoCaption = $"{id}: no optical contact (radar or RF only)";
+                }
+                else
+                {
+                    var v = _views[id];
+                    var sensor = _world.TransformPoint(new Vector3(5f, 4.6f, 5f)); // the site's sensor mast
+                    var span = ContactModels.SpanM(v.EoKind) * WorldMapping.Scale * _world.lossyScale.x;
+                    _optical.Show(sensor, v.Eo.transform.position, span, t.ClassHintQuality);
+                    var hint = t.ClassHint == null ? "no class hint yet"
+                        : $"hint {Vocabulary.Label(t.ClassHint)} ({t.ClassHintQuality:0.00})";
+                    _eoCaption = $"{id} · {hint}";
+                }
+            }
+            if (_eoQuad != null)
+            {
+                _eoQuad.gameObject.SetActive(_optical.Active);
+                if (_optical.Active) _eoQuadMat.mainTexture = _optical.Texture;
+                _eoText.text = _eoCaption == null ? "" : "Optical sensor (simulated)\n" + _eoCaption;
+            }
+        }
+
+        void DrawOptical()
+        {
+            if (_eoCaption == null || VrActive) return;
+            const float w = 400f;
+            var img = new Rect(UnityEngine.Screen.width - w - 2f, 42f, w - 20f, (w - 20f) * 9f / 16f);
+            var r = new Rect(img.x - 10f, 12f, w, img.height + 62f);
+            GUI.Box(r, GUIContent.none);
+            GUI.Label(new Rect(r.x + 10, r.y + 6, w - 20, 22), "Optical sensor (simulated)", _heading);
+            if (_optical.Active) GUI.DrawTexture(img, _optical.Texture, ScaleMode.ScaleToFit, false);
+            else GUI.Box(img, "No picture");
+            GUI.Label(new Rect(r.x + 10, img.yMax + 4, w - 20, 22), _eoCaption, _small);
         }
 
         void DrawTrackLabels()

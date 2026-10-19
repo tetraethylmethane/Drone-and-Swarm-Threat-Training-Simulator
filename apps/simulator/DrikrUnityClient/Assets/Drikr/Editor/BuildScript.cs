@@ -16,6 +16,70 @@ namespace Drikr.EditorTools
     public static class BuildScript
     {
         const string MaterialDir = "Assets/Drikr/Resources/DrikrMaterials";
+        // CC0 skies (Poly Haven) and ground textures (ambientCG); see THIRD_PARTY_NOTICES.md.
+        const string EnvDir = "Assets/Drikr/Resources/DrikrEnv";
+        static readonly string[] Terrains = { "rural", "urban", "coastal", "industrial" };
+        static readonly string[] Skies = { "day", "dusk", "overcast", "night" };
+
+        static void SaveMaterial(Material m, string name)
+        {
+            var path = MaterialDir + "/" + name + ".mat";
+            var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (existing == null) AssetDatabase.CreateAsset(m, path);
+            else
+            {
+                existing.shader = m.shader;
+                existing.CopyPropertiesFromMaterial(m);
+                existing.shaderKeywords = m.shaderKeywords;
+                EditorUtility.SetDirty(existing);
+            }
+        }
+
+        /// <summary>Lit materials, ground per terrain, skies, and fog kept in the player.</summary>
+        static void PrepareEnvironment()
+        {
+            var standard = Shader.Find("Standard");
+            var lit = new Material(standard);
+            lit.SetFloat("_Glossiness", 0.3f);
+            SaveMaterial(lit, "Lit");
+            SaveMaterial(new Material(Shader.Find("Unlit/Texture")), "UnlitTexture");
+            foreach (var t in Terrains)
+            {
+                var color = EnvDir + "/ground_" + t + "_color.jpg";
+                var normal = EnvDir + "/ground_" + t + "_normal.jpg";
+                if (AssetImporter.GetAtPath(normal) is TextureImporter ni && ni.textureType != TextureImporterType.NormalMap)
+                {
+                    ni.textureType = TextureImporterType.NormalMap;
+                    ni.SaveAndReimport();
+                }
+                var m = new Material(standard) { mainTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(color) };
+                m.SetTexture("_BumpMap", AssetDatabase.LoadAssetAtPath<Texture2D>(normal));
+                m.SetFloat("_BumpScale", 0.8f);
+                m.SetFloat("_Glossiness", 0.08f);
+                m.EnableKeyword("_NORMALMAP");
+                SaveMaterial(m, "Ground_" + t);
+            }
+            var panoramic = Shader.Find("Skybox/Panoramic");
+            foreach (var sky in Skies)
+            {
+                var hdr = EnvDir + "/sky_" + sky + ".hdr";
+                if (AssetImporter.GetAtPath(hdr) is TextureImporter hi && hi.wrapModeV != TextureWrapMode.Clamp)
+                {
+                    hi.wrapModeU = TextureWrapMode.Repeat;
+                    hi.wrapModeV = TextureWrapMode.Clamp;
+                    hi.SaveAndReimport();
+                }
+                var m = new Material(panoramic);
+                m.SetTexture("_MainTex", AssetDatabase.LoadAssetAtPath<Texture2D>(hdr));
+                m.SetFloat("_Exposure", sky == "night" ? 1.4f : 1f);
+                SaveMaterial(m, "Sky_" + sky);
+            }
+            // The scene has no fog, so the build would strip fog variants; keep exponential squared.
+            var gs = new SerializedObject(UnityEngine.Rendering.GraphicsSettings.GetGraphicsSettings());
+            gs.FindProperty("m_FogStripping").intValue = 1;
+            gs.FindProperty("m_FogKeepExp2").boolValue = true;
+            gs.ApplyModifiedPropertiesWithoutUndo();
+        }
         const string ScenePath = "Assets/Drikr/Scenes/Main.unity";
         // Official Drikr Systems artwork, copied unchanged from assets/brand/ (see docs/design).
         const string LogoPath = "Assets/Drikr/Resources/DrikrBrand/drikr-logo.png";
@@ -43,6 +107,8 @@ namespace Drikr.EditorTools
                 // Resources reference keeps the shader in the player build (Shader.Find alone would not).
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Unlit/Color")), path);
             }
+
+            PrepareEnvironment();
 
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath)!);
             if (!File.Exists(ScenePath))

@@ -10,6 +10,14 @@ Engine versions are tracked separately because they affect reproducibility.
   chose it). With the published demo definitions, the seed was enough to regenerate the exercise
   offline and learn every track's true class. Web and Unity clients updated.
 
+### Added
+- Realistic Unity scene (B-27): CC0 skies and ground textures, terrain with hills, the site with
+  buildings and a rotating radar, trees and haze; low-poly drone, fixed-wing, bird and
+  unidentified-contact models; a simulated optical camera view of the selected track (desktop
+  panel and a screen beside the VR table) whose clarity follows the optical sensor's quality and
+  the scenario's visibility. Models follow the trainee's classification or the sensor's hint,
+  never the ground truth.
+
 ### Fixed
 - D-06: the VR view drew track trails, range rings and the selection ring hundreds of times
   too large, covering the sand table. `-drikrVrPreview` shows the VR scene from a seated eye

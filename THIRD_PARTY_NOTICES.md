@@ -28,7 +28,11 @@ all scenario data is original synthetic content.
 | Newtonsoft.Json (`com.unity.nuget.newtonsoft-json` 3.2.1) | MIT | Bundled in the player |
 | Unity Test Framework 1.6.0 / NUnit | Unity Companion Licence / MIT | Editor and tests only, not in the player |
 
-No third-party 3D models, textures or audio are used; the scene is built from engine primitives.
+| Sky images (HDRI): *Kloofendal 48d Partly Cloudy (Pure Sky)*, *Kloppenheim 06 (Pure Sky)*, *Overcast Soil (Pure Sky)*, *Moonless Golf*, from [Poly Haven](https://polyhaven.com/) | CC0 1.0 (public domain) | `Assets/Drikr/Resources/DrikrEnv/sky_*.hdr`, downloaded 2026-10-19 through the Poly Haven API. No attribution required; credited here as a courtesy |
+| Ground textures: Grass001, Concrete034, Ground054, Ground037 from [ambientCG](https://ambientcg.com/) | CC0 1.0 (public domain) | `Assets/Drikr/Resources/DrikrEnv/ground_*` (1K colour and normal maps), downloaded 2026-10-19 |
+
+The 3D models (drones, fixed-wing aircraft, birds, buildings, trees, radar) are built in code from
+engine primitives (`ContactModels.cs`, `Scenery.cs`); no third-party models or audio are used.
 
 ## Production web dependencies (shipped in the browser bundle)
 
