@@ -14,6 +14,16 @@ namespace Drikr
         public bool Active { get; private set; }
         public string FailureReason { get; private set; }
 
+        /// <summary>The VR scene without a headset (-drikrVrPreview): for checking the layout and
+        /// for screenshots. No XR runtime is started; the camera stays where the app puts it.</summary>
+        public bool Preview { get; private set; }
+
+        public void StartPreview()
+        {
+            Preview = true;
+            Active = true;
+        }
+
         public bool TryStart()
         {
             var manager = XRGeneralSettings.Instance != null ? XRGeneralSettings.Instance.Manager : null;
@@ -40,6 +50,11 @@ namespace Drikr
         public void Stop()
         {
             if (!Active) return;
+            if (Preview)
+            {
+                Active = false;
+                return;
+            }
             var manager = XRGeneralSettings.Instance.Manager;
             manager.StopSubsystems();
             manager.DeinitializeLoader();

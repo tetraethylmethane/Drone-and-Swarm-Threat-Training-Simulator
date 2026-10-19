@@ -10,6 +10,11 @@ Engine versions are tracked separately because they affect reproducibility.
   chose it). With the published demo definitions, the seed was enough to regenerate the exercise
   offline and learn every track's true class. Web and Unity clients updated.
 
+### Fixed
+- D-06: the VR view drew track trails, range rings and the selection ring hundreds of times
+  too large, covering the sand table. `-drikrVrPreview` shows the VR scene from a seated eye
+  position without a headset.
+
 ### Changed
 - After-action review: "Classification given" and "Response given" replace "Your ...", which
   misread in the instructor's view (U-04). The difficulty override no longer offers "Lower to

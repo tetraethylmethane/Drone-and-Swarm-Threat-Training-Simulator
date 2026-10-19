@@ -23,7 +23,8 @@ namespace Drikr
         string _apiUrl = "http://localhost:8080/api/v1";
         string _username = "", _password = "", _mfaCode = "";
         string _caCertPath; // -drikrCa / DRIKR_CA_CERT: private training-network CA for HTTPS
-        // -drikrVr: optional VR sand-table view (VrSession, VrControls); desktop when absent or unavailable
+        // -drikrVr: optional VR sand-table view (VrSession, VrControls); desktop when absent or unavailable.
+        // -drikrVrPreview: the same VR scene without a headset, seen from a seated eye position.
         VrSession _vr;
         VrControls _vrc;
         TextMesh _vrText;
@@ -97,7 +98,8 @@ namespace Drikr
                 AssistiveSupport.screenReaderStatusOverride = AssistiveSupport.ScreenReaderStatusOverride.ForceEnabled;
             Application.targetFrameRate = 60;
             BuildScene();
-            if (Array.IndexOf(args, "-drikrVr") >= 0) StartVr();
+            if (Array.IndexOf(args, "-drikrVrPreview") >= 0) StartVr(preview: true);
+            else if (Array.IndexOf(args, "-drikrVr") >= 0) StartVr();
         }
 
         /// <summary>Command line `-drikrApi URL` wins, then DRIKR_API_URL, then the default.</summary>
@@ -149,7 +151,9 @@ namespace Drikr
             _api = new DrikrApi(_apiUrl, caCertPath: _caCertPath);
             if (await _api.Login(_username, pw)) throw new Exception("smoke user has MFA enabled; use an account without it");
             await LoadHome();
-            var scenario = _practice.FirstOrDefault() ?? throw new Exception("no practice scenario available");
+            var key = Environment.GetEnvironmentVariable("DRIKR_SMOKE_SCENARIO");
+            var scenario = (key == null ? _practice.FirstOrDefault() : _practice.FirstOrDefault(p => p.Key == key))
+                ?? throw new Exception("no practice scenario available");
             await OpenSession(await _api.CreatePractice(scenario.Id));
             SetState(await _api.Transition(_state.Id, "start"));
             var deadline = Time.realtimeSinceStartup + 90f;
@@ -158,7 +162,8 @@ namespace Drikr
                 if (Time.realtimeSinceStartup > deadline) throw new Exception("no positional track within 90 s");
                 await Task.Delay(250); // Update() keeps polling the feed
             }
-            await Task.Delay(8000); // let trails build up for the screenshot
+            var wait = int.TryParse(Environment.GetEnvironmentVariable("DRIKR_SMOKE_WAIT_S"), out var w) ? w : 8;
+            await Task.Delay(wait * 1000); // let trails build up for the screenshot
             var first = _picture.Tracks.Values.First(t => t.Position.HasValue).Id;
             _selected.Add(first);
             SyncViews();
@@ -233,7 +238,7 @@ namespace Drikr
         static LineRenderer MakeRing(float radius, float y, Material mat, Transform parent)
         {
             var go = new GameObject($"Ring {radius}");
-            go.transform.SetParent(parent);
+            go.transform.SetParent(parent, false); // local size, also under the scaled VR world (D-06)
             var lr = go.AddComponent<LineRenderer>();
             lr.sharedMaterial = mat;
             lr.loop = true;
@@ -281,12 +286,18 @@ namespace Drikr
             v.Stalk.transform.SetParent(_world);
             v.Stalk.GetComponent<Renderer>().sharedMaterial = v.Mat;
             Destroy(v.Stalk.GetComponent<Collider>());
-            v.SelectRing = MakeRing(14f, 0.6f, _matSite, v.Marker.transform.parent).gameObject;
+            // Line widths do not follow the transform's scale, so they are scaled with the world
+            // (1 on the desktop, the sand-table scale in VR; defect D-06).
+            var lineScale = _world.localScale.x;
+            var selectRing = MakeRing(14f, 0.6f, _matSite, v.Marker.transform.parent);
+            selectRing.widthMultiplier *= lineScale;
+            v.SelectRing = selectRing.gameObject;
             var trailGo = new GameObject(id + " trail");
-            trailGo.transform.SetParent(_world);
+            trailGo.transform.SetParent(_world, false);
             v.Trail = trailGo.AddComponent<LineRenderer>();
             v.Trail.sharedMaterial = v.Mat;
-            v.Trail.widthMultiplier = 1.5f;
+            v.Trail.useWorldSpace = false; // positions are in world-map units, under the (scaled) world
+            v.Trail.widthMultiplier = 1.5f * lineScale;
             _views[id] = v;
             return v;
         }
@@ -370,10 +381,11 @@ namespace Drikr
         // VR (sand table). Same selection and decisions as the desktop; input differs only.
         // ------------------------------------------------------------------------
 
-        void StartVr()
+        void StartVr(bool preview = false)
         {
             _vr = new VrSession();
-            if (!_vr.TryStart())
+            if (preview) _vr.StartPreview();
+            else if (!_vr.TryStart())
             {
                 _notice = $"VR not started: {_vr.FailureReason} Running on the desktop.";
                 Debug.Log("DRIKR_VR " + _notice);
@@ -381,6 +393,8 @@ namespace Drikr
             }
             var area = WorldMapping.AreaRadiusM * WorldMapping.Scale * 1.15f;
             _world.localScale = Vector3.one * VrControls.TableScale(area);
+            foreach (var line in _world.GetComponentsInChildren<LineRenderer>(true))
+                line.widthMultiplier *= _world.localScale.x; // range rings (D-06)
             _world.position = new Vector3(0f, 0.85f, 1.2f); // a table at waist height in front of the trainee
             var rig = new GameObject("VR rig").transform;
             _cam.transform.SetParent(rig, false);
@@ -399,6 +413,16 @@ namespace Drikr
             _vrRay.sharedMaterial = _matRing;
             _vrRay.widthMultiplier = 0.004f;
             _vrRay.positionCount = 2;
+            _vrRay.enabled = false; // shown once a controller pose arrives
+            if (preview)
+            {
+                // A seated operator's eyes, looking down at the table, as a headset would report them.
+                _cam.transform.localPosition = new Vector3(0f, 1.25f, 0f);
+                _cam.transform.localRotation = Quaternion.Euler(18f, 0f, 0f);
+                _cam.fieldOfView = 70f;
+                Debug.Log("DRIKR_VR preview (no headset): VR scene layout only");
+                return;
+            }
             Debug.Log("DRIKR_VR started; devices: " + VrSession.DescribeDevices());
         }
 
@@ -732,6 +756,7 @@ namespace Drikr
 
         void OnGUI()
         {
+            if (_vr != null && _vr.Preview) return; // the preview shows what the headset shows
             Styles();
             GUI.skin = _skin;
             _a11y.BeginFrame();
