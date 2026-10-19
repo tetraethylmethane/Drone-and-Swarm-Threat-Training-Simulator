@@ -3,6 +3,50 @@
 All notable changes to this project are documented here. Versions follow semantic versioning.
 Engine versions are tracked separately because they affect reproducibility.
 
+## [1.0.0-rc5] - 2026-10-19
+
+Sprint 10 and the work after it. **Not ready for operational use:** the instructor usability study,
+the human study, the load test on the deployment server and the independent security assessment
+remain open (`docs/operations/operational-readiness.md`).
+
+### Added
+- Each attempt is a different, recorded and reproducible exercise (per-attempt seeds); instructors
+  can require identical attempts. Existing assignments keep identical attempts (migration `0006`).
+- Adaptive adversary (opt-in per assignment, ADR-012): rules-based tactics chosen from the trainee's
+  recorded weaknesses, stored with the session and shown in the AAR. Not machine learning. A
+  synthetic evaluation (1,680 sessions) found it targets clear weaknesses but only measurably
+  exposes bird confusion (B-24).
+- Optional OpenXR VR view in the Windows x64 player (`-drikrVr`, ADR-013), including training
+  responses on the left controller. **Not tested on a headset.**
+- Admission control (`DRIKR_MAX_ACTIVE_SESSIONS`); set it below measured capacity.
+- Pre-generated first attempts when an assignment is created (`DRIKR_TIMELINE_CACHE_MB`): 30
+  simultaneous starts went from 7.3–10.5 s to 3.9–7.1 s (p95) on the test laptop.
+- Recorded, owner-defined purges of raw event logs (migration `0005`); least-privilege API database
+  role and immutability triggers (migration `0004`).
+- Load, soak and class-start test harnesses (`tests/load`), reports for reproducibility, load and
+  resilience, security findings, threat model, and the operational readiness guide.
+
+### Fixed
+- D-03: about 1 seed in 15 produced a valid session that verification reported as not
+  reproducible (`-0.0` stored as `0.0` by PostgreSQL); digests now treat them alike.
+- D-02: every attempt replayed the identical exercise.
+- Connection-pool exhaustion (L-01), feed starvation during generation (L-02), and refused sessions
+  doing generation work (L-05).
+
+### Security
+- Web image: `libexpat` CVE-2026-77214 (HIGH) is fixed by rebuilding without the build cache;
+  release images must be built with `docker compose build --no-cache --pull`. Existing
+  `drikr-web:1.0.0` images need a rebuild.
+
+### Known limitations
+- A clean 8-hour soak has not been measured: two attempts were cut short (Docker failure; laptop
+  standby) after about 4 hours each, with no leak seen in either. Accepted by the project owner for
+  this release candidate (2026-10-19).
+- Measured on one development laptop only; minimum hardware is not established.
+
+### Changed
+- Database schema revision `0006`.
+
 ## [1.0.0-rc4] - 2026-10-16
 
 ### Added

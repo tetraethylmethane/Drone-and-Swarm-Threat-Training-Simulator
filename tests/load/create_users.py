@@ -2,8 +2,8 @@
 
     docker compose -p drikrload exec -T -e LT_USERS=100 api python - < tests/load/create_users.py
 
-Accounts are named lt-001 ... lt-NNN (trainees) and lt-instructor, use LT_USER_PASSWORD (DRIKR_DEMO_PASSWORD in the container)
-and do not need a password change. Idempotent.
+Accounts are named lt-001 ... lt-NNN (trainees) and lt-instructor, use LT_USER_PASSWORD
+(DRIKR_DEMO_PASSWORD in the container) and do not need a password change. Idempotent.
 """
 
 import os
