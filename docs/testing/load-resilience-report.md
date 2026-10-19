@@ -488,6 +488,48 @@ it is not evidence of a leak, but it is not explained either. A clean 8-hour day
 been measured. A repeat must keep the machine awake (for example a keep-awake request for the
 duration) and on mains power.
 
+### 5.12 Deployment-server procedure (operational readiness §3), 2026-10-19
+
+The procedure in `docs/operations/operational-readiness.md` §3, run on the deployment host (this
+laptop, which also runs the `drikr-*` deployment) with the release images (`1.0.0-rc5`, built
+uncached). Class size **20** (the laptop guidance); stress at 40. Criteria are §2.3 unchanged, with
+the design load set to 20, fixed before the runs:
+
+```
+bash tests/load/run.sh load "20 40" 5m
+bash tests/load/run.sh resilience 20
+bash tests/load/memory.sh 3 20 5m
+```
+
+The machine was kept awake for the duration (a keep-awake request, no settings changed). The
+deployment stack was idle during the runs. **The charger was disconnected during part of the
+procedure** (Kernel-Power 105: off at 06:27, on at 06:57, off at 07:02 UTC), so each run is marked
+with its power state; runs on battery are not judged.
+
+| Run (UTC) | Power | Feed p95 / p99 | Decision p95 | Create / finish p95 | Errors | Records |
+|---|---|---|---|---|---|---|
+| load-20 (05:57–06:04) | mains | **525 / 1,071** | **400** | **4.0 / 7.9 s** | 0 | 72 of 72 scored; 0 paused; 500 of 500 reproducible; audit valid |
+| load-40 (06:09–06:16) | mains | 1,577 / 2,571 | 1,503 | 5.6 / 18.5 s | 0 | 132 of 132; 500 of 500; valid |
+| resilience-20 (06:20–06:28) | mains (last 80 s on battery, after both recoveries) | 835 / 2,010 | 795 | 4.5 / 13.7 s | 361 during the outages (expected) | 80 of 80 completed, 0 open; 500 of 500; valid |
+| memory runs 1 and 3 | **battery** | 1,108 and 1,166 | | | 0 | 500 of 500 each; valid |
+| memory run 2 | mostly mains | 557 / 1,437 | 535 | 4.2 / 11.2 s | 0 | 500 of 500; valid |
+
+| Criterion at 20 trainees | Outcome |
+|---|---|
+| A1 feed p95 ≤ 1,000 ms, p99 ≤ 2,000 ms | ✅ 525 / 1,071 |
+| A2 decision p95 ≤ 1,000 ms | ✅ 400 |
+| A3 server-caused pauses | ✅ 0 |
+| A4 create and finish p95 ≤ 10 s | ✅ 4.0 / 7.9 s |
+| A5 errors | ✅ 0 |
+| A6 consistency | ✅ 0 inconsistent; 500 of 500 reproducible; audit valid |
+| A7 memory (three identical runs) | **Not judged**: two of the three runs were on battery. Memory over time is covered by the soaks (5.9, 5.11) |
+| A8 recovery | ✅ API ready 14 s after being killed and 2 s after the database returned; every session completed; reproducible; audit valid |
+
+**Verdict: a class of 20 meets every judged criterion on this host; 40 does not (A1, A2).**
+`DRIKR_MAX_ACTIVE_SESSIONS=20` was set in the deployment's `.env` on 2026-10-19. That is the level
+met here; with the same limit, admitted trainees stayed within A1 and A2 while 60 tried to connect
+(5.8). Loads between 20 and 40 were not tested.
+
 ## 6. Defects found
 
 ### L-01 Connection-pool exhaustion at 10 concurrent trainees (fixed)

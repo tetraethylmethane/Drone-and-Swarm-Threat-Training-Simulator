@@ -19,6 +19,7 @@ Windows 11 development laptop.
 | F-07 | Logging | API logs at INFO (703 request records), the nginx access log (about 44,000 lines) and the audit table were searched for 5 canary secrets, a live session token and every deployment secret. The load-test stack logs at WARNING by default, so an earlier claim of a scan over "about 70,000 API lines" could not be reproduced and is withdrawn | Info | **No issue found**. Note: a failed sign-in records the attempted *username* in the audit log (R5), so a password typed into the username field would be kept | Section 3.2 |
 | F-09 | Record integrity | The app role could DELETE raw event logs (retention needs deletion) and UPDATE `training_sessions.events_purged_at`. A compromised API process could therefore delete a session's log and mark it purged, and verification would report `event_log_purged` rather than a failure | Low | **Fixed** (2026-10-17, migration `0005`) | Raw logs are deleted only by two owner-defined `SECURITY DEFINER` functions: retention (finished sessions older than a real retention run's cutoff, at least 30 days, measured by the database clock) and anonymisation (a deactivated trainee's finished sessions). Each purge is written to the append-only `event_log_purges` table, which the app role can only read. `events_purged_at` can be set only once, and only with a purge record. Verification accepts a purge only with a matching record. The app role has lost DELETE on `session_events`. Tests: `tests/integration/test_purge_integrity.py` (6). **Residual:** a compromised API can still purge *old* logs through a fabricated retention run, or a user's logs after deactivating the account. Such a purge is recorded permanently and never changes a score (R9) |
 | F-08 | Backup and restore with the app role | Restore uses `--no-privileges`, which drops grants on the restored tables | Low | **Mitigated by design; verified 2026-10-17** | The API re-runs `provision-app-role` at every start, and `restore.sh` restarts it. Section 3.3 records the backup → verify → change → restore cycle, the role's privileges after the restore, and a write workflow as that role |
+| S-01 | Assessment integrity | Trainees received their session's **seed** while the exercise was running. The demo scenarios' definitions ship with the source code, so with the seed a trainee could regenerate the timeline offline and read every track's true class before classifying. Found in the internal assessment of 2026-10-19 | Medium | **Fixed** 2026-10-19 | The seed is withheld (null) until the session ends, unless the trainee chose it; web and Unity clients updated. `test_attempt_variation.py::test_the_seed_is_withheld_until_the_session_ends`. Residual: scenarios that fix their seed and are published (the demos) remain predictable by design; use organisation-authored scenarios for assessment |
 
 ## 2. Review checklist
 
@@ -99,6 +100,24 @@ Full Python suite on the final code (adaptive policy F, L-02): see `docs/SPRINT_
 security-relevant tests (`test_db_role.py`, `test_route_security.py`, `test_integrity.py`,
 `test_adaptive_override.py`, `test_auth.py`, `test_mfa.py`, `test_rbac.py`) all passed. Ruff
 (including bandit `S` rules) and strict mypy are clean.
+
+### 3.5 Internal security assessment, 2026-10-19 (not independent)
+
+Done by the development team on the release candidate `1.0.0-rc5` (plus fix S-01). **It does not
+replace the independent assessment** in `docs/operations/operational-readiness.md` §4: the people
+who wrote the code reviewed it, and the tools find known classes of problem only.
+
+| Check | Method | Result |
+|---|---|---|
+| Python dependencies | `pip-audit --skip-editable` | No known vulnerabilities |
+| Web and E2E dependencies | `npm audit` in `apps/web` and `tests/e2e` | 0 vulnerabilities |
+| Container images | Trivy 0.66.0, HIGH and CRITICAL (section 3.1, 2026-10-18) | 0 after the uncached rebuild |
+| Secrets | gitleaks 8.30.1 over the history (section 3.1) | No leaks |
+| Dynamic scan, unauthenticated | OWASP ZAP 2.16.1 `zap-api-scan.py` with the OpenAPI description, against the isolated load-test stack (never the deployment) | 0 failures, 114 rules passed. Warnings: 9 non-API paths answered with the web app's HTML (expected; includes cloud-metadata probes, which are not proxied), and "ZAP is out of date" |
+| Dynamic scan, as an instructor | Same, with a bearer token; the sign-in, sign-out, password and MFA operations removed from the scanned description so the scan could not end its own session. The token was checked valid before and after | 0 failures, 114 passed; 1,900 requests to administrator operations refused with 403 as expected. A first attempt was invalid (the token was not applied; files kept as `auth-attempt1-INVALID-*`) |
+| Manual review | The code changed since the last review (per-attempt seeds, adaptive adversary, pre-generation cache, admission control), against the threat model | **S-01** (above). The cache key is computed by the server and the cache is bounded; the adversary plan is shown only with the result; pre-generation runs only for assignments the instructor creates |
+
+Raw reports: `tests/security/zap/2026-10-19/` (JSON and console output; the HTML renderings were not kept).
 
 ## 4. Residual-risk register
 

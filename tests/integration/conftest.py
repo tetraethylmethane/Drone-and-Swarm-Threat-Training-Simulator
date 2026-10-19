@@ -146,7 +146,9 @@ def make_settings(**overrides: Any) -> Settings:
         "log_level": "WARNING",
     }
     base.update(overrides)
-    return Settings(**base)
+    # Never read a deployment's .env (D-04): its values, such as DRIKR_MAX_ACTIVE_SESSIONS, would
+    # silently change the settings under test.
+    return Settings(_env_file=None, **base)  # type: ignore[call-arg]
 
 
 class FakeClock:

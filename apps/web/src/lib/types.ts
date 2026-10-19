@@ -184,7 +184,8 @@ export interface SessionState {
   scenario: { id: string; key: string; version: number; name: string };
   rubric: { id: string; key: string; version: number };
   assignment_id: string | null;
-  seed: number;
+  /** Withheld (null) while the session is in progress, unless the trainee chose it. */
+  seed: number | null;
   difficulty_level: number;
   selection: Record<string, unknown>;
   sim_time_ms: number;

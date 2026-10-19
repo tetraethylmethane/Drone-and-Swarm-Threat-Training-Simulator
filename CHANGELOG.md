@@ -3,6 +3,25 @@
 All notable changes to this project are documented here. Versions follow semantic versioning.
 Engine versions are tracked separately because they affect reproducibility.
 
+## [Unreleased]
+
+### Security
+- S-01: a session's seed is withheld from the trainee until the session ends (unless the trainee
+  chose it). With the published demo definitions, the seed was enough to regenerate the exercise
+  offline and learn every track's true class. Web and Unity clients updated.
+
+### Changed
+- After-action review: "Classification given" and "Response given" replace "Your ...", which
+  misread in the instructor's view (U-04). The difficulty override no longer offers "Lower to
+  level 0" at the minimum (U-05).
+
+### Verification (internal or synthetic; does not replace the four external activities)
+- Load test on the deployment host: a class of 20 meets every judged criterion;
+  `DRIKR_MAX_ACTIVE_SESSIONS=20` set on the deployment.
+- Internal security assessment (dependency audits, ZAP scans with and without sign-in, manual
+  review); scripted instructor walkthrough of T1–T10; synthetic dry run of the effectiveness study;
+  VR session with Unity's OpenXR mock runtime.
+
 ## [1.0.0-rc5] - 2026-10-19
 
 Sprint 10 and the work after it. **Not ready for operational use:** the instructor usability study,

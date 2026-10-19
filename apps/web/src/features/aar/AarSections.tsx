@@ -258,9 +258,9 @@ export function TrackDecisionsSection({
           <TR>
             <TH>Track</TH>
             <TH>Ground truth</TH>
-            <TH>Your classification</TH>
+            <TH>Classification given</TH>
             <TH>Time to classify</TH>
-            <TH>Your response</TH>
+            <TH>Response given</TH>
             <TH>Rubric expected</TH>
             <TH>Credit</TH>
             <TH>Evidence</TH>

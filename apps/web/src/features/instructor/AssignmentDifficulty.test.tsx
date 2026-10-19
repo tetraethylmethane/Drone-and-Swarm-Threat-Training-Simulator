@@ -92,7 +92,7 @@ describe("AssignmentDifficultyPage", () => {
     expect(await screen.findByText(/mean 88.0 >= 85/)).toBeInTheDocument();
     expect(screen.queryByText("Another assignment")).not.toBeInTheDocument();
     // At the maximum, only lowering is offered.
-    expect(screen.getByRole("button", { name: /Raise to level 4/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Raise \(level 3 is the maximum\)/ })).toBeDisabled();
     expect(screen.getByRole("button", { name: /Lower to level 2/ })).toBeEnabled();
   });
 

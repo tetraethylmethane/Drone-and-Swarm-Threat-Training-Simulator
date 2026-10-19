@@ -870,7 +870,7 @@ namespace Drikr
             Heading(_state.Scenario?.Name ?? "Exercise");
             // The clock changes every second: one stable node whose value is updated, not a new node.
             var clockKey = _a11y.KeyFor(A11yRole.Text, "exercise status");
-            var status = $"{Clock(DisplayMs())} / {Clock(_state.DurationMs)} · {Vocabulary.Label(_state.Status)} · difficulty {_state.DifficultyLevel} · seed {_state.Seed}";
+            var status = $"{Clock(DisplayMs())} / {Clock(_state.DurationMs)} · {Vocabulary.Label(_state.Status)} · difficulty {_state.DifficultyLevel}{(_state.Seed.HasValue ? $" · seed {_state.Seed}" : "")}";
             GUILayout.Label(status, _label);
             Register(A11yRole.Text, clockKey, "Exercise status: " + status, status);
             Text("Synthetic training data. Not real sensor measurements.", _small);

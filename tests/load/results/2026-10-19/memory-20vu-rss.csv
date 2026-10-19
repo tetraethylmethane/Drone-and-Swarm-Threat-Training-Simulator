@@ -1,0 +1,63 @@
+ts,phase,pid,process,rss_kib
+06:39:12,fresh,1,/usr/local/bin/python3.12 /usr/local/bin,119540
+06:39:12,fresh,35,sh -c for p in $(ls /proc | grep -E "^[0
+06:39:12,fresh,      [ -r /proc/$p/status ] || continue
+06:39:12,fresh,      c=$(tr "" " " </proc/$p/cmdline 
+06:39:13,fresh,      case "$c" in *python*) echo "$p,$c
+06:39:13,fresh,    done ,920
+06:56:01,after-run1,1,/usr/local/bin/python3.12 /usr/local/bin,640692
+06:56:01,after-run1,600,/bin/sh -c python -c "import urllib.requ,904
+06:56:01,after-run1,606,python -c import urllib.request,sys; sys,20988
+06:56:01,after-run1,607,sh -c for p in $(ls /proc | grep -E "^[0
+06:56:02,after-run1,      [ -r /proc/$p/status ] || continue
+06:56:02,after-run1,      c=$(tr "" " " </proc/$p/cmdline 
+06:56:02,after-run1,      case "$c" in *python*) echo "$p,$c
+06:56:02,after-run1,    done ,1612
+06:56:02,after-run1,94,/usr/local/bin/python3.12 -B -c from mul,16924
+06:56:02,after-run1,95,/usr/local/bin/python3.12 -B -c from mul,52864
+06:56:02,after-run1,98,/usr/local/bin/python3.12 -B -c from mul,53384
+06:57:04,idle-run1,1,/usr/local/bin/python3.12 /usr/local/bin,640692
+06:57:04,idle-run1,665,sh -c for p in $(ls /proc | grep -E "^[0
+06:57:04,idle-run1,      [ -r /proc/$p/status ] || continue
+06:57:04,idle-run1,      c=$(tr "" " " </proc/$p/cmdline 
+06:57:04,idle-run1,      case "$c" in *python*) echo "$p,$c
+06:57:05,idle-run1,    done ,896
+06:57:05,idle-run1,94,/usr/local/bin/python3.12 -B -c from mul,16924
+06:57:05,idle-run1,95,/usr/local/bin/python3.12 -B -c from mul,52864
+06:57:05,idle-run1,98,/usr/local/bin/python3.12 -B -c from mul,53384
+07:13:30,after-run2,1,/usr/local/bin/python3.12 /usr/local/bin,730532
+07:13:30,after-run2,1272,sh -c for p in $(ls /proc | grep -E "^[0
+07:13:30,after-run2,      [ -r /proc/$p/status ] || continue
+07:13:30,after-run2,      c=$(tr "" " " </proc/$p/cmdline 
+07:13:30,after-run2,      case "$c" in *python*) echo "$p,$c
+07:13:30,after-run2,    done ,916
+07:13:31,after-run2,94,/usr/local/bin/python3.12 -B -c from mul,16880
+07:13:31,after-run2,95,/usr/local/bin/python3.12 -B -c from mul,54008
+07:13:31,after-run2,98,/usr/local/bin/python3.12 -B -c from mul,52916
+07:14:32,idle-run2,1,/usr/local/bin/python3.12 /usr/local/bin,730532
+07:14:32,idle-run2,1328,sh -c for p in $(ls /proc | grep -E "^[0
+07:14:32,idle-run2,      [ -r /proc/$p/status ] || continue
+07:14:32,idle-run2,      c=$(tr "" " " </proc/$p/cmdline 
+07:14:33,idle-run2,      case "$c" in *python*) echo "$p,$c
+07:14:33,idle-run2,    done ,948
+07:14:33,idle-run2,94,/usr/local/bin/python3.12 -B -c from mul,16880
+07:14:33,idle-run2,95,/usr/local/bin/python3.12 -B -c from mul,54008
+07:14:33,idle-run2,98,/usr/local/bin/python3.12 -B -c from mul,52916
+07:30:20,after-run3,1,/usr/local/bin/python3.12 /usr/local/bin,771312
+07:30:20,after-run3,1880,sh -c for p in $(ls /proc | grep -E "^[0
+07:30:21,after-run3,      [ -r /proc/$p/status ] || continue
+07:30:21,after-run3,      c=$(tr "" " " </proc/$p/cmdline 
+07:30:21,after-run3,      case "$c" in *python*) echo "$p,$c
+07:30:21,after-run3,    done ,920
+07:30:21,after-run3,94,/usr/local/bin/python3.12 -B -c from mul,15836
+07:30:21,after-run3,95,/usr/local/bin/python3.12 -B -c from mul,52280
+07:30:22,after-run3,98,/usr/local/bin/python3.12 -B -c from mul,52832
+07:31:23,idle-run3,1,/usr/local/bin/python3.12 /usr/local/bin,771256
+07:31:23,idle-run3,1937,sh -c for p in $(ls /proc | grep -E "^[0
+07:31:23,idle-run3,      [ -r /proc/$p/status ] || continue
+07:31:23,idle-run3,      c=$(tr "" " " </proc/$p/cmdline 
+07:31:23,idle-run3,      case "$c" in *python*) echo "$p,$c
+07:31:23,idle-run3,    done ,928
+07:31:23,idle-run3,94,/usr/local/bin/python3.12 -B -c from mul,15780
+07:31:23,idle-run3,95,/usr/local/bin/python3.12 -B -c from mul,52224
+07:31:23,idle-run3,98,/usr/local/bin/python3.12 -B -c from mul,52776

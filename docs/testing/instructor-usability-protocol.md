@@ -86,6 +86,43 @@ U-01 was a defect with a clear expected behaviour and was fixed first. U-02 and 
 fixed as low-risk improvements (2026-10-17). Whether any of these mattered to instructors is for
 the participant sessions to show; they are not evidence of usability.
 
+## 6a. Scripted walkthrough, 2026-10-19 (not user data)
+
+Method: a Playwright script (`tests/e2e/usability/walkthrough.spec.ts`) performed T1–T10 on the
+development stack at 1920×1080, finding every control by its **visible label** as a newcomer would,
+with a full-page screenshot at the end of each task; the screenshots were then reviewed against
+Nielsen's heuristics. This shows that each task **can** be done through the interface and how many
+actions it takes. It says nothing about whether instructors find the way, understand what they see,
+or trust it (Q2–Q4), and it gives no SUS score. Selector mistakes in the script needed four reruns;
+those were defects of the script, not of the interface, and are not counted as findings.
+
+| Task | Through the interface | Actions |
+|---|---|---|
+| T1 | Completed | 3 |
+| T2 | Completed | 4 |
+| T3 | Completed | 5 |
+| T4 | Completed | 13 |
+| T5 | Completed | 2 |
+| T6 | Completed | 2 |
+| T7 | Completed | 2 |
+| T8 | Completed | 6 |
+| T9 | Completed | 4 |
+| T10 | Completed | 2 |
+
+Times are not reported: a script acts in milliseconds, and its timings say nothing about people.
+
+| ID | Task | Finding | Severity (estimate) | Status |
+|---|---|---|---|---|
+| U-04 | T6 | The track-decision table in the after-action review labelled columns "**Your** classification" and "**Your** response" also in the instructor's view of a trainee's session, which reads as if the instructor made those decisions | 2 | **Fixed** 2026-10-19: "Classification given", "Response given" |
+| U-05 | T9 | At the lowest allowed level the disabled button read "Lower to level **0**", a level that does not exist (likewise "Raise to level 6" at the top) | 2 | **Fixed** 2026-10-19: "Lower (level 1 is the minimum)"; unit test updated |
+| U-06 | T5 | No date filter on Sessions and reviews: "lowest score last week" needs the score sort plus reading the Created column | 2 | Open (backlog B-26) |
+| U-07 | T2, T3 | In the scenario list only the "Open" link opens a scenario; the scenario name is plain text | 1 | Open (backlog B-26) |
+| — | T7 | Verification result is clear: "Reproduced" with three plain-language checks | — | No change |
+| — | T4 | Choosing a scenario sets the level choices to its allowed range; the button names the number of trainees ("Assign to 2 trainees") | — | No change |
+
+No severity 3 or 4 problem was found by this method. That is a weak statement: the protocol's
+severity 4 ("causes a wrong training judgement") is about understanding, which a script cannot test.
+
 ## 7. Status
 
 | Item | Status |
@@ -95,3 +132,4 @@ the participant sessions to show; they are not evidence of usability.
 | Participant recruitment and consent route | **Blocked**: needs the deploying organisation |
 | Participant sessions and results | **Not run** |
 | Heuristic walkthrough | Done (development team; not user data) |
+| Scripted walkthrough of T1–T10 | Done 2026-10-19: all ten tasks possible through the interface; U-04, U-05 fixed; U-06, U-07 open (not user data) |

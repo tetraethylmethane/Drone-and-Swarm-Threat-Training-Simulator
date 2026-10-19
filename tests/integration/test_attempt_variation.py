@@ -77,3 +77,16 @@ def test_existing_assignments_keep_identical_attempts_after_the_upgrade(engine: 
             )
         ).scalar_one()
     assert default == "false"  # rows that existed before migration 0006 are not changed
+
+
+def test_the_seed_is_withheld_until_the_session_ends(trainee: Api, clock: FakeClock) -> None:
+    """Security finding S-01: with a published definition, the seed reveals every track's class."""
+    sid = scenario_id(trainee, "demo-perimeter-basics")
+    s = trainee.post("/sessions", {"scenario_id": sid, "selection": {}}).json()
+    assert s["seed"] is None
+    trainee.post(f"/sessions/{s['id']}/start")
+    assert trainee.get(f"/sessions/{s['id']}").json()["seed"] is None
+    assert trainee.get(f"/sessions/{s['id']}/feed?since_ms=0").json()["state"]["seed"] is None
+    clock.advance(5)
+    trainee.post(f"/sessions/{s['id']}/complete")
+    assert isinstance(trainee.get(f"/sessions/{s['id']}").json()["seed"], int)

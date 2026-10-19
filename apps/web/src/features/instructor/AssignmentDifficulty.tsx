@@ -99,14 +99,18 @@ export function AssignmentDifficultyPage() {
                   onClick={() => override(current - 1)}
                   variant="secondary"
                 >
-                  Lower to level {current - 1}
+                  {current <= a.min_level
+                    ? `Lower (level ${current} is the minimum)`
+                    : `Lower to level ${current - 1}`}
                 </Button>
                 <Button
                   disabled={busy || current >= a.max_level}
                   onClick={() => override(current + 1)}
                   variant="secondary"
                 >
-                  Raise to level {current + 1}
+                  {current >= a.max_level
+                    ? `Raise (level ${current} is the maximum)`
+                    : `Raise to level ${current + 1}`}
                 </Button>
               </div>
               {error ? <Alert tone="danger">{error}</Alert> : null}

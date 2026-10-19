@@ -74,7 +74,8 @@ export function ExercisePage() {
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border bg-surface px-4 py-3">
         <div className="min-w-0">
           <p className="text-xs text-ink-subtle">
-            Exercise · attempt {s.attempt_number} · difficulty {s.difficulty_level} · seed {s.seed}
+            Exercise · attempt {s.attempt_number} · difficulty {s.difficulty_level}
+            {s.seed !== null && ` · seed ${s.seed}`}
           </p>
           <h1 className="truncate text-lg">{s.scenario.name}</h1>
         </div>

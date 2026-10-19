@@ -110,7 +110,7 @@ score as covariate. Report the adjusted mean difference with its 95% CI, and Hed
 **Robustness.** Repeat with a linear mixed model over all three time points (random intercept per
 participant), and with a permutation test on gain scores.
 
-**Secondary analyses.** The same model for each dimension, with Holm correction across the five
+**Secondary analyses.** The same model for each dimension, with Holm correction across the six
 dimensions. The retention effect comes from the group × time interaction at week 7.
 
 **Missing data.** Intention to treat, using all randomised participants. The mixed model uses all
@@ -180,6 +180,7 @@ Indicative timeline: ethics review, then pilot (2 weeks), then Stage B recruitme
 | Scenario freeze for the study | Planned: freeze the scenario and rubric versions at the start of the pilot; *Perimeter basics* v1 sessions must not be pooled with v2 |
 | Ethics or equivalent approval | **Blocked**: needs the deploying organisation |
 | Pilot | **Not run** |
+| Synthetic dry run of the procedure and analysis | Done 2026-10-19 (`training-effectiveness-dry-run.md`): procedure executable; analysis detects an assumed effect (20 of 20) and keeps false alarms at 1 of 20. Not evidence about people. The mixed model needs named analysis software |
 | Stage B, analysis and report | **Not run** |
 
 **No participant has been enrolled, and no human data exists.** No claim that the simulator

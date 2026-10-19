@@ -59,7 +59,7 @@ namespace Drikr
         [JsonProperty("mode")] public string Mode;
         [JsonProperty("scenario")] public ScenarioRef Scenario;
         [JsonProperty("difficulty_level")] public int DifficultyLevel;
-        [JsonProperty("seed")] public long Seed;
+        [JsonProperty("seed")] public long? Seed; // null while the session is in progress
         [JsonProperty("sim_time_ms")] public int SimTimeMs;
         [JsonProperty("duration_ms")] public int DurationMs;
         [JsonProperty("allow_pause")] public bool AllowPause;

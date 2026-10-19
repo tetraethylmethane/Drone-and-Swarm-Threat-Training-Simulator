@@ -1,0 +1,153 @@
+{
+  "synthetic": true,
+  "note": "Simulated participants with assumed learning; not evidence about human training.",
+  "design": {
+    "per_group": 36,
+    "level": 3,
+    "test_scenarios": [
+      "demo-perimeter-basics",
+      "demo-night-loiter"
+    ],
+    "forms": {
+      "T1": [
+        7101,
+        7102
+      ],
+      "T2": [
+        7201,
+        7202
+      ],
+      "T3": [
+        7301,
+        7302
+      ]
+    },
+    "attrition_post": 0.05,
+    "attrition_retention": 0.1,
+    "worlds": {
+      "effect": {
+        "training": 0.3,
+        "control": 0.15
+      },
+      "null": {
+        "training": 0.15,
+        "control": 0.15
+      }
+    },
+    "retained": 0.7,
+    "master_seed": 20261019
+  },
+  "summary": {
+    "effect": {
+      "replicates": 20,
+      "primary_significant_share": 1.0,
+      "permutation_significant_share": 1.0,
+      "mean_adjusted_diff": 10.554068456534331,
+      "mean_hedges_g": 0.9680218797772653,
+      "mean_pre_sd": 10.175274151637613,
+      "retention_significant_share": 0.85,
+      "any_dimension_significant_share": 1.0
+    },
+    "null": {
+      "replicates": 20,
+      "primary_significant_share": 0.05,
+      "permutation_significant_share": 0.05,
+      "mean_adjusted_diff": -0.1036196072303669,
+      "mean_hedges_g": 0.010138423160832636,
+      "mean_pre_sd": 10.221640974628553,
+      "retention_significant_share": 0.0,
+      "any_dimension_significant_share": 0.0
+    }
+  },
+  "first_replicates": [
+    {
+      "world": "effect",
+      "rep": 0,
+      "allocated": {
+        "training": 37,
+        "control": 35
+      },
+      "analysed_post": 70,
+      "analysed_retention": 68,
+      "pre_sd": 8.668023435691099,
+      "pre_balance_diff": 0.5344401544401549,
+      "primary": {
+        "n": 70,
+        "diff": 11.251160824070489,
+        "ci": [
+          6.853466443924584,
+          15.648855204216392
+        ],
+        "p": 2.000177801164682e-12
+      },
+      "hedges_g": 0.9847775283193799,
+      "gain_means": {
+        "training": 23.448648648648646,
+        "control": 12.251515151515152
+      },
+      "permutation_p": 0.00024993751562109475,
+      "dimensions_holm_p": {
+        "timing": 1.2001066806988092e-11,
+        "uncertainty": 0.0024500317094278135,
+        "consistency": 0.007296282918878738,
+        "recognition": 0.007296282918878738,
+        "objectives": 0.008230349843941998,
+        "procedure": 0.03875011953838525
+      },
+      "retention": {
+        "n": 68,
+        "diff": 11.071795875364337,
+        "ci": [
+          6.791912419217838,
+          15.351679331510837
+        ],
+        "p": 2.000177801164682e-12
+      }
+    },
+    {
+      "world": "null",
+      "rep": 0,
+      "allocated": {
+        "training": 35,
+        "control": 37
+      },
+      "analysed_post": 67,
+      "analysed_retention": 61,
+      "pre_sd": 10.989001383585803,
+      "pre_balance_diff": 3.075289575289574,
+      "primary": {
+        "n": 67,
+        "diff": 1.3343924600430421,
+        "ci": [
+          -2.7097987429775934,
+          5.378583663063678
+        ],
+        "p": 0.5121620857845244
+      },
+      "hedges_g": 0.3169653536494904,
+      "gain_means": {
+        "training": 10.634374999999999,
+        "control": 10.875714285714285
+      },
+      "permutation_p": 0.9125218695326168,
+      "dimensions_holm_p": {
+        "procedure": 0.1491119719578906,
+        "objectives": 0.8698367284396025,
+        "consistency": 1.0,
+        "timing": 1.0,
+        "recognition": 1.0,
+        "uncertainty": 1.0
+      },
+      "retention": {
+        "n": 61,
+        "diff": 0.0390802273367784,
+        "ci": [
+          -4.2146025208824955,
+          4.292762975556052
+        ],
+        "p": 0.9853905082317478
+      }
+    }
+  ],
+  "duration_s": 903.5
+}

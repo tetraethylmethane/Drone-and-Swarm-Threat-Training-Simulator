@@ -11,6 +11,17 @@ the team provides, and what "done" means for each. Start item 2 first: it has th
 | 3 | Load test on the deployment server | System owner + development team | 1 day | Pass or fail against the criteria on that server; `DRIKR_MAX_ACTIVE_SESSIONS` set; minimum and recommended hardware documented |
 | 4 | Independent security assessment | Security owner; external tester | 2–6 weeks including contracting | Report received; findings triaged and fixed or accepted in the risk register |
 
+**Status 2026-10-19.** The development team did internal or synthetic versions of all four, plus a
+simulated-headset VR test. They found and fixed real problems, but **none of them completes an
+activity above**, except item 3 for the current host:
+
+| # | Done internally | Still needed |
+|---|---|---|
+| 1 | Scripted walkthrough of T1–T10: all possible; two wording defects fixed (usability protocol §6a) | Sessions with 5–8 instructors, SUS, comprehension checks |
+| 2 | Synthetic dry run: procedure executable, analysis behaves correctly; protocol corrected (`docs/research/training-effectiveness-dry-run.md`) | Ethics approval, pilot and study with people |
+| 3 | **Done on the current host** (the laptop that runs the deployment): class of 20 meets the criteria; limit set to 20 (load report 5.12) | Repeat if the deployment moves; a minimum specification needs a weaker machine |
+| 4 | Internal assessment: audits, ZAP scans, manual review; S-01 fixed (security findings 3.5) | An independent tester |
+
 ## 1. Instructor usability study
 
 **Decisions needed from the organisation:** a sponsor who can approve a voluntary staff evaluation;

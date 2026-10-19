@@ -13,6 +13,7 @@ from drikr_api.models import (
     Scenario,
     ScoreResult,
     SessionMode,
+    SessionStatus,
     TrainingSession,
     User,
     utcnow,
@@ -164,7 +165,16 @@ def result_summary(r: ScoreResult | None) -> dict[str, Any] | None:
     }
 
 
+#: Statuses in which the exercise is still under way.
+_IN_PROGRESS = (SessionStatus.CREATED, SessionStatus.RUNNING, SessionStatus.PAUSED)
+
+
 def session_out(s: TrainingSession, sim_time_ms: int) -> dict[str, Any]:
+    # The seed is withheld until the session ends (security finding S-01): with a published
+    # scenario definition (the demo scenarios ship with the source code), the seed is enough to
+    # regenerate the timeline offline and learn every track's true class. A seed the trainee chose
+    # is no secret to them.
+    seed_known = s.status not in _IN_PROGRESS or (s.selection or {}).get("seed") is not None
     return {
         "id": str(s.id),
         "status": s.status.value,
@@ -179,7 +189,7 @@ def session_out(s: TrainingSession, sim_time_ms: int) -> dict[str, Any]:
         },
         "rubric": {"id": str(s.rubric_id), "key": s.rubric.key, "version": s.rubric.version},
         "assignment_id": str(s.assignment_id) if s.assignment_id else None,
-        "seed": s.seed,
+        "seed": s.seed if seed_known else None,
         "difficulty_level": s.difficulty_level,
         "selection": s.selection,
         "sim_time_ms": sim_time_ms,

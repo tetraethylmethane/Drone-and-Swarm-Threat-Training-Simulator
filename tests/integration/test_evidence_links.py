@@ -13,7 +13,8 @@ pytestmark = pytest.mark.integration
 def test_around_seq_returns_the_page_holding_each_evidence_event(
     instructor: Api, trainee: Api, clock: FakeClock
 ) -> None:
-    sid = run_exercise(trainee, instructor, clock)
+    # The scenario's own seed: with varied attempt seeds some exercises have fewer than 3 evidence events.
+    sid = run_exercise(trainee, instructor, clock, vary_seed=False)
     items = instructor.get(f"/sessions/{sid}/result").json()["items"]
     evidence = [ev for it in items for ev in it.get("evidence_events", [])]
     assert len(evidence) >= 3

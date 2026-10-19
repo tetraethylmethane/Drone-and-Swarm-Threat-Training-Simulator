@@ -1,0 +1,30 @@
+DRIKR_VR started; devices: none
+[XR] [23744] [14:01:04.153][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_UNKNOWN->XR_SESSION_STATE_IDLE session=3 time=0
+[XR] [23744] [14:01:04.153][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_IDLE->XR_SESSION_STATE_READY session=3 time=0
+[XR] [23744] [14:01:04.178][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_READY->XR_SESSION_STATE_SYNCHRONIZED session=3 time=0
+[XR] [23744] [14:01:04.178][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_SYNCHRONIZED->XR_SESSION_STATE_VISIBLE session=3 time=0
+[XR] [23744] [14:01:04.178][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_VISIBLE->XR_SESSION_STATE_FOCUSED session=3 time=0
+[XR] [23744] [14:01:04.179][Info   ] Runtime Name: Unity Mock Runtime
+[XR] [23744] [14:01:04.180][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_UNKNOWN->XR_SESSION_STATE_IDLE
+[XR] [23744] [14:01:04.180][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_IDLE->XR_SESSION_STATE_READY
+[XR] [23744] [14:01:04.181][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_READY->XR_SESSION_STATE_SYNCHRONIZED
+[XR] [23744] [14:01:04.181][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_SYNCHRONIZED->XR_SESSION_STATE_VISIBLE
+[XR] [23744] [14:01:04.181][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_VISIBLE->XR_SESSION_STATE_FOCUSED
+DRIKR_SMOKE tracks=2 rendered=2 result=Overall 33.3% (Not passed). Pass mark 70%.
+DRIKR_SMOKE result=pass
+[XR] [23744] [14:01:28.582][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_FOCUSED->XR_SESSION_STATE_VISIBLE session=3 time=0
+[XR] [23744] [14:01:28.582][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_VISIBLE->XR_SESSION_STATE_SYNCHRONIZED session=3 time=0
+[XR] [23744] [14:01:28.582][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_SYNCHRONIZED->XR_SESSION_STATE_STOPPING session=3 time=0
+[XR] [23744] [14:01:28.582][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_STOPPING->XR_SESSION_STATE_IDLE session=3 time=0
+[XR] [23744] [14:01:28.582][Info   ] OpenXRSession::HandleSessionStateChangedEvent: state XR_SESSION_STATE_IDLE->XR_SESSION_STATE_EXITING session=3 time=0
+[XR] [23744] [14:01:28.584][Info   ] Runtime Name: Unity Mock Runtime
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_UNKNOWN->XR_SESSION_STATE_IDLE
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_IDLE->XR_SESSION_STATE_READY
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_READY->XR_SESSION_STATE_SYNCHRONIZED
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_SYNCHRONIZED->XR_SESSION_STATE_VISIBLE
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_VISIBLE->XR_SESSION_STATE_FOCUSED
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_FOCUSED->XR_SESSION_STATE_VISIBLE
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_VISIBLE->XR_SESSION_STATE_SYNCHRONIZED
+[XR] [23744] [14:01:28.584][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_SYNCHRONIZED->XR_SESSION_STATE_STOPPING
+[XR] [23744] [14:01:28.585][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_STOPPING->XR_SESSION_STATE_IDLE
+[XR] [23744] [14:01:28.585][Info   ] XrEventDataSessionStateChanged: XR_SESSION_STATE_IDLE->XR_SESSION_STATE_EXITING
