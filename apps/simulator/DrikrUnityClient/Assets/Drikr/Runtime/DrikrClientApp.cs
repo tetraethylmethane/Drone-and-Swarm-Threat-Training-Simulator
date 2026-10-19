@@ -440,7 +440,7 @@ namespace Drikr
             if (_backdrop != null) _backdrop.enabled = false;
             _vrc = new VrControls(Vocabulary.Classifications);
             _vrText = new GameObject("VR status").AddComponent<TextMesh>();
-            _vrText.transform.position = new Vector3(0f, 1.55f, 1.9f);
+            _vrText.transform.position = new Vector3(-0.3f, 1.74f, 1.9f); // above the table, clear of the optical screen
             _vrText.characterSize = 0.02f;
             _vrText.fontSize = 48;
             _vrText.anchor = TextAnchor.UpperCenter;
@@ -459,7 +459,7 @@ namespace Drikr
             quad.name = "Optical sensor screen";
             quad.GetComponent<Renderer>().sharedMaterial = _eoQuadMat;
             _eoQuad = quad.transform;
-            _eoQuad.position = new Vector3(0.95f, 1.02f, 1.5f);
+            _eoQuad.position = new Vector3(1.12f, 1.0f, 1.45f);
             _eoQuad.rotation = Quaternion.Euler(12f, 38f, 0f);
             _eoQuad.localScale = new Vector3(0.56f, 0.315f, 1f);
             _eoText = new GameObject("Optical sensor caption").AddComponent<TextMesh>();
